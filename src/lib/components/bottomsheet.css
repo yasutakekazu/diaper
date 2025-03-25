@@ -1,0 +1,84 @@
+body {
+	--progress: 0;
+	--roundness: calc((1 - var(--progress)) * 1rem);
+	clip-path: inset(0);
+	transition: scale, clip-path;
+	transition-duration: 0.5s;
+	transform-origin: bottom;
+	&.dialog-open {
+		scale: calc(0.94 + var(--progress) * 0.06);
+		clip-path: inset(0 round var(--roundness) var(--roundness) 0 0);
+		#body-overlay {
+			opacity: 0.1;
+		}
+	}
+}
+
+/* :root {
+	background-color: green;
+} */
+
+html {
+	background-color: black;
+}
+
+body {
+	background-color: red;
+	margin: 0;
+	position: fixed;
+	inset: 0;
+}
+
+dialog {
+	--progress: 1;
+	--backdrop-opacity: 0.25;
+	--box-shadow-color: #0004;
+	/* height: 93%; */
+	width: 100%;
+	margin-bottom: 0;
+	margin-top: auto;
+	padding: 0;
+	max-width: 100%;
+	max-height: 100%;
+	box-sizing: border-box;
+	border: none;
+	outline: none;
+	/* border: 1px solid #7773; */
+	border-radius: 1rem 1rem 0 0;
+	/* background-color: var(--bg); */
+	box-shadow: 0 -8px 8px 0 var(--box-shadow-color);
+	transition-property: display, overlay, translate, scale;
+	transition-duration: 0.5s;
+	transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+	transform-origin: top;
+	overflow: clip;
+	overscroll-behavior-y: none;
+	/* display: flex; */
+	/* flex-direction: column; */
+
+	&[open] {
+		@starting-style {
+			translate: 0 100%;
+		}
+		/* top 2 dialogs have backdrop and box-shadow */
+		&:not(:nth-last-of-type(-n + 2)) {
+			--backdrop-opacity: 0;
+			--box-shadow-color: #0000;
+		}
+		&:not(:last-of-type) {
+			--progress: 0;
+			scale: calc(0.94 + var(--progress) * 0.06);
+			translate: 0 calc(var(--progress) * 8px - 8px);
+		}
+	}
+}
+
+dialog::backdrop {
+	background-color: black;
+	opacity: var(--backdrop-opacity);
+	transition: display, overlay, opacity;
+	transition-duration: 0.5s;
+	@starting-style {
+		opacity: 0;
+	}
+}
