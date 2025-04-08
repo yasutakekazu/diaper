@@ -80,15 +80,19 @@
 {#if showBotttomsheet2}
 	<Bottomsheet bind:this={bs2} onclose={() => (showBotttomsheet2 = false)} snapPoints={[0.3, 0.7]}>
 		{#snippet header()}
-			<h1>BottomSheet2</h1>
-			<button onclick={() => (showBotttomsheet3 = true)}>Open Another</button>
-			<button onclick={bs2!.close}>close</button>
+			<div class="p-4">
+				<h1>BottomSheet2</h1>
+				<button onclick={() => (showBotttomsheet3 = true)}>Open Another</button>
+				<button onclick={bs2!.close}>close</button>
+			</div>
 		{/snippet}
-		<RenderRoute path="/page2"></RenderRoute>
-		<p>
-			Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat est laudantium asperiores ipsa et officiis animi placeat quod pariatur quasi, tempore
-			illum veritatis? Voluptatibus eligendi, odit quidem obcaecati iure quam?
-		</p>
+		<div class="p-4">
+			<RenderRoute path="/page2"></RenderRoute>
+			<p>
+				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat est laudantium asperiores ipsa et officiis animi placeat quod pariatur quasi, tempore
+				illum veritatis? Voluptatibus eligendi, odit quidem obcaecati iure quam?
+			</p>
+		</div>
 	</Bottomsheet>
 {/if}
 
