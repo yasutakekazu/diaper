@@ -71,7 +71,12 @@
 		open = false
 	}
 
-	export function snapToIndex(index: number) {
+	export function snapTo(index: number) {
+		if (isTouching) return
+		snapToIndex(index)
+	}
+
+	function snapToIndex(index: number) {
 		if (index < 0) index = snappoints.length - 1
 		snapPointIndex = clamp(index, 0, snappoints.length - 1)
 		const snapPoint = snappoints[snapPointIndex]
