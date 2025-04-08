@@ -10,16 +10,17 @@
 	let bs2: Bottomsheet | null = $state(null)
 	let bs3: Bottomsheet | null = $state(null)
 
-	let initialSnapPoint = $state(1)
+	let initialSnapPoint = $state(0)
 	let snapPoints = $state([0.3, 0.7])
 </script>
 
 <header class="p-4">
 	<h1>Home</h1>
 	<button
+		class="btn preset-filled"
 		onclick={() => {
 			showBotttomsheet = true
-			setTimeout(() => (initialSnapPoint = 2), 3000)
+			setTimeout(() => bs1!.snapTo(1), 3000)
 		}}>Open</button
 	>
 </header>
@@ -29,14 +30,14 @@
 		<div class="p-4">
 			<h1 class="text-center">BottomSheet1</h1>
 			<div class="flex gap-2 justify-between">
-				<button onclick={() => (showBotttomsheet2 = true)}>Open Another</button>
-				<button onclick={() => bs1!.snapToIndex(2)}>Snap</button>
-				<button onclick={() => (showBotttomsheet = false)}>close</button>
+				<button class="btn btn-sm preset-filled" onclick={() => (showBotttomsheet2 = true)}>Open Another</button>
+				<button class="btn btn-sm preset-filled" onclick={() => bs1!.snapTo(2)}>Snap</button>
+				<button class="btn btn-sm preset-filled" onclick={() => (showBotttomsheet = false)}>close</button>
 			</div>
 		</div>
 	{/snippet}
 	{#snippet snapPoint1Content()}
-		<div class="p-4">
+		<div class="card preset-outlined-surface-500 p-4 m-4">
 			<p>
 				SP1. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur adipisci, nulla iusto quae quaerat eius illo deserunt nobis praesentium
 				suscipit ipsam excepturi officia perspiciatis ratione distinctio quisquam? Nesciunt, dolor optio!
@@ -48,7 +49,7 @@
 		</div>
 	{/snippet}
 	{#snippet snapPoint2Content()}
-		<div class="p-4">
+		<div class="card preset-outlined-surface-500 p-4 m-4">
 			<p>
 				SP2. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur adipisci, nulla iusto quae quaerat eius illo deserunt nobis praesentium
 				suscipit ipsam excepturi officia perspiciatis ratione distinctio quisquam? Nesciunt, dolor optio!
@@ -56,7 +57,7 @@
 		</div>
 	{/snippet}
 	{#snippet children()}
-		<div class="p-4">
+		<div class="card preset-outlined-surface-500 p-4 m-4">
 			<p>
 				Children. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur adipisci, nulla iusto quae quaerat eius illo deserunt nobis praesentium
 				suscipit ipsam excepturi officia perspiciatis ratione distinctio quisquam? Nesciunt, dolor optio!

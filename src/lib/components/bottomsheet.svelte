@@ -170,9 +170,9 @@
 		applyProgress(progress)
 	}
 
-	function ontouchend() {
+	function ontouchend(e) {
 		setRootProperty('--duration', duration)
-		if (newTranslate === 0) return
+		// if (newTranslate === 0) return
 		if (!isTouching) return
 		snapToIndex(snapPointIndex)
 		startY = 0
