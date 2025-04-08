@@ -29,7 +29,8 @@
 							scrollTop = scrollElement.scrollTop
 						}
 					} else {
-						scrollElement.scrollTop = scrollTop
+						// Timeout only seems to be needed with tailwind
+						setTimeout(() => (scrollElement.scrollTop = scrollTop), 0)
 					}
 					prevIndex = snapPointIndex
 				})
