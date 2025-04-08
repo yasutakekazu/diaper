@@ -1,22 +1,18 @@
-body {
-	--progress: 0;
-	--roundness: calc((1 - var(--progress)) * 1rem);
-	clip-path: inset(0);
-	transition: scale, clip-path;
-	transition-duration: 0.5s;
-	transform-origin: bottom;
-	&.dialog-open {
-		scale: calc(0.94 + var(--progress) * 0.06);
-		clip-path: inset(0 round var(--roundness) var(--roundness) 0 0);
-		#body-overlay {
-			opacity: 0.1;
-		}
-	}
+:root {
+	--duration: 0.5s;
+	--backdrop-opacity: 0.25;
+	color-scheme: light dark;
 }
 
-/* :root {
-	background-color: green;
-} */
+body {
+	--progress: 1;
+	--roundness: calc((1 - var(--progress)) * 1rem);
+	transition: scale, clip-path;
+	transition-duration: var(--duration);
+	transform-origin: bottom;
+	scale: calc(0.94 + var(--progress) * 0.06);
+	clip-path: inset(0 round var(--roundness) var(--roundness) 0 0);
+}
 
 html {
 	background-color: black;
@@ -31,9 +27,7 @@ body {
 
 dialog {
 	--progress: 1;
-	--backdrop-opacity: 0.25;
 	--box-shadow-color: #0004;
-	/* height: 93%; */
 	width: 100%;
 	margin-bottom: 0;
 	margin-top: auto;
@@ -43,42 +37,40 @@ dialog {
 	box-sizing: border-box;
 	border: none;
 	outline: none;
-	/* border: 1px solid #7773; */
 	border-radius: 1rem 1rem 0 0;
-	/* background-color: var(--bg); */
+	background-color: light-dark(#fcfcfc, #222222);
+	color: light-dark(#222222, #fcfcfc);
 	box-shadow: 0 -8px 8px 0 var(--box-shadow-color);
-	transition-property: display, overlay, translate, scale;
-	transition-duration: 0.5s;
+	transition-property: transform, translate, scale;
+	transition-duration: var(--duration);
 	transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
 	transform-origin: top;
 	overflow: clip;
 	overscroll-behavior-y: none;
-	/* display: flex; */
-	/* flex-direction: column; */
+	display: flex;
+	flex-direction: column;
 
 	&[open] {
 		@starting-style {
 			translate: 0 100%;
 		}
-		/* top 2 dialogs have backdrop and box-shadow */
+		/* only top 2 dialogs have backdrop and box-shadow */
 		&:not(:nth-last-of-type(-n + 2)) {
 			--backdrop-opacity: 0;
 			--box-shadow-color: #0000;
 		}
 		&:not(:last-of-type) {
-			--progress: 0;
 			scale: calc(0.94 + var(--progress) * 0.06);
-			translate: 0 calc(var(--progress) * 8px - 8px);
+			transform: translateY(calc(var(--progress) * 8px - 8px));
 		}
-	}
-}
-
-dialog::backdrop {
-	background-color: black;
-	opacity: var(--backdrop-opacity);
-	transition: display, overlay, opacity;
-	transition-duration: 0.5s;
-	@starting-style {
-		opacity: 0;
+		&::backdrop {
+			background-color: black;
+			opacity: var(--backdrop-opacity);
+			transition: opacity;
+			transition-duration: var(--duration);
+			@starting-style {
+				opacity: 0;
+			}
+		}
 	}
 }
