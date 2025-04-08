@@ -72,7 +72,8 @@
 	}
 
 	export function snapToIndex(index: number) {
-		snapPointIndex = index
+		if (index < 0) index = snappoints.length - 1
+		snapPointIndex = clamp(index, 0, snappoints.length - 1)
 		const snapPoint = snappoints[snapPointIndex]
 		onsnap?.(snapPoint)
 		if (snapPoint === 1) {
