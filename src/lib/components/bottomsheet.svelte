@@ -238,7 +238,6 @@
 		use:scrollRestore={{ scrollElement: refs.children, snapPointIndex }}
 	>
 		<header bind:this={refs.header} {ontouchstart} {ontouchmove} {ontouchend}>
-			<button onclick={() => snapToIndex(2)}>Snap</button>
 			{@render header?.()}
 		</header>
 		<main bind:this={refs.main} style:height={mainHeight - newTranslate + 'px'}>

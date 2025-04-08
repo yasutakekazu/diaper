@@ -19,7 +19,7 @@ html {
 }
 
 body {
-	background-color: red;
+	background-color: light-dark(color-mix(in oklab, #fcfcfc 80%, grey), color-mix(in oklab, #222222 90%, black));
 	margin: 0;
 	position: fixed;
 	inset: 0;
