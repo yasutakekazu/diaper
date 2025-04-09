@@ -1,6 +1,6 @@
 <script module lang="ts">
 	import type { HTMLAttributes } from 'svelte/elements'
-	import { untrack, type Snippet } from 'svelte'
+	import { tick, untrack, type Snippet } from 'svelte'
 	import './bottomsheet.css'
 	import { fade } from 'svelte/transition'
 
@@ -218,9 +218,9 @@
 			isOpen = true
 			startY = 0
 			lastTranslate = 0
-			return
+		} else {
+			if (isOpen) doClose()
 		}
-		if (isOpen) doClose()
 	})
 
 	$effect(() => {
@@ -231,6 +231,13 @@
 		dialog = refs.ref as HTMLDialogElement
 		dialog.showModal()
 		untrack(init)
+	})
+
+	$effect(() => {
+		if (height !== 'auto') return
+		if (!refs.children) return
+		if (!refs.main) return
+		autoHeight = refs.main.offsetHeight + headerHeight + 'px'
 	})
 </script>
 
@@ -249,7 +256,7 @@
 		<main bind:this={refs.main} style:height={mainHeight - newTranslate + 'px'}>
 			{#if !hasRendered}
 				{#if children}
-					<section bind:this={refs.children}>
+					<section bind:this={refs.children} class="h-fit">
 						{@render children()}
 					</section>
 				{/if}
