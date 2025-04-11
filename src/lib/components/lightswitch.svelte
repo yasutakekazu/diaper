@@ -1,26 +1,30 @@
 <script lang="ts">
-	import { Switch } from '@skeletonlabs/skeleton-svelte'
+	import { Sun, Moon, SunMoon } from '@lucide/svelte/icons'
+	import type { Component } from 'svelte'
 
-	let checked = $state(false)
+	type Mode = 'dark' | 'light' | 'system'
+
+	const modes: Record<Mode, Component> = {
+		dark: Moon,
+		light: Sun,
+		system: SunMoon
+	}
+
+	let mode = $state<Mode>('system')
+
+	function switchMode() {
+		mode = { system: 'dark', dark: 'light', light: 'system' }[mode] as Mode
+		document.documentElement.style.setProperty('color-scheme', mode === 'system' ? 'light dark' : mode)
+		localStorage.setItem('mode', mode)
+	}
+
+	const ModeIcon = $derived(modes[mode])
 
 	$effect(() => {
-		const mode = localStorage.getItem('mode') || 'light'
-		checked = mode === 'dark'
+		mode = (localStorage.getItem('mode') as Mode) || 'light'
 	})
-
-	const onCheckedChange = (event: { checked: boolean }) => {
-		const mode = event.checked ? 'dark' : 'light'
-		document.documentElement.setAttribute('data-mode', mode)
-		localStorage.setItem('mode', mode)
-		checked = event.checked
-	}
 </script>
 
-<svelte:head>
-	<script>
-		const mode = localStorage.getItem('mode') || 'light'
-		document.documentElement.setAttribute('data-mode', mode)
-	</script>
-</svelte:head>
-
-<Switch {checked} {onCheckedChange} ids={{ hiddenInput: 'lightswitch' }}></Switch>
+<button onclick={switchMode}>
+	<ModeIcon />
+</button>
