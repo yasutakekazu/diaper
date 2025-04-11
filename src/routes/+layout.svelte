@@ -7,18 +7,20 @@
 </script>
 
 <div class="flex flex-col h-full">
-	<header class="text-center px-1 py-2 preset-filled-surface-900-100 flex justify-between items-center">
-		<button aria-label="Github">
-			<svg height="48" width="48" fill="currentColor">
-				<Diaper />
-			</svg>
-		</button>
-		<h1 class="h3 translate-y-0.25">Diaper</h1>
-		<div class="flex gap-2 items-center">
-			<Lightswitch />
-			<button class="p-2">
-				<Github />
+	<header class="preset-filled-surface-900-100 flex justify-center">
+		<div class="px-1 py-2 flex justify-between items-center w-full max-w-2xl">
+			<button aria-label="Github">
+				<svg height="48" width="48" fill="currentColor">
+					<Diaper />
+				</svg>
 			</button>
+			<h1 class="h3 translate-y-0.25">Diaper</h1>
+			<div class="flex gap-2 items-center">
+				<Lightswitch />
+				<button class="p-2">
+					<Github />
+				</button>
+			</div>
 		</div>
 	</header>
 	{@render children()}
