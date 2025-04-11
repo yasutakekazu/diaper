@@ -14,7 +14,6 @@
 			</svg>
 		</button>
 		<Lightswitch />
-
 		<h1 class="h3">Diaper</h1>
 		<button aria-label="Github" class="p-2">
 			<svg height="24" width="24" viewBox="0 0 98 96" fill="currentColor">
