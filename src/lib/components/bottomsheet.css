@@ -8,12 +8,6 @@
 	--darker: color-mix(in oklab, var(--dark) 90%, black);
 	--fg: light-dark(var(--dark), var(--light));
 	--bg: light-dark(var(--light), var(--dark));
-	&:has(input[id='lightswitch']:checked) {
-		color-scheme: light;
-	}
-	&:has(input[id='lightswitch']) {
-		color-scheme: dark;
-	}
 }
 
 body {
