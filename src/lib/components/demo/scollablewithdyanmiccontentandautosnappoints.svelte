@@ -21,12 +21,12 @@
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum
 			autem laboriosam consectetur repellendus voluptates ut sint impedit quam? Praesentium.
 		</p>
-	</div>
-	<br />
-	<div class="space-y-2">
-		{#each { length: 25 }, i}
-			<div class="card preset-filled-surface-200-800 p-4" style="content-visibility: auto ;">Item {i + 1}</div>
-		{/each}
+		<br />
+		<div class="space-y-2">
+			{#each { length: 25 }, i}
+				<div class="card preset-filled-surface-200-800 p-4" style="content-visibility: auto ;">Item {i + 1}</div>
+			{/each}
+		</div>
 	</div>
 	{#snippet snapPoint1Content()}
 		<div class="p-4">
