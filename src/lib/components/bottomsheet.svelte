@@ -76,6 +76,11 @@
 		snapToIndex(index)
 	}
 
+	export function setIndex(index: number) {
+		if (isTouching) return
+		snapPointIndex = index
+	}
+
 	function snapToIndex(index: number) {
 		if (index < 0) index = snappoints.length - 1
 		snapPointIndex = clamp(index, 0, snappoints.length - 1)
@@ -225,8 +230,10 @@
 
 	$effect(() => {
 		if (!refs.ref) return
-		duration = getRootProperty('--duration')
-		backdropOpacity = +getRootProperty('--backdrop-opacity')
+		requestAnimationFrame(() => {
+			duration = getRootProperty('--duration')
+			backdropOpacity = +getRootProperty('--backdrop-opacity')
+		})
 		document.body.style.setProperty('overflow', 'hidden')
 		dialog = refs.ref as HTMLDialogElement
 		dialog.showModal()
