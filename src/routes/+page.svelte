@@ -28,6 +28,10 @@
 			<li>Light/dark mode out of the box</li>
 			<li>Mobile first, in fact mobile only ;)</li>
 		</ul>
+		<div class="space-y-2">
+			<h2 class="h3 border-b">Basic</h2>
+			<p>Basic sheets can be opened and closed but not resized</p>
+		</div>
 		<Basicsheet />
 		<Basicwithfixedheight />
 		<Basicwithautoeight />

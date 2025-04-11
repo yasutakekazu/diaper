@@ -5,8 +5,8 @@
 </script>
 
 <div class="space-y-2">
-	<h2 class="h4">Scrollable With Fixed Snap Point</h2>
-	<p>Sheets are automatically scrollable when content overflows</p>
+	<h2 class="h4">Scrollable with fixed snap point</h2>
+	<p>Scrollable sheet that can be minimized to specified snap point.</p>
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
 </div>
 
@@ -15,7 +15,7 @@
 		<Header title="Scrollable Sheet" subtitle="With Fixed Snap Point" onclick={() => (open = false)} />
 	{/snippet}
 	<div class="p-4">
-		<p>A basic sheet can be dragged</p>
+		<p>Scrollable sheet that can be minimized to specified snap point.</p>
 		<br />
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum

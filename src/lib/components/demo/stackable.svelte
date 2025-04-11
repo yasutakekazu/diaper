@@ -17,7 +17,10 @@
 		<Header title="Stackable Sheet" subtitle="First" onclick={() => (open1 = false)} />
 	{/snippet}
 	<div class="p-4">
-		<p>A basic sheet can be dragged</p>
+		<p>
+			Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa, velit rem? Maxime quae repudiandae, placeat ullam fuga ea quisquam porro assumenda enim
+			hic nulla sapiente temporibus, in distinctio natus necessitatibus.
+		</p>
 		<div class="text-center p-8">
 			<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open2 = true)}>Open another</button>
 		</div>
@@ -29,7 +32,10 @@
 		<Header title="Stackable Sheet" subtitle="Second" onclick={() => (open2 = false)} />
 	{/snippet}
 	<div class="p-4">
-		<p>A basic sheet can be dragged</p>
+		<p>
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus quam placeat error, debitis nam rerum earum. Inventore voluptatem dolorum facilis
+			illo nulla facere earum! Hic consequuntur deleniti minima ullam. Accusamus?
+		</p>
 		<div class="text-center p-8">
 			<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open3 = true)}>Open another</button>
 		</div>
@@ -40,8 +46,13 @@
 	{#snippet header()}
 		<Header title="Stackable Sheet" subtitle="Third" onclick={() => (open3 = false)} />
 	{/snippet}
-	<div class="p-8 text-center space-y-4 mb-12">
-		<p>A basic sheet can be dragged</p>
-		<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open3 = false)}>Okay, that's enough</button>
+	<div class="p-4">
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime ullam laborum accusantium. Impedit nesciunt odit fugit pariatur optio, cupiditate neque
+			aperiam reiciendis ratione beatae eaque, ut et maiores, odio mollitia?
+		</p>
+		<div class="text-center p-8">
+			<button class=" m-auto btn btn-sm text-center preset-outlined-secondary-600-400" onclick={() => (open3 = false)}>Okay, that's enough</button>
+		</div>
 	</div>
 </Bottomsheet>

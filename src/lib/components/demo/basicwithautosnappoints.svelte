@@ -12,10 +12,10 @@
 
 <Bottomsheet bind:open snapPoints="auto">
 	{#snippet header()}
-		<Header title="Basic Sheet" subtitle="With Auto Snap Points" onclick={() => (open = false)} />
+		<Header title="Basic Sheet" subtitle="with auto snap point" onclick={() => (open = false)} />
 	{/snippet}
 	<div class="p-4">
-		<p>A basic sheet can be dragged</p>
+		<p>Opens at max height but can be miminized to fit content</p>
 		<br />
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum

@@ -12,10 +12,10 @@
 
 <Bottomsheet bind:open snapPoints="auto">
 	{#snippet header()}
-		<Header title="Dynamic Content Sheet" subtitle="With Auto Snap Points" onclick={() => (open = false)} />
+		<Header title="Dynamic Content Sheet" subtitle="with auto snap points" onclick={() => (open = false)} />
 	{/snippet}
 	<div class="p-4">
-		<p>A basic sheet can be dragged</p>
+		<p>Auto-calculates snap points to fit content</p>
 		<br />
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum
