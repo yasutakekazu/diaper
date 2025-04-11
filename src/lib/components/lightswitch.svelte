@@ -11,18 +11,20 @@
 	}
 
 	let mode = $state<Mode>('system')
-	function switchMode() {
-		mode = { system: 'dark', dark: 'light', light: 'system' }[mode] as Mode
-		document.documentElement.style.setProperty('color-scheme', mode === 'system' ? 'light dark' : mode)
-		localStorage.setItem('mode', mode)
-	}
-
 	let ModeIcon = $derived(modes[mode])
 
+	function switchMode() {
+		mode = { system: 'dark', dark: 'light', light: 'system' }[mode] as Mode
+	}
+
 	$effect(() => {
-		const localStorageMode = (localStorage.getItem('mode') || 'system') as Mode
+		const localStorageMode = localStorage.getItem('mode') as Mode
 		mode = modes[localStorageMode] ? localStorageMode : 'system'
+	})
+
+	$effect(() => {
 		document.documentElement.style.setProperty('color-scheme', mode === 'system' ? 'light dark' : mode)
+		localStorage.setItem('mode', mode)
 	})
 </script>
 
