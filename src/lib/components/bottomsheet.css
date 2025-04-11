@@ -2,6 +2,18 @@
 	--duration: 0.5s;
 	--backdrop-opacity: 0.25;
 	color-scheme: light dark;
+	--light: #fcfcfc;
+	--dark: #222222;
+	--lighter: color-mix(in oklab, var(--light) 80%, grey);
+	--darker: color-mix(in oklab, var(--dark) 90%, black);
+	--fg: light-dark(var(--dark), var(--light));
+	--bg: light-dark(var(--light), var(--dark));
+	&:has(input[id='lightswitch']:checked) {
+		color-scheme: light;
+	}
+	&:has(input[id='lightswitch']) {
+		color-scheme: dark;
+	}
 }
 
 body {
@@ -19,7 +31,8 @@ html {
 }
 
 body {
-	background-color: light-dark(color-mix(in oklab, #fcfcfc 80%, grey), color-mix(in oklab, #222222 90%, black));
+	background-color: light-dark(var(--lighter), var(--darker));
+	color: var(--fg);
 	margin: 0;
 	position: fixed;
 	inset: 0;
@@ -31,6 +44,7 @@ dialog {
 	width: 100%;
 	margin-bottom: 0;
 	margin-top: auto;
+	margin-inline: auto;
 	padding: 0;
 	max-width: 100%;
 	max-height: 100%;
@@ -38,8 +52,8 @@ dialog {
 	border: none;
 	outline: none;
 	border-radius: 1rem 1rem 0 0;
-	background-color: light-dark(#fcfcfc, #222222);
-	color: light-dark(#222222, #fcfcfc);
+	background-color: var(--bg);
+	color: var(--fg);
 	box-shadow: 0 -8px 8px 0 var(--box-shadow-color);
 	transition-property: transform, translate, scale;
 	transition-duration: var(--duration);
@@ -51,6 +65,7 @@ dialog {
 	flex-direction: column;
 
 	&[open] {
+		max-width: 48rem;
 		@starting-style {
 			translate: 0 100%;
 		}
