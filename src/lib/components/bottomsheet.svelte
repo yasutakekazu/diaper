@@ -1,6 +1,6 @@
 <script module lang="ts">
 	import type { HTMLAttributes } from 'svelte/elements'
-	import { tick, untrack, type Snippet } from 'svelte'
+	import { untrack, type Snippet } from 'svelte'
 	import './bottomsheet.css'
 	import { fade } from 'svelte/transition'
 
