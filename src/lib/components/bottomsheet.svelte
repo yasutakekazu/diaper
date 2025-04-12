@@ -260,7 +260,7 @@
 		<header bind:this={refs.header} {ontouchstart} {ontouchmove} {ontouchend}>
 			{@render header?.()}
 		</header>
-		<main bind:this={refs.main} style:height={mainHeight - newTranslate + 'px'}>
+		<main bind:this={refs.main} style:max-height={mainHeight - newTranslate + 'px'}>
 			{#if !hasRendered}
 				{#if children}
 					<section bind:this={refs.children} class="h-fit">
