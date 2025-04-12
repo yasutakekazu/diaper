@@ -24,7 +24,7 @@ body {
 
 html {
 	background-color: black;
-	min-height: calc(100% + env(safe-area-inset-top));
+	/* min-height: calc(100% + env(safe-area-inset-top)); */
 	padding-bottom: env(safe-area-inset-bottom);
 	overscroll-behavior-y: none;
 }
