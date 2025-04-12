@@ -309,7 +309,4 @@
 	.h-fit {
 		height: fit-content;
 	}
-	.invisible {
-		visibility: hidden;
-	}
 </style>
