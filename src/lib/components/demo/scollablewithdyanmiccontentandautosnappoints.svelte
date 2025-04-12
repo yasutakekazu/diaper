@@ -24,7 +24,7 @@
 		<br />
 		<div class="space-y-2">
 			{#each { length: 25 }, i}
-				<div class="card preset-filled-surface-200-800 p-4" style="content-visibility: auto ;">Item {i + 1}</div>
+				<div class="card preset-filled-surface-200-800 p-4">Item {i + 1}</div>
 			{/each}
 		</div>
 	</div>
