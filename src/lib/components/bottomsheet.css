@@ -8,6 +8,8 @@
 	--darker: color-mix(in oklab, var(--dark) 90%, black);
 	--fg: light-dark(var(--dark), var(--light));
 	--bg: light-dark(var(--light), var(--dark));
+	--fg-tinted: light-dark(var(--darker), var(--lighter));
+	--bg-tinted: light-dark(var(--lighter), var(--darker));
 }
 
 body {
@@ -22,14 +24,19 @@ body {
 
 html {
 	background-color: black;
+	min-height: calc(100% + env(safe-area-inset-top));
+	padding-bottom: env(safe-area-inset-bottom);
+	overscroll-behavior-y: none;
 }
 
 body {
-	background-color: light-dark(var(--lighter), var(--darker));
-	color: var(--fg);
+	background-color: var(--bg-tinted);
+	color: var(--fg-tinted);
 	margin: 0;
 	position: fixed;
 	inset: 0;
+	overscroll-behavior-y: none;
+	/* min-height: calc(100% + env(safe-area-inset-top)); */
 }
 
 dialog {

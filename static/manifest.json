@@ -1,0 +1,8 @@
+{
+	"name": "Diaper",
+	"short_name": "Diaper",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"background_color": "#ffc209"
+}
