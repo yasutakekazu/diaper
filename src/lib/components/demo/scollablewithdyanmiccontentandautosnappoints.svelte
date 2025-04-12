@@ -5,14 +5,14 @@
 </script>
 
 <div class="space-y-2">
-	<h2 class="h4">Scrollable with dynamic content and auto snap point</h2>
+	<h2 class="h4">Scrollable with dynamic content and auto snap points</h2>
 	<p>The content changes based on the snap point. The scroll position is restored when the scrollable content is made visible again</p>
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
 </div>
 
 <Bottomsheet bind:open snapPoints="auto">
 	{#snippet header()}
-		<Header title="Scrollable Sheet" subtitle="with dynamic content and auto snap point" onclick={() => (open = false)} />
+		<Header title="Scrollable Sheet" subtitle="with dynamic content and auto snap points" onclick={() => (open = false)} />
 	{/snippet}
 	<div class="p-4">
 		<p>The content changes based on the snap point. The scroll position is restored when the scrollable content is made visible again</p>
