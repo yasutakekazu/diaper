@@ -233,7 +233,7 @@
 		if (height !== 'auto') return
 		if (!refs.children) return
 		if (!refs.main) return
-		autoHeight = refs.main.offsetHeight + headerHeight + 'px'
+		autoHeight = refs.main.offsetHeight + (headerOverlaysContent ? 0 : headerHeight) + 'px'
 	})
 </script>
 
