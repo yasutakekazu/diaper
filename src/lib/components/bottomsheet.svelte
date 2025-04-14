@@ -48,6 +48,7 @@
 		initialSnapPoint = 0,
 		snapPoint1Content,
 		snapPoint2Content,
+		headerOverlaysContent = true,
 		onclose = () => {},
 		onsnap = () => {},
 		header,
@@ -245,14 +246,14 @@
 		style={props?.style}
 		use:scrollRestore={{ scrollElement: refs.children, snapPointIndex }}
 	>
-		<header bind:this={refs.header} {ontouchstart} {ontouchmove} {ontouchend}>
+		<header bind:this={refs.header} {ontouchstart} {ontouchmove} {ontouchend} class:headerOverlaysContent>
 			{#if header}
 				{@render header?.()}
 			{:else}
 				<div class="handle"></div>
 			{/if}
 		</header>
-		<main bind:this={refs.main} style:max-height={mainHeight - newTranslate + 'px'}>
+		<main bind:this={refs.main} style:max-height={(headerOverlaysContent ? dialogHeight : mainHeight) - newTranslate + 'px'}>
 			{#if !hasRendered}
 				{#if children}
 					<section bind:this={refs.children} class="h-fit">
@@ -272,15 +273,15 @@
 			{:else}
 				<!--  -->
 				{#if snapPointIndex === 1 && snapPoint1Content}
-					<section transition:fade style="overflow:auto;">
+					<section transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
 						{@render snapPoint1Content()}
 					</section>
 				{:else if snapPointIndex > 1 && snapPoint2Content}
-					<section transition:fade style="overflow:auto;">
+					<section transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
 						{@render snapPoint2Content()}
 					</section>
 				{:else if children}
-					<section bind:this={refs.children} transition:fade style="overflow:auto;">
+					<section bind:this={refs.children} transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
 						{@render children()}
 					</section>
 				{/if}
@@ -307,5 +308,12 @@
 		background-color: #e0e0e0;
 		border-radius: 2px;
 		margin: 16px auto;
+	}
+	.headerOverlaysContent {
+		position: absolute;
+		top: 0;
+		z-index: 50;
+		width: 100%;
+		backdrop-filter: blur(8px);
 	}
 </style>
