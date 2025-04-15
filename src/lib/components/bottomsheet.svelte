@@ -45,7 +45,7 @@
 		maxHeight = '93%',
 		height = maxHeight,
 		snapPoints = [],
-		initialSnapPoint = 0,
+		initialIndex = 0,
 		snapPoint1Content,
 		snapPoint2Content,
 		headerOverlaysContent = false,
@@ -107,7 +107,7 @@
 	let headerHeight = $state(0)
 	let mainHeight = $state(0)
 	let newTranslate = $state(0)
-	let snapPointIndex = $state(initialSnapPoint)
+	let snapPointIndex = $state(initialIndex)
 
 	let snappoints: number[] = []
 	let dialog: HTMLDialogElement
@@ -136,7 +136,7 @@
 				document.body.style.setProperty('overflow', 'visible')
 			}
 			isTransitioning = false
-			snapPointIndex = initialSnapPoint
+			snapPointIndex = initialIndex
 			newTranslate = 0
 			hasRendered = false
 		})
@@ -217,7 +217,7 @@
 			isTransitioning = false
 		})
 		backgroundElement = [...document.querySelectorAll('dialog')].at(-2) ?? document.body
-		snapToIndex(initialSnapPoint)
+		snapToIndex(initialIndex)
 	}
 
 	$effect(() => {

@@ -6,7 +6,7 @@ export type BottomsheetProps = {
 	maxHeight?: string
 	height?: string
 	snapPoints?: number[] | 'auto'
-	initialSnapPoint?: number
+	initialIndex?: number
 	snapPoint1Content?: Snippet
 	snapPoint2Content?: Snippet
 	headerOverlaysContent?: boolean
