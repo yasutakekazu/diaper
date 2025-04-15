@@ -48,7 +48,7 @@
 		initialSnapPoint = 0,
 		snapPoint1Content,
 		snapPoint2Content,
-		headerOverlaysContent = true,
+		headerOverlaysContent = false,
 		canDragSheet = true,
 		onclose = () => {},
 		onsnap = () => {},
@@ -147,7 +147,7 @@
 	function ontouchstart(e: TouchEvent) {
 		const isHeader = isTouchingHeader(e.target as HTMLElement)
 		if (!canDragSheet && !isHeader) return
-		if (refs.children!.scrollTop !== 0 && !isHeader) return
+		if (refs.children?.scrollTop !== 0 && !isHeader) return
 		if (isTransitioning) return
 		startY = e.touches[0].clientY
 		isTouching = true
