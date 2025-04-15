@@ -184,7 +184,11 @@
 		if (height === maxHeight) backgroundElement.style.setProperty('--progress', `${progress}`)
 	}
 
-	const calcAutoSnapPoint = (ref: HTMLElement | undefined) => (ref ? clamp((mainHeight - ref.offsetHeight) / dialogHeight, 0, 1) : 0)
+	const calcAutoSnapPoint = (ref: HTMLElement | undefined) => {
+		if (!ref) return 0
+		const contentHeight = headerOverlaysContent ? mainHeight - headerHeight : mainHeight
+		return clamp((contentHeight - ref.offsetHeight) / dialogHeight, 0, 1)
+	}
 
 	function calcSnapPoints(snapPoints: number[] | 'auto') {
 		let snappoints = [0, 1]
