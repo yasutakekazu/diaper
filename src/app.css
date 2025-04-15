@@ -5,3 +5,8 @@
 @import '@skeletonlabs/skeleton/themes/cerberus';
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
+
+body {
+	background-color: var(--diaper-bg-tinted);
+	color: var(--diaper-fg-tinted);
+}

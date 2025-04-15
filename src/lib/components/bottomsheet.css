@@ -12,16 +12,6 @@
 	--diaper-bg-tinted: light-dark(var(--diaper-lighter), var(--diaper-darker));
 }
 
-body {
-	--diaper-progress: 1;
-	--diaper-roundness: calc((1 - var(--diaper-progress)) * 1rem);
-	transition: scale, clip-path;
-	transition-duration: var(--diaper-duration);
-	transform-origin: bottom;
-	scale: calc(0.94 + var(--diaper-progress) * 0.06);
-	clip-path: inset(0 round var(--diaper-roundness) var(--diaper-roundness) 0 0);
-}
-
 html {
 	background-color: black;
 	/* min-height: calc(100% + env(safe-area-inset-top)); */
@@ -30,8 +20,15 @@ html {
 }
 
 body {
-	background-color: var(--diaper-bg-tinted);
-	color: var(--diaper-fg-tinted);
+	--diaper-progress: 1;
+	--diaper-roundness: calc((1 - var(--diaper-progress)) * 1rem);
+	transition: scale, clip-path;
+	transition-duration: var(--diaper-duration);
+	transform-origin: bottom;
+	scale: calc(0.94 + var(--diaper-progress) * 0.06);
+	clip-path: inset(0 round var(--diaper-roundness) var(--diaper-roundness) 0 0);
+	/* background-color: var(--diaper-bg-tinted);
+	color: var(--diaper-fg-tinted); */
 	margin: 0;
 	position: fixed;
 	inset: 0;
