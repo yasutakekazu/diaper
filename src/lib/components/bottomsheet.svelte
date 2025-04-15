@@ -151,7 +151,7 @@
 		if (isTransitioning) return
 		startY = e.touches[0].clientY
 		isTouching = true
-		setRootProperty('--duration', '0s')
+		setRootProperty('--diaper-duration', '0s')
 	}
 
 	function ontouchmove(e: TouchEvent) {
@@ -170,7 +170,7 @@
 	}
 
 	function ontouchend() {
-		setRootProperty('--duration', duration)
+		setRootProperty('--diaper-duration', duration)
 		// if (newTranslate === 0) return
 		if (!isTouching) return
 		snapToIndex(snapPointIndex)
@@ -179,9 +179,9 @@
 	}
 
 	function applyProgress(progress: number) {
-		dialog.style.setProperty('--backdrop-opacity', `${(1 - progress) * backdropOpacity}`)
+		dialog.style.setProperty('--diaper-backdrop-opacity', `${(1 - progress) * backdropOpacity}`)
 		// only scale body or dialog underneath if drag is between full and the first snap point
-		if (height === maxHeight) backgroundElement.style.setProperty('--progress', `${progress}`)
+		if (height === maxHeight) backgroundElement.style.setProperty('--diaper-progress', `${progress}`)
 	}
 
 	const calcAutoSnapPoint = (ref: HTMLElement | undefined) => {
@@ -232,8 +232,8 @@
 	$effect(() => {
 		if (!refs.ref) return
 		requestAnimationFrame(() => {
-			duration = getRootProperty('--duration')
-			backdropOpacity = +getRootProperty('--backdrop-opacity')
+			duration = getRootProperty('--diaper-duration')
+			backdropOpacity = +getRootProperty('--diaper-backdrop-opacity')
 		})
 		document.body.style.setProperty('overflow', 'hidden')
 		dialog = refs.ref as HTMLDialogElement

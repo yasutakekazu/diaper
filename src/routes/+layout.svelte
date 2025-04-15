@@ -7,7 +7,7 @@
 </script>
 
 <div class="flex flex-col h-full">
-	<header class="preset-filled-surface-900-100 bg-[#407878] text-[var(--fg-tinted)] flex justify-center pt-[env(safe-area-inset-top)]">
+	<header class="preset-filled-surface-900-100 bg-[#407878] text-[var(--diaper-fg-tinted)] flex justify-center pt-[env(safe-area-inset-top)]">
 		<div class="px-1 py-1 flex justify-between items-center w-full max-w-2xl">
 			<button aria-label="Github">
 				<svg height="48" width="48" fill="currentColor">

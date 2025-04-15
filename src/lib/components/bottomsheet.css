@@ -1,25 +1,25 @@
 :root {
-	--duration: 0.5s;
-	--backdrop-opacity: 0.25;
+	--diaper-duration: 0.5s;
+	--diaper-backdrop-opacity: 0.25;
 	color-scheme: light dark;
-	--light: #fcfcfc;
-	--dark: #222222;
-	--lighter: color-mix(in oklab, var(--light) 80%, grey);
-	--darker: color-mix(in oklab, var(--dark) 90%, black);
-	--fg: light-dark(var(--dark), var(--light));
-	--bg: light-dark(var(--light), var(--dark));
-	--fg-tinted: light-dark(var(--darker), var(--lighter));
-	--bg-tinted: light-dark(var(--lighter), var(--darker));
+	--diaper-light: #fcfcfc;
+	--diaper-dark: #222222;
+	--diaper-lighter: color-mix(in oklab, var(--diaper-light) 80%, grey);
+	--diaper-darker: color-mix(in oklab, var(--diaper-dark) 90%, black);
+	--diaper-fg: light-dark(var(--diaper-dark), var(--diaper-light));
+	--diaper-bg: light-dark(var(--diaper-light), var(--diaper-dark));
+	--diaper-fg-tinted: light-dark(var(--diaper-darker), var(--diaper-lighter));
+	--diaper-bg-tinted: light-dark(var(--diaper-lighter), var(--diaper-darker));
 }
 
 body {
-	--progress: 1;
-	--roundness: calc((1 - var(--progress)) * 1rem);
+	--diaper-progress: 1;
+	--diaper-roundness: calc((1 - var(--diaper-progress)) * 1rem);
 	transition: scale, clip-path;
-	transition-duration: var(--duration);
+	transition-duration: var(--diaper-duration);
 	transform-origin: bottom;
-	scale: calc(0.94 + var(--progress) * 0.06);
-	clip-path: inset(0 round var(--roundness) var(--roundness) 0 0);
+	scale: calc(0.94 + var(--diaper-progress) * 0.06);
+	clip-path: inset(0 round var(--diaper-roundness) var(--diaper-roundness) 0 0);
 }
 
 html {
@@ -30,8 +30,8 @@ html {
 }
 
 body {
-	background-color: var(--bg-tinted);
-	color: var(--fg-tinted);
+	background-color: var(--diaper-bg-tinted);
+	color: var(--diaper-fg-tinted);
 	margin: 0;
 	position: fixed;
 	inset: 0;
@@ -40,8 +40,8 @@ body {
 }
 
 dialog {
-	--progress: 1;
-	--box-shadow-color: #0004;
+	--diaper-progress: 1;
+	--diaper-box-shadow-color: #0004;
 	width: 100%;
 	margin-bottom: 0;
 	margin-top: auto;
@@ -53,11 +53,11 @@ dialog {
 	border: none;
 	outline: none;
 	border-radius: 1rem 1rem 0 0;
-	background-color: var(--bg);
-	color: var(--fg);
-	box-shadow: 0 -8px 8px 0 var(--box-shadow-color);
+	background-color: var(--diaper-bg);
+	color: var(--diaper-fg);
+	box-shadow: 0 -8px 8px 0 var(--diaper-box-shadow-color);
 	transition-property: transform, translate, scale;
-	transition-duration: var(--duration);
+	transition-duration: var(--diaper-duration);
 	transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
 	transform-origin: top;
 	overflow: clip;
@@ -72,18 +72,18 @@ dialog {
 		}
 		/* only top 2 dialogs have backdrop and box-shadow */
 		&:not(:nth-last-of-type(-n + 2)) {
-			--backdrop-opacity: 0;
-			--box-shadow-color: #0000;
+			--diaper-backdrop-opacity: 0;
+			--diaper-box-shadow-color: #0000;
 		}
 		&:not(:last-of-type) {
-			scale: calc(0.94 + var(--progress) * 0.06);
-			transform: translateY(calc(var(--progress) * 8px - 8px));
+			scale: calc(0.94 + var(--diaper-progress) * 0.06);
+			transform: translateY(calc(var(--diaper-progress) * 8px - 8px));
 		}
 		&::backdrop {
 			background-color: black;
-			opacity: var(--backdrop-opacity);
+			opacity: var(--diaper-backdrop-opacity);
 			transition: opacity;
-			transition-duration: var(--duration);
+			transition-duration: var(--diaper-duration);
 			@starting-style {
 				opacity: 0;
 			}
