@@ -48,7 +48,7 @@
 		initialSnapPoint = 0,
 		snapPoint1Content,
 		snapPoint2Content,
-		headerOverlaysContent = false,
+		headerOverlaysContent = true,
 		onclose = () => {},
 		onsnap = () => {},
 		header,
@@ -249,48 +249,50 @@
 		style={props?.style}
 		use:scrollRestore={{ scrollElement: refs.children, snapPointIndex }}
 	>
-		<header bind:this={refs.header} {ontouchstart} {ontouchmove} {ontouchend} class:headerOverlaysContent>
-			{#if header}
-				{@render header?.()}
-			{:else}
-				<div class="handle"></div>
-			{/if}
-		</header>
-		<main bind:this={refs.main} style:max-height={mainHeight - newTranslate + 'px'}>
-			{#if !hasRendered}
-				{#if children}
-					<section bind:this={refs.children} class="h-fit">
-						{@render children()}
-					</section>
+		<div style="flex: 1">
+			<header bind:this={refs.header} {ontouchstart} {ontouchmove} {ontouchend} class:headerOverlaysContent>
+				{#if header}
+					{@render header?.()}
+				{:else}
+					<div class="handle"></div>
 				{/if}
-				{#if snapPoint1Content}
-					<section bind:this={refs.snapPoint1} class="h-fit">
-						{@render snapPoint1Content()}
-					</section>
+			</header>
+			<main bind:this={refs.main} style:max-height={mainHeight - newTranslate + 'px'}>
+				{#if !hasRendered}
+					{#if children}
+						<section bind:this={refs.children} class="h-fit">
+							{@render children()}
+						</section>
+					{/if}
+					{#if snapPoint1Content}
+						<section bind:this={refs.snapPoint1} class="h-fit">
+							{@render snapPoint1Content()}
+						</section>
+					{/if}
+					{#if snapPoint2Content}
+						<section bind:this={refs.snapPoint2} class="h-fit">
+							{@render snapPoint2Content()}
+						</section>
+					{/if}
+				{:else}
+					<!--  -->
+					{#if snapPointIndex === 1 && snapPoint1Content}
+						<section transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
+							{@render snapPoint1Content()}
+						</section>
+					{:else if snapPointIndex > 1 && snapPoint2Content}
+						<section transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
+							{@render snapPoint2Content()}
+						</section>
+					{:else if children}
+						<section bind:this={refs.children} transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
+							{@render children()}
+						</section>
+					{/if}
+					<!--  -->
 				{/if}
-				{#if snapPoint2Content}
-					<section bind:this={refs.snapPoint2} class="h-fit">
-						{@render snapPoint2Content()}
-					</section>
-				{/if}
-			{:else}
-				<!--  -->
-				{#if snapPointIndex === 1 && snapPoint1Content}
-					<section transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
-						{@render snapPoint1Content()}
-					</section>
-				{:else if snapPointIndex > 1 && snapPoint2Content}
-					<section transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
-						{@render snapPoint2Content()}
-					</section>
-				{:else if children}
-					<section bind:this={refs.children} transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
-						{@render children()}
-					</section>
-				{/if}
-				<!--  -->
-			{/if}
-		</main>
+			</main>
+		</div>
 	</dialog>
 {/if}
 
@@ -298,6 +300,7 @@
 	main {
 		display: grid;
 		grid-template-areas: 'content';
+		height: 100%;
 	}
 	section {
 		grid-area: content;
