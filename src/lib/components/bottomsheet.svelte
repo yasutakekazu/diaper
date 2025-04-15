@@ -48,7 +48,7 @@
 		initialSnapPoint = 0,
 		snapPoint1Content,
 		snapPoint2Content,
-		headerOverlaysContent = true,
+		headerOverlaysContent = false,
 		onclose = () => {},
 		onsnap = () => {},
 		header,
@@ -104,7 +104,7 @@
 	let autoHeight = $state(height)
 	let dialogHeight = $state(0)
 	let headerHeight = $state(0)
-	let mainHeight = $derived(dialogHeight - headerHeight)
+	let mainHeight = $state(0)
 	let newTranslate = $state(0)
 	let snapPointIndex = $state(initialSnapPoint)
 
@@ -197,6 +197,9 @@
 	function init() {
 		dialogHeight = dialog.offsetHeight
 		headerHeight = refs.header?.offsetHeight ?? 0
+		if (!mainHeight) {
+			mainHeight = headerOverlaysContent ? dialogHeight : dialogHeight - headerHeight
+		}
 		snappoints = calcSnapPoints(snapPoints)
 		hasRendered = true
 		onTransitionend(() => {
@@ -233,7 +236,7 @@
 		if (height !== 'auto') return
 		if (!refs.children) return
 		if (!refs.main) return
-		autoHeight = refs.main.offsetHeight + (headerOverlaysContent ? 0 : headerHeight) + 'px'
+		autoHeight = refs.main.offsetHeight + 'px'
 	})
 </script>
 
@@ -253,7 +256,7 @@
 				<div class="handle"></div>
 			{/if}
 		</header>
-		<main bind:this={refs.main} style:max-height={(headerOverlaysContent ? dialogHeight : mainHeight) - newTranslate + 'px'}>
+		<main bind:this={refs.main} style:max-height={mainHeight - newTranslate + 'px'}>
 			{#if !hasRendered}
 				{#if children}
 					<section bind:this={refs.children} class="h-fit">
