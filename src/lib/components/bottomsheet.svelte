@@ -143,10 +143,11 @@
 	}
 
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
+	const canDragSheetOverride = snapPoint1Content || snapPoint2Content ? false : canDragSheet
 
 	function ontouchstart(e: TouchEvent) {
 		const isHeader = isTouchingHeader(e.target as HTMLElement)
-		if (!canDragSheet && !isHeader) return
+		if (!canDragSheetOverride && !isHeader) return
 		if (refs.children?.scrollTop !== 0 && !isHeader) return
 		if (isTransitioning) return
 		startY = e.touches[0].clientY
