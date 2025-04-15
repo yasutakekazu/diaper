@@ -49,6 +49,7 @@
 		snapPoint1Content,
 		snapPoint2Content,
 		headerOverlaysContent = true,
+		canDragSheet = true,
 		onclose = () => {},
 		onsnap = () => {},
 		header,
@@ -141,8 +142,12 @@
 		})
 	}
 
+	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
+
 	function ontouchstart(e: TouchEvent) {
-		if (refs.main!.scrollTop !== 0 && !refs.header!.contains(e.target as HTMLElement)) return
+		const isHeader = isTouchingHeader(e.target as HTMLElement)
+		if (!canDragSheet && !isHeader) return
+		if (refs.children!.scrollTop !== 0 && !isHeader) return
 		if (isTransitioning) return
 		startY = e.touches[0].clientY
 		isTouching = true
@@ -164,7 +169,7 @@
 		applyProgress(progress)
 	}
 
-	function ontouchend(e) {
+	function ontouchend() {
 		setRootProperty('--duration', duration)
 		// if (newTranslate === 0) return
 		if (!isTouching) return
