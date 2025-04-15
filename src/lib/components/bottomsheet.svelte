@@ -241,15 +241,8 @@
 </script>
 
 {#if isOpen}
-	<dialog
-		bind:this={refs.ref}
-		style:height={autoHeight}
-		style:max-height={maxHeight}
-		class={props?.class}
-		style={props?.style}
-		use:scrollRestore={{ scrollElement: refs.children, snapPointIndex }}
-	>
-		<div style="flex: 1">
+	<dialog bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight} use:scrollRestore={{ scrollElement: refs.children, snapPointIndex }}>
+		<div class={props?.class} style={props?.style} style:flex="1">
 			<header bind:this={refs.header} {ontouchstart} {ontouchmove} {ontouchend} class:headerOverlaysContent>
 				{#if header}
 					{@render header?.()}
