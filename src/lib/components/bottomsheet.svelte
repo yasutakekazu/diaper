@@ -312,8 +312,9 @@
 	.headerOverlaysContent {
 		position: absolute;
 		top: 0;
+		left: 0;
+		right: 0;
 		z-index: 50;
-		width: 100%;
 		backdrop-filter: blur(8px);
 	}
 </style>
