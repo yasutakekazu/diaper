@@ -86,15 +86,25 @@ All the examples in the demo app are in the [demo](https://github.com/devantic/d
 
 The sheet can be styled using tailwind or css by passing a `class` prop or `style` prop (or both) on the component instance.
 
-```svelte
-<Bottomsheet bind:{open} class="p-4 pt-0 bg-red-500">...</Bottomsheet>
-```
+### Tailwind
 
 ```svelte
-<Bottomsheet bind:{open} style="padding: 1rem; padding-top: 0; background-color: red;">...</Bottomsheet>
+<Bottomsheet bind:open class="p-4 pt-0 bg-red-500">...</Bottomsheet>
 ```
 
-Alternatively you can pass css classes to style the sheet using the container method:
+### CSS
+
+```svelte
+<Bottomsheet bind:open style="padding: 1rem; padding-top: 0; background-color: red;">...</Bottomsheet>
+```
+
+### Other methods
+
+Alternatively you can pass css classes to the component using these methods:
+
+#### Scoped, the way svelte likes it!
+
+You can pass css classes to style the sheet using the container method:
 
 ```svelte
 <div class="container">
@@ -110,9 +120,11 @@ Alternatively you can pass css classes to style the sheet using the container me
 </style>
 ```
 
+#### External stylesheet
+
 Or you can import a stylesheet
 
-```html
+```svelte
 <script>
 	import './sheet.css'
 </script>
@@ -122,7 +134,7 @@ Or you can import a stylesheet
 </div>
 ```
 
-```css
+```css sheet.css
 .sheet {
 	padding: 1rem;
 	padding-top: 0;
