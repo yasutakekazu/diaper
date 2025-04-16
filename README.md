@@ -1,14 +1,8 @@
 # Diaper
 
-A modern bottom sheet component for Svelte5
-
-Mobile only!
-
-## Demo
+A advanced bottom sheet component for Svelte5
 
 See the [demo.](https://diaperbs.vercel.app)
-
-See the [code](https://github.com/devantic/diaper/tree/main/src/routes/examples) for the demo.
 
 ## Install
 
@@ -16,11 +10,15 @@ See the [code](https://github.com/devantic/diaper/tree/main/src/routes/examples)
 npm install @devantic/diaper
 ```
 
-## Use
+## Import
 
 ```ts
 import Bottomsheet from '@devantic/diaper'
 ```
+
+## Usage
+
+See the [code for the examples](https://github.com/devantic/diaper/tree/main/src/routes/examples) used in the demo.
 
 ## Types
 
@@ -46,7 +44,7 @@ export type BottomsheetProps = {
 
 **`open` - optional, bindable**
 
-A boolean value controlling the open/closed state of the bottom sheet.
+A boolean value controlling the open/closed state of the bottom sheet. You can `bind:open` to it which is the prefered method of control. Or you can `bind:this` to the component instance and close it using the `close()` method. See [altopenmethod.svelte](https://github.com/devantic/diaper/tree/main/src/routes/examples/altopenmethod.svelte) for an example of the second approach. All other examples use the first approach.
 
 **`height` - optional**
 

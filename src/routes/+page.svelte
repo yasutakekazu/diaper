@@ -17,11 +17,11 @@
 <main class="overflow-auto pt-2">
 	<h6 class="text-center font-semibold text-[#407878]">An advanced bottom sheet for Svelte5</h6>
 	<br />
-	<p class="px-4 italic">
-		For the full experience, open this page on a mobile device and add to homescreen (it's a PWA). Or open devtools and choose a mobile device (iPhone 6/7/8
-		with device frame recommended). Touch devices only, i.e. desktop not supported.
-	</p>
 	<div class="px-4 py-4 space-y-8 max-w-2xl mx-auto">
+		<p class="italic">
+			For the full experience, open this page on a mobile device and add to homescreen (it's a PWA). Or open devtools and choose a mobile device (iPhone 6/7/8
+			with device frame recommended). Touch devices only, i.e. desktop not supported.
+		</p>
 		<h2 class="h3 border-b">Features</h2>
 		<ul class="list-inside list-disc">
 			<li>Beautiful iOS-like background animations</li>
