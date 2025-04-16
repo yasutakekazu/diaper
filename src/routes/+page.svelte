@@ -11,10 +11,16 @@
 	import Dyanmiccontentwithfixedsnappoints from './examples/dyanmiccontentwithfixedsnappoints.svelte'
 	import Scollablewithdyanmiccontentandautosnappoints from './examples/scollablewithdyanmiccontentandautosnappoints.svelte'
 	import Stackable from './examples/stackable.svelte'
+	import { Star } from '@lucide/svelte'
 </script>
 
 <main class="overflow-auto pt-2">
-	<h6 class="text-center italic">An advanced bottom sheet for Svelte5</h6>
+	<h6 class="text-center font-semibold text-[#407878]">An advanced bottom sheet for Svelte5</h6>
+	<br />
+	<p class="px-4 italic">
+		For the full experience, open this page on a mobile device and add to homescreen (it's a PWA). Or open devtools and choose a mobile device (iPhone 6/7/8
+		with device frame recommended). Touch devices only, i.e. desktop not supported.
+	</p>
 	<div class="px-4 py-4 space-y-8 max-w-2xl mx-auto">
 		<h2 class="h3 border-b">Features</h2>
 		<ul class="list-inside list-disc">
@@ -24,10 +30,16 @@
 			<li>Small</li>
 			<li>Feature rich</li>
 			<li>Svelte5</li>
-			<li>Uses the native html dialog element</li>
+			<li>Native html dialog element uth</li>
 			<li>Light/dark mode out of the box</li>
 			<li>Mobile first, in fact mobile only ;)</li>
+			<li>Many more buzzwords</li>
 		</ul>
+		<p class="text-center">
+			<a class="btn btn-lg flex items-center preset-outlined" href="https://github.com/devantic/diaper" target="_blank"
+				>Star on Github<Star color="#f007" fill="gold"></Star></a
+			>
+		</p>
 		<div class="space-y-2">
 			<h2 class="h3 border-b">Basic</h2>
 			<p>Basic sheets can be opened and closed but not resized</p>

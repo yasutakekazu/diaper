@@ -17,9 +17,9 @@
 			<h1 class="h3 translate-y-0.25">Diaper</h1>
 			<div class="flex gap-2 items-center">
 				<Lightswitch />
-				<button class="p-2">
+				<a href="https://github.com/devantic/diaper" target="_blank" class="p-2" aria-label="Github">
 					<Github />
-				</button>
+				</a>
 			</div>
 		</div>
 	</header>

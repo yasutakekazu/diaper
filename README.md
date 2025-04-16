@@ -6,7 +6,9 @@ Mobile only!
 
 ## Demo
 
-See the [demo](https://diaperbs.vercel.app).
+See the [demo.](https://diaperbs.vercel.app)
+
+See the [code](https://github.com/devantic/diaper/tree/main/src/routes/examples) for the demo.
 
 ## Install
 
@@ -18,6 +20,26 @@ npm install @devantic/diaper
 
 ```ts
 import Bottomsheet from '@devantic/diaper'
+```
+
+## Types
+
+```ts
+export type BottomsheetProps = {
+	open?: boolean
+	maxHeight?: string
+	height?: string
+	snapPoints?: number[] | 'auto'
+	initialIndex?: number
+	snapPoint1Content?: Snippet
+	snapPoint2Content?: Snippet
+	headerOverlaysContent?: boolean
+	canDragSheet?: boolean
+	onclose?: () => void
+	onsnap?: (progress: number) => void
+	header?: Snippet
+	children?: Snippet
+} & HTMLAttributes<HTMLDialogElement>
 ```
 
 ## Props
@@ -36,7 +58,7 @@ Overrides the maxHeight of the sheet, defaults to 93% of the view height to acco
 
 **`snapPoints` - optional**
 
-Accepts an array of numbers between 0 and 1 or the string value <kdb>'auto'</kbd>. E.g. <kbd>[0.25, 0.5, 0.75]</kbd>. Values are relative to the height of the sheet and specified top down. I.e. 0.25 is 1/4 from the top of the sheet amd 0.75 is 1/4 from the bottom.
+Accepts an array of numbers between 0 and 1 or the string value <kdb>'auto'</kbd>. E.g. <kbd>[0.25, 0.5, 0.75]</kbd>. Values are relative to the height of the sheet and specified top down. I.e. 0.25 is 1/4 from the top of the sheet and 0.75 is 1/4 from the bottom.
 
 The special value <kdb>'auto'</kbd> will auto-calculate snappoints where possible. E.g. If there is a lot of space at the bottom of the sheet, a snapoint will be set to allow the sheet to be minimized to fit content.
 
@@ -77,10 +99,6 @@ If specified, the content of the sheet will change to this content when dragged 
 **`snapPoint2Content()`**
 
 If specified, the content of the sheet will change to this content when dragged to the second snappoint.
-
-## See the Code
-
-All the examples in the demo app are in the [demo](https://github.com/devantic/diaper/tree/main/src/routes/examples) folder of this repo.
 
 ## Styling
 
