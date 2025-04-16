@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Bottomsheet from '$lib/components/bottomsheet.svelte'
-	import Header from '$lib/components/demo/header.svelte'
+	import Header from './header.svelte'
 	let open1 = $state(false)
 	let open2 = $state(false)
 	let open3 = $state(false)

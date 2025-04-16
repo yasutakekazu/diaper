@@ -1,21 +1,21 @@
 <script lang="ts">
 	import Bottomsheet from '$lib/components/bottomsheet.svelte'
-	import Header from '$lib/components/demo/header.svelte'
+	import Header from './header.svelte'
 	let open = $state(false)
 </script>
 
 <div class="space-y-2">
-	<h2 class="h4">Basic with initial snap point</h2>
-	<p>Opens at specified snap point and resized</p>
+	<h2 class="h4">Basic with auto snap point</h2>
+	<p>Opens at max height but can be miminized to fit content</p>
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
 </div>
 
-<Bottomsheet bind:open initialIndex={1} snapPoints={[0.25, 0.7]}>
+<Bottomsheet bind:open snapPoints="auto">
 	{#snippet header()}
-		<Header title="Basic Sheet" subtitle="with initial snap point" onclick={() => (open = false)} />
+		<Header title="Basic Sheet" subtitle="with auto snap point" onclick={() => (open = false)} />
 	{/snippet}
 	<div class="p-4">
-		<p>Opens at specified snap point and resized</p>
+		<p>Opens at max height but can be miminized to fit content</p>
 		<br />
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum

@@ -1,31 +1,25 @@
 <script lang="ts">
 	import Bottomsheet from '$lib/components/bottomsheet.svelte'
-	import Header from '$lib/components/demo/header.svelte'
+	import Header from './header.svelte'
 	let open = $state(false)
 </script>
 
 <div class="space-y-2">
-	<h2 class="h4">Scrollable with fixed snap point</h2>
-	<p>Scrollable sheet that can be minimized to specified snap point.</p>
+	<h2 class="h4">Basic with fixed snap points</h2>
+	<p>Opens at max height but can be snapped to specified points</p>
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
 </div>
 
-<Bottomsheet bind:open snapPoints={[0.5]}>
+<Bottomsheet bind:open snapPoints={[0.25, 0.7]}>
 	{#snippet header()}
-		<Header title="Scrollable Sheet" subtitle="With Fixed Snap Point" onclick={() => (open = false)} />
+		<Header title="Basic Sheet" subtitle="with fixed snap points" onclick={() => (open = false)} />
 	{/snippet}
 	<div class="p-4">
-		<p>Scrollable sheet that can be minimized to specified snap point.</p>
+		<p>Opens at max height but can be snapped to specified points</p>
 		<br />
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum
 			autem laboriosam consectetur repellendus voluptates ut sint impedit quam? Praesentium.
 		</p>
-		<br />
-		<div class="space-y-2">
-			{#each { length: 25 }, i}
-				<div class="card preset-filled-surface-200-800 p-4">Item {i + 1}</div>
-			{/each}
-		</div>
 	</div>
 </Bottomsheet>

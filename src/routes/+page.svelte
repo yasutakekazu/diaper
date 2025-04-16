@@ -1,16 +1,16 @@
 <script lang="ts">
-	import Basicsheet from '$lib/components/demo/basic.svelte'
-	import Basicwithfixedheight from '$lib/components/demo/basicwithfixedheight.svelte'
-	import Basicwithautoeight from '$lib/components/demo/basicwithautoeight.svelte'
-	import Basicwithautosnappoints from '$lib/components/demo/basicwithautosnappoints.svelte'
-	import Basicwithfixedsnappoints from '$lib/components/demo/basicwithfixedsnappoints.svelte'
-	import Basicwithinitialsnappoint from '$lib/components/demo/basicwithinitialsnappoint.svelte'
-	import Scrollable from '$lib/components/demo/scrollable.svelte'
-	import Scrollablewithfixedsnappoint from '$lib/components/demo/scrollablewithfixedsnappoint.svelte'
-	import Dyanmiccontentwithautosnappoints from '$lib/components/demo/dyanmiccontentwithautosnappoints.svelte'
-	import Dyanmiccontentwithfixedsnappoints from '$lib/components/demo/dyanmiccontentwithfixedsnappoints.svelte'
-	import Scollablewithdyanmiccontentandautosnappoints from '$lib/components/demo/scollablewithdyanmiccontentandautosnappoints.svelte'
-	import Stackable from '$lib/components/demo/stackable.svelte'
+	import Basicsheet from '$lib/demo/basic.svelte'
+	import Basicwithfixedheight from '$lib/demo/basicwithfixedheight.svelte'
+	import Basicwithautoeight from '$lib/demo/basicwithautoeight.svelte'
+	import Basicwithautosnappoints from '$lib/demo/basicwithautosnappoints.svelte'
+	import Basicwithfixedsnappoints from '$lib/demo/basicwithfixedsnappoints.svelte'
+	import Basicwithinitialsnappoint from '$lib/demo/basicwithinitialsnappoint.svelte'
+	import Scrollable from '$lib/demo/scrollable.svelte'
+	import Scrollablewithfixedsnappoint from '$lib/demo/scrollablewithfixedsnappoint.svelte'
+	import Dyanmiccontentwithautosnappoints from '$lib/demo/dyanmiccontentwithautosnappoints.svelte'
+	import Dyanmiccontentwithfixedsnappoints from '$lib/demo/dyanmiccontentwithfixedsnappoints.svelte'
+	import Scollablewithdyanmiccontentandautosnappoints from '$lib/demo/scollablewithdyanmiccontentandautosnappoints.svelte'
+	import Stackable from '$lib/demo/stackable.svelte'
 </script>
 
 <main class="overflow-auto pt-2">
