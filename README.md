@@ -134,7 +134,9 @@ Or you can import a stylesheet
 </div>
 ```
 
-```css sheet.css
+`sheet.css`
+
+```css
 .sheet {
 	padding: 1rem;
 	padding-top: 0;
