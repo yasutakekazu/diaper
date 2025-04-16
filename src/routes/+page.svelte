@@ -1,16 +1,16 @@
 <script lang="ts">
-	import Basicsheet from '$lib/demo/basic.svelte'
-	import Basicwithfixedheight from '$lib/demo/basicwithfixedheight.svelte'
-	import Basicwithautoeight from '$lib/demo/basicwithautoeight.svelte'
-	import Basicwithautosnappoints from '$lib/demo/basicwithautosnappoints.svelte'
-	import Basicwithfixedsnappoints from '$lib/demo/basicwithfixedsnappoints.svelte'
-	import Basicwithinitialsnappoint from '$lib/demo/basicwithinitialsnappoint.svelte'
-	import Scrollable from '$lib/demo/scrollable.svelte'
-	import Scrollablewithfixedsnappoint from '$lib/demo/scrollablewithfixedsnappoint.svelte'
-	import Dyanmiccontentwithautosnappoints from '$lib/demo/dyanmiccontentwithautosnappoints.svelte'
-	import Dyanmiccontentwithfixedsnappoints from '$lib/demo/dyanmiccontentwithfixedsnappoints.svelte'
-	import Scollablewithdyanmiccontentandautosnappoints from '$lib/demo/scollablewithdyanmiccontentandautosnappoints.svelte'
-	import Stackable from '$lib/demo/stackable.svelte'
+	import Basicsheet from './examples/basic.svelte'
+	import Basicwithfixedheight from './examples/basicwithfixedheight.svelte'
+	import Basicwithautoeight from './examples/basicwithautoeight.svelte'
+	import Basicwithautosnappoints from './examples/basicwithautosnappoints.svelte'
+	import Basicwithfixedsnappoints from './examples/basicwithfixedsnappoints.svelte'
+	import Basicwithinitialsnappoint from './examples/basicwithinitialsnappoint.svelte'
+	import Scrollable from './examples/scrollable.svelte'
+	import Scrollablewithfixedsnappoint from './examples/scrollablewithfixedsnappoint.svelte'
+	import Dyanmiccontentwithautosnappoints from './examples/dyanmiccontentwithautosnappoints.svelte'
+	import Dyanmiccontentwithfixedsnappoints from './examples/dyanmiccontentwithfixedsnappoints.svelte'
+	import Scollablewithdyanmiccontentandautosnappoints from './examples/scollablewithdyanmiccontentandautosnappoints.svelte'
+	import Stackable from './examples/stackable.svelte'
 </script>
 
 <main class="overflow-auto pt-2">

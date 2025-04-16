@@ -80,7 +80,7 @@ If specified, the content of the sheet will change to this content when dragged 
 
 ## See the Code
 
-All the examples in the demo app are in the [demo](https://github.com/devantic/diaper/tree/main/src/lib/components/demo) folder of this repo.
+All the examples in the demo app are in the [demo](https://github.com/devantic/diaper/tree/main/src/routes/examples) folder of this repo.
 
 ## Styling
 
