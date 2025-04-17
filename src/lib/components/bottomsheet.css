@@ -4,8 +4,8 @@
 	--diaper-backdrop-opacity: 0.25;
 	--diaper-light: #fcfcfc;
 	--diaper-dark: #222222;
-	--diaper-lighter: color-mix(in oklab, var(--diaper-light) 80%, grey);
-	--diaper-darker: color-mix(in oklab, var(--diaper-dark) 90%, black);
+	--diaper-lighter: hsl(from var(--diaper-light) h s 90%);
+	--diaper-darker: hsl(from var(--diaper-dark) h s 11%);
 	--diaper-fg: light-dark(var(--diaper-dark), var(--diaper-light));
 	--diaper-bg: light-dark(var(--diaper-light), var(--diaper-dark));
 	--diaper-fg-tinted: light-dark(var(--diaper-darker), var(--diaper-lighter));
