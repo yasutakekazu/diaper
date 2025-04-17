@@ -72,6 +72,10 @@ If omitted, the sheet opens full height. Values outside the range will either op
 
 A boolean specifying if the sheet can be dragged on the content. Defaults to true. The header is always draggable.
 
+**`headerOverlaysContent` - optional**
+
+Boolean. For scrollable sheets, if set to true, the content will scroll behind the header. I.e. the scrollable region takes up the full height of the dialog. A background blur is applied to the header. Defaults to false.
+
 **`onClose()` - optional**
 
 A function to run when the sheet has completely closed, i.e. the close transition has completed.
