@@ -55,12 +55,16 @@ dialog[data-diaper] {
 	box-shadow: 0 -8px 8px 0 var(--diaper-box-shadow-color);
 	transition-property: transform, translate, scale;
 	transition-duration: var(--diaper-duration);
-	transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+	transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+	/* transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1); */
 	transform-origin: top;
 	overflow: clip;
 	overscroll-behavior-y: none;
 	display: flex;
 	flex-direction: column;
+	will-change: transform;
+	backface-visibility: hidden; /* prevent flicker on iOS */
+	contain: layout style size; /* isolates the element */
 
 	&[open] {
 		max-width: 48rem;
@@ -84,6 +88,7 @@ dialog[data-diaper] {
 			@starting-style {
 				opacity: 0;
 			}
+			will-change: opacity;
 		}
 	}
 }
