@@ -252,6 +252,23 @@
 		if (!refs.main) return
 		autoHeight = refs.main.offsetHeight + 'px'
 	})
+
+	function handleEscape(e: KeyboardEvent) {
+		if (e.key === 'Escape' && dialog.contains(e.target as Node)) {
+			e.preventDefault()
+			close()
+		}
+	}
+
+	$effect(() => {
+		if (hasRendered) {
+			if (open) {
+				document.addEventListener('keydown', handleEscape)
+			} else {
+				document.removeEventListener('keydown', handleEscape)
+			}
+		}
+	})
 </script>
 
 {#if isOpen}
