@@ -146,6 +146,8 @@
 	const canDragSheetOverride = snapPoint1Content || snapPoint2Content ? false : canDragSheet
 
 	function ontouchstart(e: TouchEvent) {
+		// ignore multiple touches
+		if (isTouching) return
 		const isHeader = isTouchingHeader(e.target as HTMLElement)
 		if (!canDragSheetOverride && !isHeader) return
 		if (refs.children?.scrollTop !== 0 && !isHeader) return
@@ -170,7 +172,9 @@
 		applyProgress(progress)
 	}
 
-	function ontouchend() {
+	function ontouchend(e: TouchEvent) {
+		// if multiple fingers touching, do nothing until last finger is release
+		if (e.touches.length > 0) return
 		setRootProperty('--diaper-duration', duration)
 		// if (newTranslate === 0) return
 		if (!isTouching) return
