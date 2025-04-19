@@ -3,6 +3,8 @@
 	import { untrack } from 'svelte'
 	import './bottomsheet.css'
 
+	const noop = () => {}
+
 	const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max)
 
 	const getNearestValue = (value: any, array: any[]) =>
@@ -28,8 +30,8 @@
 		snapPoint2Content,
 		headerOverlaysContent = false,
 		canDragSheet = true,
-		onclose = () => {},
-		onsnap = () => {},
+		onclose = noop,
+		onsnap = noop,
 		header,
 		children,
 		...props
@@ -60,9 +62,10 @@
 			return
 		}
 		lastTranslate = snapPoint * dialogHeight
-		doTranslate(lastTranslate, () => {
+		if (newTranslate > lastTranslate) {
 			newTranslate = lastTranslate
-		})
+		}
+		doTranslate(lastTranslate)
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
 	}
@@ -117,7 +120,7 @@
 		return onPropertyTransitionend(dialog, 'translate', _callback)
 	}
 
-	function doTranslate(y: number, callback: (e: TransitionEvent) => void) {
+	function doTranslate(y: number, callback: (e: TransitionEvent) => void = noop) {
 		dialog.style.setProperty('translate', `0 ${y}px`)
 		onTransitionend(callback)
 	}
