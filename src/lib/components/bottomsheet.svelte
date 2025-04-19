@@ -109,7 +109,7 @@
 	let newTranslate = $state(0)
 	let snapPointIndex = $state(initialIndex)
 
-	let snappoints: number[] = []
+	// let snappoints: number[] = []
 	let dialog: HTMLDialogElement
 	let backgroundElement: HTMLElement
 	let startY = 0
@@ -121,13 +121,22 @@
 
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
 	const getNearestSnapPoint = (value: number) => getNearestValue(value, snappoints)
-	const onTransitionend = (callback: () => void) => dialog.addEventListener('transitionend', callback, { once: true })
+	const onTransitionend = (callback: (e: TransitionEvent) => void) => dialog.addEventListener('transitionend', callback, { once: true })
+	const onTranslateend = (callback: (e: TransitionEvent) => void) => {
+		function _callback(e: TransitionEvent) {
+			if (e.propertyName !== 'translate') return
+			dialog.removeEventListener('transitionend', _callback)
+			callback(e)
+		}
+		dialog.addEventListener('transitionend', _callback)
+	}
 
 	function doClose() {
-		dialog.style.setProperty('translate', '0 100%')
+		dialog.style.setProperty('translate', `0 ${dialogHeight}px`)
 		applyProgress(1)
 		isTransitioning = true
-		onTransitionend(() => {
+		onTranslateend((e) => {
+			console.log(e)
 			dialog.close()
 			open = false
 			isOpen = false
@@ -149,7 +158,7 @@
 		// ignore multiple touches
 		if (isTouching) return
 		const isHeader = isTouchingHeader(e.target as HTMLElement)
-		if (!canDragSheetOverride && !isHeader) return
+		if (!canDragSheet && !isHeader) return
 		if (refs.children?.scrollTop !== 0 && !isHeader) return
 		if (isTransitioning) return
 		startY = e.touches[0].clientY
@@ -198,7 +207,7 @@
 	function calcSnapPoints(snapPoints: number[] | 'auto') {
 		let snappoints = [0, 1]
 		if (snapPoints === 'auto') {
-			const sp0 = refs.snapPoint1 || refs.snapPoint2 ? 0 : calcAutoSnapPoint(refs.children)
+			const sp0 = snapPoint1Content || snapPoint2Content ? 0 : calcAutoSnapPoint(refs.children)
 			const sp1 = calcAutoSnapPoint(refs.snapPoint1)
 			const sp2 = calcAutoSnapPoint(refs.snapPoint2)
 			snappoints.push(sp0, sp1, sp2)
@@ -214,14 +223,14 @@
 		if (!mainHeight) {
 			mainHeight = headerOverlaysContent ? dialogHeight : dialogHeight - headerHeight
 		}
-		snappoints = calcSnapPoints(snapPoints)
+		// snappoints = calcSnapPoints(snapPoints)
 		hasRendered = true
 		onTransitionend(() => {
 			dialogHeight = dialog.offsetHeight
 			isTransitioning = false
 		})
 		backgroundElement = [...document.querySelectorAll('dialog')].at(-2) ?? document.body
-		snapToIndex(initialIndex)
+		// snapToIndex(initialIndex)
 	}
 
 	$effect(() => {
@@ -250,7 +259,7 @@
 		if (height !== 'auto') return
 		if (!refs.children) return
 		if (!refs.main) return
-		autoHeight = refs.main.offsetHeight + 'px'
+		autoHeight = refs.children.offsetHeight + headerHeight + 'px'
 	})
 
 	function handleEscape(e: KeyboardEvent) {
@@ -261,24 +270,27 @@
 	}
 
 	$effect(() => {
-		if (hasRendered) {
-			if (open) {
-				document.addEventListener('keydown', handleEscape)
-			} else {
-				document.removeEventListener('keydown', handleEscape)
-			}
+		if (!hasRendered) return
+		if (open) {
+			document.addEventListener('keydown', handleEscape)
+		} else {
+			document.removeEventListener('keydown', handleEscape)
 		}
 	})
+
+	let snappoints = $derived(calcSnapPoints(snapPoints))
+
+	$effect(() => {
+		if (!hasRendered) return
+		console.log('hasRendered')
+		untrack(() => snapToIndex(initialIndex))
+	})
+
+	$inspect(snappoints)
 </script>
 
 {#if isOpen}
-	<dialog
-		data-diaper
-		bind:this={refs.ref}
-		style:height={autoHeight}
-		style:max-height={maxHeight}
-		use:scrollRestore={{ scrollElement: refs.children, snapPointIndex }}
-	>
+	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight}>
 		<div class={props?.class} style={props?.style} style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
 			<header bind:this={refs.header} class:headerOverlaysContent>
 				{#if header}
@@ -288,38 +300,31 @@
 				{/if}
 			</header>
 			<main bind:this={refs.main} style:max-height={mainHeight - newTranslate + 'px'}>
-				{#if !hasRendered}
-					{#if children}
-						<section bind:this={refs.children} class="h-fit">
-							{@render children()}
-						</section>
-					{/if}
-					{#if snapPoint1Content}
-						<section bind:this={refs.snapPoint1} class="h-fit">
-							{@render snapPoint1Content()}
-						</section>
-					{/if}
-					{#if snapPoint2Content}
-						<section bind:this={refs.snapPoint2} class="h-fit">
-							{@render snapPoint2Content()}
-						</section>
-					{/if}
-				{:else}
-					<!--  -->
-					{#if snapPointIndex === 1 && snapPoint1Content}
-						<section transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
-							{@render snapPoint1Content()}
-						</section>
-					{:else if snapPointIndex > 1 && snapPoint2Content}
-						<section transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
-							{@render snapPoint2Content()}
-						</section>
-					{:else if children}
-						<section bind:this={refs.children} transition:fade style="overflow:auto;" style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}>
-							{@render children()}
-						</section>
-					{/if}
-					<!--  -->
+				{#if hasRendered}
+					<section
+						bind:this={refs.children}
+						style="overflow:auto;"
+						style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}
+						data-visible={snapPointIndex === 0 || null}
+					>
+						{@render children?.()}
+					</section>
+					<section
+						bind:this={refs.snapPoint1}
+						style="overflow:auto;"
+						style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}
+						data-visible={snapPointIndex === 1 || null}
+					>
+						{@render snapPoint1Content?.()}
+					</section>
+					<section
+						bind:this={refs.snapPoint2}
+						style="overflow:auto;"
+						style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}
+						data-visible={snapPointIndex === 2 || null}
+					>
+						{@render snapPoint2Content?.()}
+					</section>
 				{/if}
 			</main>
 		</div>
@@ -334,6 +339,18 @@
 	}
 	section {
 		grid-area: content;
+		transition-property: opacity, visibility;
+		transition-duration: 0.9s;
+		transition-behavior: allow-discrete;
+		visibility: hidden;
+		opacity: 0;
+		&[data-visible] {
+			/* background-color: red; */
+			visibility: visible;
+			opacity: 1;
+		}
+		height: fit-content;
+		max-height: 100%;
 	}
 	.h-fit {
 		height: fit-content;
