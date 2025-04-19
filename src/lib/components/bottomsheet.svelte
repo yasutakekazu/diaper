@@ -2,7 +2,6 @@
 	import type { BottomsheetProps } from './types'
 	import { untrack } from 'svelte'
 	import './bottomsheet.css'
-	import { fade } from 'svelte/transition'
 
 	const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max)
 
@@ -15,27 +14,6 @@
 	function indexOf(value: any, array: any[] = [], indexIfNotFound = -1) {
 		const index = array.indexOf(value)
 		return index > -1 ? index : indexIfNotFound
-	}
-
-	function scrollRestore(node: HTMLElement, { scrollElement, snapPointIndex }: { scrollElement: HTMLElement | undefined; snapPointIndex: number }) {
-		let scrollTop = 0
-		let prevIndex = 0
-		return {
-			update({ scrollElement, snapPointIndex }: { scrollElement: HTMLElement | undefined; snapPointIndex: number }) {
-				if (!scrollElement) return
-				$effect(() => {
-					if (snapPointIndex > 0) {
-						if (prevIndex === 0) {
-							scrollTop = scrollElement.scrollTop
-						}
-					} else {
-						// Timeout only seems to be needed with tailwind
-						setTimeout(() => (scrollElement.scrollTop = scrollTop), 10)
-					}
-					prevIndex = snapPointIndex
-				})
-			}
-		}
 	}
 </script>
 
@@ -72,6 +50,7 @@
 	}
 
 	function snapToIndex(index: number) {
+		console.log('snapToIndex', index)
 		if (index < 0) index = snappoints.length - 1
 		snapPointIndex = clamp(index, 0, snappoints.length - 1)
 		const snapPoint = snappoints[snapPointIndex]
@@ -81,12 +60,9 @@
 			return
 		}
 		lastTranslate = snapPoint * dialogHeight
-		if (newTranslate > lastTranslate) {
+		doTranslate(lastTranslate, () => {
 			newTranslate = lastTranslate
-		} else {
-			onTransitionend(() => (newTranslate = lastTranslate))
-		}
-		dialog.style.setProperty('translate', `0 ${lastTranslate}px`)
+		})
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
 	}
@@ -121,22 +97,35 @@
 
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
 	const getNearestSnapPoint = (value: number) => getNearestValue(value, snappoints)
-	const onTransitionend = (callback: (e: TransitionEvent) => void) => dialog.addEventListener('transitionend', callback, { once: true })
-	const onTranslateend = (callback: (e: TransitionEvent) => void) => {
-		function _callback(e: TransitionEvent) {
-			if (e.propertyName !== 'translate') return
-			dialog.removeEventListener('transitionend', _callback)
+
+	function onPropertyTransitionend(element: HTMLElement, property: string, callback: (e: TransitionEvent) => void) {
+		const _callback = (e: TransitionEvent) => {
+			if (e.propertyName !== property) return
+			element.removeEventListener('transitionend', _callback)
+			console.log(e)
 			callback(e)
 		}
 		dialog.addEventListener('transitionend', _callback)
 	}
 
+	function onTransitionend(callback: (e: TransitionEvent) => void) {
+		isTransitioning = true
+		const _callback = (e: TransitionEvent) => {
+			isTransitioning = false
+			callback(e)
+		}
+		return onPropertyTransitionend(dialog, 'translate', _callback)
+	}
+
+	function doTranslate(y: number, callback: (e: TransitionEvent) => void) {
+		dialog.style.setProperty('translate', `0 ${y}px`)
+		onTransitionend(callback)
+	}
+
 	function doClose() {
 		dialog.style.setProperty('translate', `0 ${dialogHeight}px`)
 		applyProgress(1)
-		isTransitioning = true
-		onTranslateend((e) => {
-			console.log(e)
+		doTranslate(dialogHeight, (e) => {
 			dialog.close()
 			open = false
 			isOpen = false
@@ -144,7 +133,6 @@
 			if (backgroundElement === document.body) {
 				document.body.style.setProperty('overflow', 'visible')
 			}
-			isTransitioning = false
 			snapPointIndex = initialIndex
 			newTranslate = 0
 			hasRendered = false
@@ -185,11 +173,12 @@
 		// if multiple fingers touching, do nothing until last finger is release
 		if (e.touches.length > 0) return
 		setRootProperty('--diaper-duration', duration)
-		// if (newTranslate === 0) return
-		if (!isTouching) return
-		snapToIndex(snapPointIndex)
 		startY = 0
+		if (!isTouching) return
 		isTouching = false
+		if (newTranslate === 0) return
+		snapToIndex(snapPointIndex)
+		console.log('ontouchend', snapPointIndex)
 	}
 
 	function applyProgress(progress: number) {
@@ -223,14 +212,8 @@
 		if (!mainHeight) {
 			mainHeight = headerOverlaysContent ? dialogHeight : dialogHeight - headerHeight
 		}
-		// snappoints = calcSnapPoints(snapPoints)
 		hasRendered = true
-		onTransitionend(() => {
-			dialogHeight = dialog.offsetHeight
-			isTransitioning = false
-		})
 		backgroundElement = [...document.querySelectorAll('dialog')].at(-2) ?? document.body
-		// snapToIndex(initialIndex)
 	}
 
 	$effect(() => {
