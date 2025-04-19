@@ -288,7 +288,7 @@
 						bind:this={refs.children}
 						style="overflow:auto;"
 						style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}
-						data-visible={snapPointIndex === 0 || null}
+						data-visible={snapPointIndex === 0 || (snapPointIndex === 1 && !snapPoint1Content) || (snapPointIndex === 2 && !snapPoint2Content) || null}
 					>
 						{@render children?.()}
 					</section>
