@@ -200,8 +200,8 @@
 		let snappoints = [0, 1]
 		if (snapPoints === 'auto') {
 			const sp0 = snapPoint1Content || snapPoint2Content ? 0 : calcAutoSnapPoint(refs.children)
-			const sp1 = calcAutoSnapPoint(refs.snapPoint1)
-			const sp2 = calcAutoSnapPoint(refs.snapPoint2)
+			const sp1 = snapPoint1Content ? calcAutoSnapPoint(refs.snapPoint1) : 0
+			const sp2 = snapPoint1Content ? calcAutoSnapPoint(refs.snapPoint2) : 0
 			snappoints.push(sp0, sp1, sp2)
 		} else {
 			snappoints.push(...snapPoints)
@@ -264,7 +264,13 @@
 		}
 	})
 
-	let snappoints = $derived(calcSnapPoints(snapPoints))
+	// let snappoints = $derived(calcSnapPoints(snapPoints))
+	let snappoints = $state([0, 1])
+
+	$effect(() => {
+		if (!hasRendered) return
+		snappoints = calcSnapPoints(snapPoints)
+	})
 
 	$effect(() => {
 		if (!hasRendered) return
