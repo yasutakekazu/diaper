@@ -94,30 +94,37 @@
 	let startY = 0
 	let lastTranslate = 0
 	let isTouching = false
-	let isTransitioning = true
 	let duration = '0.5s'
 	let backdropOpacity = 0.25
 
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
 	const getNearestSnapPoint = (value: number) => getNearestValue(value, snappoints)
 
-	function onPropertyTransitionend(element: HTMLElement, property: string, callback: (e: TransitionEvent) => void) {
-		const _callback = (e: TransitionEvent) => {
-			if (e.propertyName !== property) return
-			element.removeEventListener('transitionend', _callback)
-			console.log(e)
-			callback(e)
-		}
-		dialog.addEventListener('transitionend', _callback)
-	}
+	let isTransitioning = false
+	let cancelTransition = false
 
 	function onTransitionend(callback: (e: TransitionEvent) => void) {
-		isTransitioning = true
-		const _callback = (e: TransitionEvent) => {
+		console.log(callback, 'callback', isTransitioning)
+		const handleTransitionend = (e: TransitionEvent) => {
+			if (e.propertyName !== 'translate' || e.target !== dialog) return
+			dialog.removeEventListener('transitionend', handleTransitionend)
+			if (!cancelTransition) {
+				console.log('RUNNING CB', callback)
+				callback(e)
+			}
 			isTransitioning = false
-			callback(e)
+			cancelTransition = false
 		}
-		return onPropertyTransitionend(dialog, 'translate', _callback)
+
+		if (isTransitioning) return
+		dialog.addEventListener('transitionend', handleTransitionend)
+		isTransitioning = callback !== noop
+	}
+
+	function cancelCurrentTransition() {
+		console.log('cancelCurrentTransition')
+		if (!isTransitioning) return
+		cancelTransition = true
 	}
 
 	function doTranslate(y: number, callback: (e: TransitionEvent) => void = noop) {
@@ -126,9 +133,10 @@
 	}
 
 	function doClose() {
-		dialog.style.setProperty('translate', `0 ${dialogHeight}px`)
+		console.log('close')
 		applyProgress(1)
 		doTranslate(dialogHeight, (e) => {
+			console.log('doClose')
 			dialog.close()
 			open = false
 			isOpen = false
@@ -146,12 +154,21 @@
 	const canDragSheetOverride = snapPoint1Content || snapPoint2Content ? false : canDragSheet
 
 	function ontouchstart(e: TouchEvent) {
+		console.log('ontouchstart', e.target)
+		cancelCurrentTransition()
+		open = true
 		// ignore multiple touches
 		if (isTouching) return
 		const isHeader = isTouchingHeader(e.target as HTMLElement)
 		if (!canDragSheet && !isHeader) return
 		if (refs.children?.scrollTop !== 0 && !isHeader) return
-		if (isTransitioning) return
+		const translateY = getComputedStyle(dialog).translate.split(' ')[1] ?? '0'
+
+		lastTranslate = parseFloat(translateY)
+		if (translateY.endsWith('%')) {
+			lastTranslate = (lastTranslate * dialogHeight) / 100
+		}
+
 		startY = e.touches[0].clientY
 		isTouching = true
 		setRootProperty('--diaper-duration', '0s')
@@ -176,12 +193,11 @@
 		// if multiple fingers touching, do nothing until last finger is release
 		if (e.touches.length > 0) return
 		setRootProperty('--diaper-duration', duration)
-		startY = 0
+		// if (newTranslate === 0) return
 		if (!isTouching) return
-		isTouching = false
-		if (newTranslate === 0) return
 		snapToIndex(snapPointIndex)
-		console.log('ontouchend', snapPointIndex)
+		startY = 0
+		isTouching = false
 	}
 
 	function applyProgress(progress: number) {
