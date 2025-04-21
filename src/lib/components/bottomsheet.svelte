@@ -259,12 +259,8 @@
 	}
 
 	$effect(() => {
-		if (!hasRendered) return
-		if (open) {
-			document.addEventListener('keydown', handleEscape)
-		} else {
-			document.removeEventListener('keydown', handleEscape)
-		}
+		open && document.addEventListener('keydown', handleEscape)
+		return () => document.removeEventListener('keydown', handleEscape)
 	})
 
 	// let snappoints = $derived(calcSnapPoints(snapPoints))
