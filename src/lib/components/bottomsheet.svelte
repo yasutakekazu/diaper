@@ -177,8 +177,7 @@
 
 	const calcAutoSnapPoint = (ref: HTMLElement | undefined) => {
 		if (!ref) return 0
-		const contentHeight = headerOverlaysContent ? mainHeight - headerHeight : mainHeight
-		return clamp((contentHeight - ref.offsetHeight) / dialogHeight, 0, 1)
+		return clamp((mainHeight - ref.offsetHeight) / dialogHeight, 0, 1)
 	}
 
 	function calcSnapPoints(snapPoints: number[] | 'auto') {
@@ -237,7 +236,8 @@
 		if (height !== 'auto') return
 		if (!refs.children) return
 		if (!refs.main) return
-		autoHeight = refs.children.offsetHeight + headerHeight + 'px'
+		const offsetHeight = refs.children.offsetHeight
+		autoHeight = headerOverlaysContent ? offsetHeight + 'px' : offsetHeight + headerHeight + 'px'
 	})
 
 	$effect(() => {
