@@ -65,7 +65,7 @@
 		if (newTranslate > lastTranslate) {
 			newTranslate = lastTranslate
 		}
-		doTranslate(lastTranslate)
+		translate(lastTranslate)
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
 	}
@@ -124,26 +124,22 @@
 
 	$effect(() => {
 		if (!refs.ref) return
-		console.log('fsfsfsf')
 		refs.ref.addEventListener('transitionend', onTransitionend)
 		return () => refs!.ref!.removeEventListener('transitionend', onTransitionend)
 	})
 
-	function doTranslate(y: number, callback: (e: TransitionEvent) => void = noop) {
+	function translate(y: number) {
 		dialog.style.setProperty('translate', `0 ${y}px`)
-		// onTransitionend(callback)
 	}
 
 	function doClose() {
 		console.log('doClose')
 		open = false
-
 		applyProgress(1)
-		doTranslate(dialogHeight)
+		translate(dialogHeight)
 	}
 
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
-	const canDragSheetOverride = snapPoint1Content || snapPoint2Content ? false : canDragSheet
 
 	function ontouchstart(e: TouchEvent) {
 		console.log('ontouchstart', e.target)
@@ -170,7 +166,7 @@
 		if (!isTouching) return
 		newTranslate = lastTranslate + e.touches[0].clientY - startY
 		if (newTranslate > 0) {
-			dialog.style.setProperty('translate', `0 ${newTranslate}px`)
+			translate(newTranslate)
 		}
 		// setting snapPointIndex here causes content to change on drag.
 		// can alternatively be done in ontouchend
