@@ -349,9 +349,6 @@
 		height: fit-content;
 		max-height: 100%;
 	}
-	.h-fit {
-		height: fit-content;
-	}
 	.handle {
 		width: 40px;
 		height: 4px;
