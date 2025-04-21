@@ -83,8 +83,9 @@
 	let mainHeight = $state(0)
 	let newTranslate = $state(0)
 	let snapPointIndex = $state(initialIndex)
+	let snappoints = $state([0, 1])
+	// let snappoints = $derived(calcSnapPoints(snapPoints))
 
-	// let snappoints: number[] = []
 	let dialog: HTMLDialogElement
 	let backgroundElement: HTMLElement
 	let startY = 0
@@ -118,14 +119,14 @@
 		}
 	}
 
-	$effect(() => {
-		if (!refs.ref) return
-		refs.ref.addEventListener('transitionend', handleTransitionEnd)
-		return () => refs!.ref!.removeEventListener('transitionend', handleTransitionEnd)
-	})
-
 	function translate(y: number) {
 		dialog.style.setProperty('translate', `0 ${y}px`)
+	}
+
+	function applyProgress(progress: number) {
+		dialog.style.setProperty('--diaper-backdrop-opacity', `${(1 - progress) * backdropOpacity}`)
+		// only scale body or dialog underneath if drag is between full and the first snap point
+		if (height === maxHeight) backgroundElement.style.setProperty('--diaper-progress', `${progress}`)
 	}
 
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
@@ -164,7 +165,7 @@
 	}
 
 	function ontouchend(e: TouchEvent) {
-		// if multiple fingers touching, do nothing until last finger is release
+		// if multiple fingers touching, do nothing until last finger is released
 		if (e.touches.length > 0) return
 		setRootProperty('--diaper-duration', duration)
 		// if (newTranslate === 0) return
@@ -172,12 +173,6 @@
 		snapToIndex(snapPointIndex)
 		startY = 0
 		isTouching = false
-	}
-
-	function applyProgress(progress: number) {
-		dialog.style.setProperty('--diaper-backdrop-opacity', `${(1 - progress) * backdropOpacity}`)
-		// only scale body or dialog underneath if drag is between full and the first snap point
-		if (height === maxHeight) backgroundElement.style.setProperty('--diaper-progress', `${progress}`)
 	}
 
 	const calcAutoSnapPoint = (ref: HTMLElement | undefined) => {
@@ -199,6 +194,13 @@
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
+	function handleEscape(e: KeyboardEvent) {
+		if (e.key === 'Escape' && dialog.contains(e.target as Node)) {
+			e.preventDefault()
+			close()
+		}
+	}
+
 	function init() {
 		dialogHeight = dialog.offsetHeight
 		headerHeight = refs.header?.offsetHeight ?? 0
@@ -208,16 +210,6 @@
 		hasRendered = true
 		backgroundElement = [...document.querySelectorAll('dialog')].at(-2) ?? document.body
 	}
-
-	$effect(() => {
-		if (open) {
-			isOpen = true
-			startY = 0
-			lastTranslate = 0
-		} else {
-			if (isOpen) snapToIndex(-1)
-		}
-	})
 
 	$effect(() => {
 		if (!refs.ref) return
@@ -232,32 +224,42 @@
 	})
 
 	$effect(() => {
+		if (open) {
+			isOpen = true
+			startY = 0
+			lastTranslate = 0
+		} else {
+			if (isOpen) snapToIndex(-1)
+		}
+	})
+
+	$effect(() => {
 		if (height !== 'auto') return
 		if (!refs.children) return
 		if (!refs.main) return
 		autoHeight = refs.children.offsetHeight + headerHeight + 'px'
 	})
 
-	function handleEscape(e: KeyboardEvent) {
-		if (e.key === 'Escape' && dialog.contains(e.target as Node)) {
-			e.preventDefault()
-			close()
-		}
-	}
-
 	$effect(() => {
-		open && document.addEventListener('keydown', handleEscape)
-		return () => document.removeEventListener('keydown', handleEscape)
+		if (!hasRendered) return
+		snappoints = calcSnapPoints(snapPoints)
 	})
-
-	let snappoints = $derived(calcSnapPoints(snapPoints))
 
 	$effect(() => {
 		if (!hasRendered) return
 		untrack(() => snapToIndex(initialIndex))
 	})
 
-	$inspect(snappoints)
+	$effect(() => {
+		if (!refs.ref) return
+		refs.ref.addEventListener('transitionend', handleTransitionEnd)
+		return () => refs!.ref!.removeEventListener('transitionend', handleTransitionEnd)
+	})
+
+	$effect(() => {
+		open && document.addEventListener('keydown', handleEscape)
+		return () => document.removeEventListener('keydown', handleEscape)
+	})
 </script>
 
 {#if isOpen}
