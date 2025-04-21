@@ -100,54 +100,46 @@
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
 	const getNearestSnapPoint = (value: number) => getNearestValue(value, snappoints)
 
-	let isTransitioning = false
-	let cancelTransition = false
-
-	function onTransitionend(callback: (e: TransitionEvent) => void) {
-		console.log(callback, 'callback', isTransitioning)
-		const handleTransitionend = (e: TransitionEvent) => {
-			if (e.propertyName !== 'translate' || e.target !== dialog) return
-			dialog.removeEventListener('transitionend', handleTransitionend)
-			if (!cancelTransition) {
-				console.log('RUNNING CB', callback)
-				callback(e)
-			}
-			isTransitioning = false
-			cancelTransition = false
+	function closeMe() {
+		console.log('closeMe')
+		dialog.close()
+		open = false
+		isOpen = false
+		onclose?.()
+		if (backgroundElement === document.body) {
+			document.body.style.setProperty('overflow', 'visible')
 		}
-
-		if (isTransitioning) return
-		dialog.addEventListener('transitionend', handleTransitionend)
-		isTransitioning = callback !== noop
+		snapPointIndex = initialIndex
+		newTranslate = 0
+		hasRendered = false
 	}
 
-	function cancelCurrentTransition() {
-		console.log('cancelCurrentTransition')
-		if (!isTransitioning) return
-		cancelTransition = true
+	function onTransitionend(e: TransitionEvent) {
+		if (e.propertyName !== 'translate' || e.target !== dialog) return
+		console.log('onTransitionend', { open })
+		if (!open) {
+			closeMe()
+		}
 	}
+
+	$effect(() => {
+		if (!refs.ref) return
+		console.log('fsfsfsf')
+		refs.ref.addEventListener('transitionend', onTransitionend)
+		return () => refs!.ref!.removeEventListener('transitionend', onTransitionend)
+	})
 
 	function doTranslate(y: number, callback: (e: TransitionEvent) => void = noop) {
 		dialog.style.setProperty('translate', `0 ${y}px`)
-		onTransitionend(callback)
+		// onTransitionend(callback)
 	}
 
 	function doClose() {
-		console.log('close')
+		console.log('doClose')
+		open = false
+
 		applyProgress(1)
-		doTranslate(dialogHeight, (e) => {
-			console.log('doClose')
-			dialog.close()
-			open = false
-			isOpen = false
-			onclose?.()
-			if (backgroundElement === document.body) {
-				document.body.style.setProperty('overflow', 'visible')
-			}
-			snapPointIndex = initialIndex
-			newTranslate = 0
-			hasRendered = false
-		})
+		doTranslate(dialogHeight)
 	}
 
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
@@ -155,7 +147,6 @@
 
 	function ontouchstart(e: TouchEvent) {
 		console.log('ontouchstart', e.target)
-		cancelCurrentTransition()
 		open = true
 		// ignore multiple touches
 		if (isTouching) return
