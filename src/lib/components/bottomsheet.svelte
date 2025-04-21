@@ -76,7 +76,7 @@
 	})
 
 	let isOpen = $state(false)
-	let intialized = $state(false)
+	let initialized = $state(false)
 	let autoHeight = $state(height)
 	let dialogHeight = $state(0)
 	let headerHeight = $state(0)
@@ -103,7 +103,7 @@
 		isOpen = false
 		snapPointIndex = initialIndex
 		newTranslate = 0
-		intialized = false
+		initialized = false
 		if (backgroundElement === document.body) {
 			document.body.style.setProperty('overflow', 'visible')
 		}
@@ -203,7 +203,7 @@
 		headerHeight = refs.header?.offsetHeight ?? 0
 		mainHeight = headerOverlaysContent ? dialogHeight : dialogHeight - headerHeight
 		backgroundElement = [...document.querySelectorAll('dialog')].at(-2) ?? document.body
-		intialized = true
+		initialized = true
 	}
 
 	$effect(() => {
@@ -237,12 +237,12 @@
 	})
 
 	$effect(() => {
-		if (!intialized) return
+		if (!initialized) return
 		snappoints = calcSnapPoints(snapPoints)
 	})
 
 	$effect(() => {
-		if (!intialized) return
+		if (!initialized) return
 		untrack(() => snapToIndex(initialIndex))
 	})
 
@@ -269,7 +269,7 @@
 				{/if}
 			</header>
 			<main bind:this={refs.main} style:max-height="{mainHeight - newTranslate}px">
-				{#if intialized}
+				{#if initialized}
 					<!-- style:max-height={mainHeight - newTranslate + 'px'} is needed to make iOS scrollable -->
 					<section
 						bind:this={refs.children}
