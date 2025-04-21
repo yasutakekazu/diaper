@@ -98,7 +98,6 @@
 	const getNearestSnapPoint = (value: number) => getNearestValue(value, snappoints)
 
 	function handleCloseTransitionEnd() {
-		console.log('handleCloseTransitionEnd')
 		dialog.close()
 		open = false
 		isOpen = false
@@ -113,7 +112,6 @@
 
 	function handleTransitionEnd(e: TransitionEvent) {
 		if (e.propertyName !== 'translate' || e.target !== dialog) return
-		console.log('handleTransitionEnd', { open })
 		if (!open) {
 			handleCloseTransitionEnd()
 		}
