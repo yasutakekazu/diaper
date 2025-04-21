@@ -52,7 +52,6 @@
 	}
 
 	function snapToIndex(index: number) {
-		console.log('snapToIndex', index)
 		if (index < 0) index = snappoints.length - 1
 		snapPointIndex = clamp(index, 0, snappoints.length - 1)
 		const snapPoint = snappoints[snapPointIndex]
@@ -64,7 +63,7 @@
 		translate(lastTranslate)
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
-		if (snapPoint === 1) open = false
+		open = snapPoint !== 1
 	}
 
 	const refs = $state<Record<string, HTMLElement | undefined>>({
@@ -132,8 +131,6 @@
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
 
 	function ontouchstart(e: TouchEvent) {
-		console.log('ontouchstart', e.target)
-		open = true
 		// ignore multiple touches
 		if (isTouching) return
 		const isHeader = isTouchingHeader(e.target as HTMLElement)
@@ -218,7 +215,7 @@
 			startY = 0
 			lastTranslate = 0
 		} else {
-			if (isOpen) snapTo(1)
+			if (isOpen) snapToIndex(-1)
 		}
 	})
 
@@ -263,7 +260,6 @@
 
 	$effect(() => {
 		if (!hasRendered) return
-		console.log('hasRendered')
 		untrack(() => snapToIndex(initialIndex))
 	})
 
