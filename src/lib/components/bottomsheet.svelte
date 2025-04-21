@@ -300,11 +300,13 @@
 			</header>
 			<main bind:this={refs.main} style:max-height={mainHeight - newTranslate + 'px'}>
 				{#if hasRendered}
+					<!-- style:max-height={mainHeight - newTranslate + 'px'} is needed to make iOS scrollable -->
 					<section
 						bind:this={refs.children}
 						style="overflow:auto;"
 						style:padding-top={headerOverlaysContent ? headerHeight + 'px' : 0}
 						data-visible={snapPointIndex === 0 || (snapPointIndex === 1 && !snapPoint1Content) || (snapPointIndex === 2 && !snapPoint2Content) || null}
+						style:max-height={mainHeight - newTranslate + 'px'}
 					>
 						{@render children?.()}
 					</section>
