@@ -234,6 +234,7 @@
 		if (!refs.main) return
 		const offsetHeight = refs.children.offsetHeight
 		autoHeight = headerOverlaysContent ? offsetHeight + 'px' : offsetHeight + headerHeight + 'px'
+		dialogHeight = parseFloat(autoHeight)
 	})
 
 	$effect(() => {
