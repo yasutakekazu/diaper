@@ -57,10 +57,6 @@
 		snapPointIndex = clamp(index, 0, snappoints.length - 1)
 		const snapPoint = snappoints[snapPointIndex]
 		onsnap?.(snapPoint)
-		if (snapPoint === 1) {
-			close()
-			return
-		}
 		lastTranslate = snapPoint * dialogHeight
 		if (newTranslate > lastTranslate) {
 			newTranslate = lastTranslate
@@ -68,6 +64,7 @@
 		translate(lastTranslate)
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
+		if (snapPoint === 1) open = false
 	}
 
 	const refs = $state<Record<string, HTMLElement | undefined>>({
@@ -100,8 +97,8 @@
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
 	const getNearestSnapPoint = (value: number) => getNearestValue(value, snappoints)
 
-	function closeMe() {
-		console.log('closeMe')
+	function handleCloseTransitionEnd() {
+		console.log('handleCloseTransitionEnd')
 		dialog.close()
 		open = false
 		isOpen = false
@@ -114,29 +111,22 @@
 		hasRendered = false
 	}
 
-	function onTransitionend(e: TransitionEvent) {
+	function handleTransitionEnd(e: TransitionEvent) {
 		if (e.propertyName !== 'translate' || e.target !== dialog) return
-		console.log('onTransitionend', { open })
+		console.log('handleTransitionEnd', { open })
 		if (!open) {
-			closeMe()
+			handleCloseTransitionEnd()
 		}
 	}
 
 	$effect(() => {
 		if (!refs.ref) return
-		refs.ref.addEventListener('transitionend', onTransitionend)
-		return () => refs!.ref!.removeEventListener('transitionend', onTransitionend)
+		refs.ref.addEventListener('transitionend', handleTransitionEnd)
+		return () => refs!.ref!.removeEventListener('transitionend', handleTransitionEnd)
 	})
 
 	function translate(y: number) {
 		dialog.style.setProperty('translate', `0 ${y}px`)
-	}
-
-	function doClose() {
-		console.log('doClose')
-		open = false
-		applyProgress(1)
-		translate(dialogHeight)
 	}
 
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
@@ -228,7 +218,7 @@
 			startY = 0
 			lastTranslate = 0
 		} else {
-			if (isOpen) doClose()
+			if (isOpen) snapTo(1)
 		}
 	})
 
