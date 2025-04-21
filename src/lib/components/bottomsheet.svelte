@@ -250,13 +250,7 @@
 		return () => document.removeEventListener('keydown', handleEscape)
 	})
 
-	// let snappoints = $derived(calcSnapPoints(snapPoints))
-	let snappoints = $state([0, 1])
-
-	$effect(() => {
-		if (!hasRendered) return
-		snappoints = calcSnapPoints(snapPoints)
-	})
+	let snappoints = $derived(calcSnapPoints(snapPoints))
 
 	$effect(() => {
 		if (!hasRendered) return
