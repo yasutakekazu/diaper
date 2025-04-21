@@ -101,13 +101,13 @@
 		dialog.close()
 		open = false
 		isOpen = false
-		onclose?.()
-		if (backgroundElement === document.body) {
-			document.body.style.setProperty('overflow', 'visible')
-		}
 		snapPointIndex = initialIndex
 		newTranslate = 0
 		intialized = false
+		if (backgroundElement === document.body) {
+			document.body.style.setProperty('overflow', 'visible')
+		}
+		onclose?.()
 	}
 
 	function handleTransitionEnd(e: TransitionEvent) {
