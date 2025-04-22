@@ -67,7 +67,8 @@ dialog[data-diaper] {
 	will-change: transform, translate, scale;
 	backface-visibility: hidden; /* prevent flicker on iOS */
 	contain: strict; /* isolates the element */
-
+	position: fixed;
+	inset: 0;
 	&[open] {
 		max-width: 48rem;
 		@starting-style {

@@ -32,7 +32,8 @@
 		canDragSheet = true,
 		stickyHeader = false,
 		openSticky = false,
-		closeOnClickOutside = true,
+		closeOnBackdropTap = true,
+		toggleOnHeaderTap = true,
 		onclose = noop,
 		onsnap = noop,
 		header,
@@ -120,6 +121,12 @@
 		if (!open) {
 			handleCloseTransitionEnd()
 		}
+		if (isMinimized()) {
+			console.log('isMinimized')
+			dialog.close()
+			dialog.show()
+			action = ''
+		}
 	}
 
 	function translate(y: number) {
@@ -155,9 +162,14 @@
 	function ontouchmove(e: TouchEvent) {
 		if (startY === 0) return
 		if (!isTouching) return
-		newTranslate = lastTranslate + e.touches[0].clientY - startY
+		const distance = e.touches[0].clientY - startY
+		newTranslate = lastTranslate + distance
 		if (newTranslate > 0) {
 			translate(newTranslate)
+		}
+		if (stickyHeader && isMinimized() && e.touches[0].clientY - startY < -40) {
+			dialog.close()
+			dialog.showModal()
 		}
 		// setting snapPointIndex here causes content to change on drag.
 		// can alternatively be done in ontouchend
@@ -186,18 +198,29 @@
 	let headerSnappoint = 0
 
 	function isMinimized() {
-		return snapPointIndex === getSnapPointIndex(headerSnappoint)
+		return stickyHeader && snapPointIndex === getSnapPointIndex(headerSnappoint)
 	}
 
+	let action = ''
+
 	function handleHeaderClick(e: MouseEvent) {
-		if (!stickyHeader) return
+		if (!stickyHeader) {
+			close()
+			return
+		}
 		// ignore clicks on focusable child elements, e.g. the close button
 		// buttons in iOS are not considered focusable so attempt to focus
 		// the target first. Obviously won't focus a non-focusable element
 		if (e.target !== e.currentTarget) (e.target as HTMLElement).focus()
 		if ((e.currentTarget as HTMLElement).contains(document.activeElement)) return
-		if (isMinimized()) snapToIndex(initialIndex ?? 0)
-		else snapToIndex(getSnapPointIndex(headerSnappoint))
+		if (isMinimized()) {
+			dialog.close()
+			dialog.showModal()
+			snapToIndex(initialIndex ?? 1)
+		} else {
+			action = 'minimize'
+			snapToIndex(getSnapPointIndex(headerSnappoint))
+		}
 	}
 
 	function calcSnapPoints(snapPoints: number[] | 'auto') {
@@ -232,7 +255,8 @@
 		})
 		document.body.style.setProperty('overflow', 'hidden')
 		dialog = refs.ref as HTMLDialogElement
-		dialog.showModal()
+		if (stickyHeader && openSticky) dialog.show()
+		else dialog.showModal()
 		dialogHeight = dialog.offsetHeight
 		backgroundElement = [...document.querySelectorAll('dialog')].at(-2) ?? document.body
 		initialized = true
@@ -272,7 +296,7 @@
 	})
 
 	function onclick(e: MouseEvent) {
-		if (closeOnClickOutside && e.target === e.currentTarget) close()
+		if (closeOnBackdropTap && e.target === e.currentTarget) close()
 	}
 </script>
 
