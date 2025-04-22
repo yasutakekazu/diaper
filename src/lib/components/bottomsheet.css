@@ -64,7 +64,7 @@ dialog[data-diaper] {
 	overscroll-behavior-y: none;
 	display: flex;
 	flex-direction: column;
-	will-change: transform;
+	will-change: transform, translate, scale;
 	backface-visibility: hidden; /* prevent flicker on iOS */
 	contain: layout style size; /* isolates the element */
 
