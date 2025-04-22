@@ -24,7 +24,7 @@
 		open = $bindable(true),
 		maxHeight = '93%',
 		height = maxHeight,
-		snapPoints = [],
+		snapPoints = [0, 1],
 		initialIndex = 0,
 		snapPoint1Content,
 		snapPoint2Content,
@@ -79,12 +79,11 @@
 	let initialized = $state(false)
 	let autoHeight = $state(height)
 	let dialogHeight = $state(0)
-	let headerHeight = $derived(refs.header?.offsetHeight ?? 0)
-	let mainHeight = $derived(dialogHeight - (headerOverlaysContent ? 0 : headerHeight))
 	let newTranslate = $state(0)
 	let snapPointIndex = $state(initialIndex)
-	let snappoints = $state([0, 1])
-	// let snappoints = $derived(calcSnapPoints(snapPoints))
+	let snappoints = $derived(calcSnapPoints(snapPoints))
+	let headerHeight = $derived(refs.header?.offsetHeight ?? 0)
+	let mainHeight = $derived(dialogHeight - (headerOverlaysContent ? 0 : headerHeight))
 
 	let dialog: HTMLDialogElement
 	let backgroundElement: HTMLElement
@@ -229,11 +228,6 @@
 		const offsetHeight = refs.children.offsetHeight + (headerOverlaysContent ? 0 : headerHeight)
 		dialogHeight = offsetHeight
 		autoHeight = `${offsetHeight}px`
-	})
-
-	$effect(() => {
-		if (!initialized) return
-		snappoints = calcSnapPoints(snapPoints)
 	})
 
 	$effect(() => {
