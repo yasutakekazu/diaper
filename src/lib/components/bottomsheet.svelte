@@ -310,7 +310,6 @@
 		visibility: hidden;
 		opacity: 0;
 		&[data-visible] {
-			/* background-color: red; */
 			visibility: visible;
 			opacity: 1;
 		}
