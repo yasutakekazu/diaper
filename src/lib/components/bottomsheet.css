@@ -66,7 +66,7 @@ dialog[data-diaper] {
 	flex-direction: column;
 	will-change: transform, translate, scale;
 	backface-visibility: hidden; /* prevent flicker on iOS */
-	contain: layout style size; /* isolates the element */
+	contain: strict; /* isolates the element */
 
 	&[open] {
 		max-width: 48rem;
