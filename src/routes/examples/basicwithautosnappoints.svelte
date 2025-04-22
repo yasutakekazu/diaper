@@ -10,7 +10,7 @@
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
 </div>
 
-<Bottomsheet bind:open snapPoints="auto" initialIndex={1} stickyHeader={true}>
+<Bottomsheet bind:open snapPoints="auto">
 	{#snippet header()}
 		<Header title="Basic Sheet" subtitle="with auto snap point" onclick={() => (open = false)} />
 	{/snippet}
