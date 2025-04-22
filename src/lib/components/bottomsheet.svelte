@@ -31,6 +31,7 @@
 		headerOverlaysContent = false,
 		canDragSheet = true,
 		stickyHeader = false,
+		openSticky = false,
 		onclose = noop,
 		onsnap = noop,
 		header,
@@ -184,15 +185,18 @@
 	let headerSnappoint = 0
 
 	function isMinimized() {
-		return snapPointIndex === snappoints.indexOf(headerSnappoint)
+		return snapPointIndex === getSnapPointIndex(headerSnappoint)
 	}
 
 	function handleHeaderClick(e: MouseEvent) {
 		if (!stickyHeader) return
 		// ignore clicks on focusable child elements, e.g. the close button
+		// buttons in iOS are not considered focusable so attempt to focus
+		// the target first. Obviously won't focus a non-focusable element
+		if (e.target !== e.currentTarget) (e.target as HTMLElement).focus()
 		if ((e.currentTarget as HTMLElement).contains(document.activeElement)) return
 		if (isMinimized()) snapToIndex(initialIndex ?? 0)
-		else snapToIndex(snappoints.indexOf(headerSnappoint))
+		else snapToIndex(getSnapPointIndex(headerSnappoint))
 	}
 
 	function calcSnapPoints(snapPoints: number[] | 'auto') {
@@ -255,11 +259,10 @@
 	$effect(() => {
 		if (!initialized) return
 		snappoints = calcSnapPoints(snapPoints)
-	})
-
-	$effect(() => {
-		if (!initialized) return
-		untrack(() => snapToIndex(initialIndex))
+		untrack(() => {
+			const index = stickyHeader && openSticky ? getSnapPointIndex(headerSnappoint) : (initialIndex ?? 0)
+			snapToIndex(index)
+		})
 	})
 
 	$effect(() => {
