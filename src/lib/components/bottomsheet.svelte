@@ -52,6 +52,9 @@
 	}
 
 	function snapToIndex(index: number) {
+		// translate 16px more when the dialog is closing to
+		// prevent box-shadow jumping at end of transition
+		const translateMore = index < 0 ? 16 : 0
 		if (index < 0) index = snappoints.length - 1
 		snapPointIndex = clamp(index, 0, snappoints.length - 1)
 		const snapPoint = snappoints[snapPointIndex]
@@ -60,7 +63,7 @@
 		if (newTranslate > lastTranslate) {
 			newTranslate = lastTranslate
 		}
-		translate(lastTranslate)
+		translate(lastTranslate + translateMore)
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
 		open = snapPoint !== 1
