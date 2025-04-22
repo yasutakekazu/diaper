@@ -115,7 +115,7 @@
 		onclose?.()
 	}
 
-	function handleTransitionEnd(e: TransitionEvent) {
+	function ontransitionend(e: TransitionEvent) {
 		if (e.propertyName !== 'translate' || e.target !== dialog) return
 		if (!open) {
 			handleCloseTransitionEnd()
@@ -267,23 +267,17 @@
 	})
 
 	$effect(() => {
-		if (!refs.ref) return
-		refs.ref.addEventListener('transitionend', handleTransitionEnd)
-		return () => refs!.ref!.removeEventListener('transitionend', handleTransitionEnd)
-	})
-
-	$effect(() => {
 		open && document.addEventListener('keydown', handleEscape)
 		return () => document.removeEventListener('keydown', handleEscape)
 	})
 
-	function handleClick(e: MouseEvent) {
+	function onclick(e: MouseEvent) {
 		if (closeOnClickOutside && e.target === e.currentTarget) close()
 	}
 </script>
 
 {#if isOpen}
-	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight} onclick={handleClick}>
+	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight} {onclick} {ontransitionend}>
 		<div class={props?.class} style={props?.style} style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
