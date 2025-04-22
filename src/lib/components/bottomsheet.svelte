@@ -201,7 +201,7 @@
 	function init() {
 		dialogHeight = dialog.offsetHeight
 		headerHeight = refs.header?.offsetHeight ?? 0
-		mainHeight = headerOverlaysContent ? dialogHeight : dialogHeight - headerHeight
+		mainHeight = dialogHeight - (headerOverlaysContent ? 0 : headerHeight)
 		backgroundElement = [...document.querySelectorAll('dialog')].at(-2) ?? document.body
 		initialized = true
 	}
