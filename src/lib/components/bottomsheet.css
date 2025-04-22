@@ -10,6 +10,7 @@
 	--diaper-bg: light-dark(var(--diaper-light), var(--diaper-dark));
 	--diaper-fg-tinted: light-dark(var(--diaper-darker), var(--diaper-lighter));
 	--diaper-bg-tinted: light-dark(var(--diaper-lighter), var(--diaper-darker));
+	--diaper-easing: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
@@ -25,6 +26,7 @@ body {
 	transition: scale, clip-path;
 	transition-duration: var(--diaper-duration);
 	transform-origin: bottom;
+	transition-timing-function: var(--diaper-easing);
 	scale: calc(0.94 + var(--diaper-progress) * 0.06);
 	clip-path: inset(0 round var(--diaper-roundness) var(--diaper-roundness) 0 0);
 	/* background-color: var(--diaper-bg-tinted);
@@ -55,12 +57,16 @@ dialog[data-diaper] {
 	box-shadow: 0 -8px 8px 0 var(--diaper-box-shadow-color);
 	transition-property: transform, translate, scale;
 	transition-duration: var(--diaper-duration);
-	transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+	transition-timing-function: var(--diaper-easing);
+	/* transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1); */
 	transform-origin: top;
 	overflow: clip;
 	overscroll-behavior-y: none;
 	display: flex;
 	flex-direction: column;
+	will-change: transform, translate, scale;
+	backface-visibility: hidden; /* prevent flicker on iOS */
+	contain: strict; /* isolates the element */
 
 	&[open] {
 		max-width: 48rem;
@@ -81,9 +87,11 @@ dialog[data-diaper] {
 			opacity: var(--diaper-backdrop-opacity);
 			transition: opacity;
 			transition-duration: var(--diaper-duration);
+			transition-timing-function: var(--diaper-easing);
 			@starting-style {
 				opacity: 0;
 			}
+			will-change: opacity;
 		}
 	}
 }

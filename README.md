@@ -13,7 +13,7 @@ npm install @devantic/diaper
 ## Import
 
 ```ts
-import Bottomsheet from '@devantic/diaper'
+import Bottomsheet from '$lib/components/bottomsheet.svelte'
 ```
 
 ## Usage
