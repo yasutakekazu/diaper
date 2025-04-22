@@ -30,6 +30,7 @@
 		snapPoint2Content,
 		headerOverlaysContent = false,
 		canDragSheet = true,
+		stickyHeader = false,
 		onclose = noop,
 		onsnap = noop,
 		header,
@@ -187,6 +188,7 @@
 	}
 
 	function handleHeaderClick(e: MouseEvent) {
+		if (!stickyHeader) return
 		// ignore clicks on focusable child elements, e.g. the close button
 		if ((e.currentTarget as HTMLElement).contains(document.activeElement)) return
 		if (isMinimized()) snapToIndex(initialIndex ?? 0)
@@ -203,8 +205,10 @@
 		} else {
 			snappoints.push(...snapPoints)
 		}
-		headerSnappoint = 1 - (header ? headerHeight / dialogHeight : 0)
-		snappoints.push(headerSnappoint)
+		if (stickyHeader) {
+			headerSnappoint = 1 - (header ? headerHeight / dialogHeight : 0)
+			snappoints.push(headerSnappoint)
+		}
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
