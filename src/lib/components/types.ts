@@ -13,6 +13,7 @@ export type BottomsheetProps = {
 	canDragSheet?: boolean
 	stickyHeader?: boolean
 	openSticky?: boolean
+	closeOnClickOutside?: boolean
 	onclose?: () => void
 	onsnap?: (progress: number) => void
 	header?: Snippet

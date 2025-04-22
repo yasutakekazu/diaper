@@ -32,6 +32,7 @@
 		canDragSheet = true,
 		stickyHeader = false,
 		openSticky = false,
+		closeOnClickOutside = true,
 		onclose = noop,
 		onsnap = noop,
 		header,
@@ -275,10 +276,14 @@
 		open && document.addEventListener('keydown', handleEscape)
 		return () => document.removeEventListener('keydown', handleEscape)
 	})
+
+	function handleClick(e: MouseEvent) {
+		if (closeOnClickOutside && e.target === e.currentTarget) close()
+	}
 </script>
 
 {#if isOpen}
-	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight}>
+	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight} onclick={handleClick}>
 		<div class={props?.class} style={props?.style} style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
