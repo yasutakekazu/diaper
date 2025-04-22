@@ -180,6 +180,19 @@
 		return clamp((mainHeight - ref.offsetHeight) / dialogHeight, 0, 1)
 	}
 
+	let headerSnappoint = 0
+
+	function isMinimized() {
+		return snapPointIndex === snappoints.indexOf(headerSnappoint)
+	}
+
+	function handleHeaderClick(e: MouseEvent) {
+		// ignore clicks on focusable child elements, e.g. the close button
+		if ((e.currentTarget as HTMLElement).contains(document.activeElement)) return
+		if (isMinimized()) snapToIndex(initialIndex ?? 0)
+		else snapToIndex(snappoints.indexOf(headerSnappoint))
+	}
+
 	function calcSnapPoints(snapPoints: number[] | 'auto') {
 		let snappoints = [0, 1]
 		if (snapPoints === 'auto') {
@@ -190,6 +203,8 @@
 		} else {
 			snappoints.push(...snapPoints)
 		}
+		headerSnappoint = 1 - (header ? headerHeight / dialogHeight : 0)
+		snappoints.push(headerSnappoint)
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
@@ -258,7 +273,9 @@
 {#if isOpen}
 	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight}>
 		<div class={props?.class} style={props?.style} style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
-			<header bind:this={refs.header} class:headerOverlaysContent>
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<header bind:this={refs.header} class:headerOverlaysContent onclick={handleHeaderClick}>
 				{#if header}
 					{@render header?.()}
 				{:else}
