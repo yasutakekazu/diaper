@@ -79,8 +79,8 @@
 	let initialized = $state(false)
 	let autoHeight = $state(height)
 	let dialogHeight = $state(0)
-	let headerHeight = $state(0)
-	let mainHeight = $state(0)
+	let headerHeight = $derived(refs.header?.offsetHeight ?? 0)
+	let mainHeight = $derived(dialogHeight - (headerOverlaysContent ? 0 : headerHeight))
 	let newTranslate = $state(0)
 	let snapPointIndex = $state(initialIndex)
 	let snappoints = $state([0, 1])
@@ -198,14 +198,6 @@
 		}
 	}
 
-	function init() {
-		dialogHeight = dialog.offsetHeight
-		headerHeight = refs.header?.offsetHeight ?? 0
-		mainHeight = dialogHeight - (headerOverlaysContent ? 0 : headerHeight)
-		backgroundElement = [...document.querySelectorAll('dialog')].at(-2) ?? document.body
-		initialized = true
-	}
-
 	$effect(() => {
 		if (!refs.ref) return
 		requestAnimationFrame(() => {
@@ -215,7 +207,9 @@
 		document.body.style.setProperty('overflow', 'hidden')
 		dialog = refs.ref as HTMLDialogElement
 		dialog.showModal()
-		untrack(init)
+		dialogHeight = dialog.offsetHeight
+		backgroundElement = [...document.querySelectorAll('dialog')].at(-2) ?? document.body
+		initialized = true
 	})
 
 	$effect(() => {
