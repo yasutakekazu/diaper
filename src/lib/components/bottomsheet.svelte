@@ -30,7 +30,7 @@
 		snapPoint2Content,
 		headerOverlaysContent = false,
 		canDragSheet = true,
-		stickyHeader = false,
+		stickyHeader = true,
 		openSticky = false,
 		closeOnBackdropTap = true,
 		toggleOnHeaderTap = true,
@@ -90,7 +90,7 @@
 	let autoHeight = $state(height)
 	let dialogHeight = $state(0)
 	let newTranslate = $state(0)
-	let snappoints = $state([0, 1])
+	let snappoints = $state.raw([0, 1])
 	let snapPointIndex = $state(initialIndex)
 	let headerHeight = $derived(refs.header?.offsetHeight ?? 0)
 	let mainHeight = $derived(dialogHeight - (headerOverlaysContent ? 0 : headerHeight))
@@ -114,6 +114,7 @@
 		snapPointIndex = initialIndex
 		newTranslate = 0
 		initialized = false
+		rendered = false
 		if (backgroundElement === document.body) {
 			document.body.style.setProperty('overflow', 'visible')
 		}
@@ -220,6 +221,7 @@
 
 	$effect(() => {
 		if (!refs.ref) return
+		console.log('$effect INIT')
 		requestAnimationFrame(() => {
 			duration = getRootProperty('--diaper-duration')
 			backdropOpacity = +getRootProperty('--diaper-backdrop-opacity')
@@ -237,9 +239,14 @@
 		initialized = true
 	})
 
+	let count = 0
+
 	$effect(() => {
-		if (!initialized) return
+		if (!rendered) return
+		console.log('$effect OBSERVER')
+		console.log('snappoints', snappoints)
 		let first = true
+		// console.log('COUNT', ++count)
 		const observer = new IntersectionObserver(
 			(entries) => {
 				if (first) {
@@ -250,22 +257,23 @@
 				// console.log(entry)
 				const a = entry.intersectionRatio
 				const b = 1 - headerSnappoint
-				console.log(snapPointIndex)
-				console.log(a, b)
+				// console.log(snapPointIndex)
+				// console.log(a, b)
 				isMinimized = a <= b
 				const isClosed = a <= 0
-				console.log({ isMinimized, isClosed })
+				// console.log({ isMinimized, isClosed })
 				if (isClosed) handleClose()
 			},
-			{ threshold: snappoints.map((p) => 1 - p) }
+			{ threshold: snappoints.map((p) => 1 - p), root: null, rootMargin: '0px 0px -1px 0px' }
 		)
 		observer.observe(dialog)
 		return () => observer.disconnect()
 	})
-	$inspect(isMinimized)
+	// $inspect(isMinimized)
 
 	$effect(() => {
-		if (!initialized) return
+		if (!rendered) return
+		console.log('$effect SHOW')
 		dialog.close()
 		if (stickyHeader && isMinimized) {
 			dialog.show()
@@ -275,6 +283,7 @@
 	})
 
 	$effect(() => {
+		console.log('$effect OPEN', open, isOpen)
 		if (open) {
 			isOpen = true
 			startY = 0
@@ -285,16 +294,19 @@
 	})
 
 	$effect(() => {
-		if (height !== 'auto') return
 		if (!refs.children) return
-		if (!refs.main) return
+		rendered = true
+		if (height !== 'auto') return
+		console.log('$effect HEIGHT')
 		const offsetHeight = refs.children.offsetHeight + (headerOverlaysContent ? 0 : headerHeight)
 		dialogHeight = offsetHeight
 		autoHeight = `${offsetHeight}px`
 	})
 
+	let rendered = $state(false)
 	$effect(() => {
-		if (!initialized) return
+		if (!rendered) return
+		console.log('$effect SNAPPOINTS')
 		snappoints = calcSnapPoints(snapPoints)
 		untrack(() => {
 			const index = stickyHeader && openSticky ? getSnapPointIndex(headerSnappoint) : (initialIndex ?? 0)
@@ -310,7 +322,9 @@
 	}
 
 	$effect(() => {
-		open && document.addEventListener('keydown', handleEscape)
+		if (!open) return
+		console.log('$effect KEYDOWN')
+		document.addEventListener('keydown', handleEscape)
 		return () => document.removeEventListener('keydown', handleEscape)
 	})
 
