@@ -30,7 +30,7 @@
 		snapPoint2Content,
 		headerOverlaysContent = false,
 		canDragSheet = true,
-		stickyHeader = true,
+		stickyHeader = false,
 		openSticky = false,
 		closeOnBackdropTap = true,
 		toggleOnHeaderTap = true,
@@ -240,7 +240,6 @@
 		}
 		dialogHeight = dialog.offsetHeight
 		backgroundElement = dialogs.at(-2) ?? document.body
-
 		initialized = true
 	})
 
@@ -275,7 +274,11 @@
 	$effect(() => {
 		if (!initialized) return
 		dialog.close()
-		dialog[isMinimized ? 'show' : 'showModal']()
+		if (stickyHeader && isMinimized) {
+			dialog.show()
+		} else {
+			dialog.showModal()
+		}
 	})
 
 	$effect(() => {
