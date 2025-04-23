@@ -30,7 +30,7 @@
 		snapPoint2Content,
 		headerOverlaysContent = false,
 		canDragSheet = true,
-		stickyHeader = false,
+		stickyHeader = true,
 		openSticky = false,
 		closeOnBackdropTap = true,
 		toggleOnHeaderTap = true,
@@ -67,7 +67,9 @@
 		if (newTranslate > lastTranslate) {
 			newTranslate = lastTranslate
 		}
-		translate(lastTranslate + translateMore)
+		// Add 0.01 to get intersection observer to fire when minimized.
+		// Only seems to affext dialogs that have a specific height set.
+		translate(lastTranslate + translateMore + 0.01)
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
 		open = snapPoint !== 1
@@ -103,7 +105,7 @@
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
 	const getNearestSnapPoint = (value: number) => getNearestValue(value, snappoints)
 
-	function handleCloseTransitionEnd() {
+	function handleClose() {
 		dialog.close()
 		open = false
 		isOpen = false
@@ -114,19 +116,6 @@
 			document.body.style.setProperty('overflow', 'visible')
 		}
 		onclose?.()
-	}
-
-	function ontransitionend(e: TransitionEvent) {
-		if (e.propertyName !== 'translate' || e.target !== dialog) return
-		if (!open) {
-			handleCloseTransitionEnd()
-		}
-		if (isMinimized()) {
-			console.log('isMinimized')
-			dialog.close()
-			dialog.show()
-			action = ''
-		}
 	}
 
 	function translate(y: number) {
@@ -167,10 +156,6 @@
 		if (newTranslate > 0) {
 			translate(newTranslate)
 		}
-		if (stickyHeader && isMinimized() && e.touches[0].clientY - startY < -40) {
-			dialog.close()
-			dialog.showModal()
-		}
 		// setting snapPointIndex here causes content to change on drag.
 		// can alternatively be done in ontouchend
 		const snapPoint = getNearestSnapPoint(newTranslate / dialogHeight)
@@ -197,12 +182,6 @@
 
 	let headerSnappoint = 0
 
-	function isMinimized() {
-		return stickyHeader && snapPointIndex === getSnapPointIndex(headerSnappoint)
-	}
-
-	let action = ''
-
 	function handleHeaderClick(e: MouseEvent) {
 		if (!stickyHeader) {
 			close()
@@ -213,12 +192,9 @@
 		// the target first. Obviously won't focus a non-focusable element
 		if (e.target !== e.currentTarget) (e.target as HTMLElement).focus()
 		if ((e.currentTarget as HTMLElement).contains(document.activeElement)) return
-		if (isMinimized()) {
-			dialog.close()
-			dialog.showModal()
+		if (isMinimized) {
 			snapToIndex(initialIndex ?? 1)
 		} else {
-			action = 'minimize'
 			snapToIndex(getSnapPointIndex(headerSnappoint))
 		}
 	}
@@ -263,7 +239,42 @@
 		}
 		dialogHeight = dialog.offsetHeight
 		backgroundElement = dialogs.at(-2) ?? document.body
+
 		initialized = true
+	})
+
+	let isMinimized = $state(false)
+	$effect(() => {
+		if (!initialized) return
+		let first = true
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (first) {
+					first = false
+					return
+				}
+				const entry = entries[0]
+				// console.log(entry)
+				const a = entry.intersectionRatio
+				const b = 1 - headerSnappoint
+				console.log(snapPointIndex)
+				console.log(a, b)
+				isMinimized = a <= b
+				const isClosed = a <= 0
+				console.log({ isMinimized, isClosed })
+				if (isClosed) handleClose()
+			},
+			{ threshold: snappoints.map((p) => 1 - p) }
+		)
+		observer.observe(dialog)
+		return () => observer.disconnect()
+	})
+	$inspect(isMinimized)
+
+	$effect(() => {
+		if (!initialized) return
+		dialog.close()
+		dialog[isMinimized ? 'show' : 'showModal']()
 	})
 
 	$effect(() => {
@@ -305,7 +316,7 @@
 </script>
 
 {#if isOpen}
-	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight} {onclick} {ontransitionend}>
+	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight} {onclick}>
 		<div class={props?.class} style={props?.style} style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
