@@ -255,10 +255,14 @@
 		})
 		document.body.style.setProperty('overflow', 'hidden')
 		dialog = refs.ref as HTMLDialogElement
-		if (stickyHeader && openSticky) dialog.show()
-		else dialog.showModal()
+		const dialogs = [...document.querySelectorAll('dialog')]
+		if (stickyHeader && openSticky && dialogs.length < 2) {
+			dialog.show()
+		} else {
+			dialog.showModal()
+		}
 		dialogHeight = dialog.offsetHeight
-		backgroundElement = [...document.querySelectorAll('dialog')].at(-2) ?? document.body
+		backgroundElement = dialogs.at(-2) ?? document.body
 		initialized = true
 	})
 
