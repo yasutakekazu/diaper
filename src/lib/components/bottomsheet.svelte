@@ -86,11 +86,12 @@
 
 	let isOpen = $state(false)
 	let initialized = $state(false)
+	let isMinimized = $state(false)
 	let autoHeight = $state(height)
 	let dialogHeight = $state(0)
 	let newTranslate = $state(0)
-	let snapPointIndex = $state(initialIndex)
 	let snappoints = $state([0, 1])
+	let snapPointIndex = $state(initialIndex)
 	let headerHeight = $derived(refs.header?.offsetHeight ?? 0)
 	let mainHeight = $derived(dialogHeight - (headerOverlaysContent ? 0 : headerHeight))
 
@@ -101,6 +102,7 @@
 	let isTouching = false
 	let duration = '0.5s'
 	let backdropOpacity = 0.25
+	let headerSnappoint = 0
 
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
 	const getNearestSnapPoint = (value: number) => getNearestValue(value, snappoints)
@@ -136,8 +138,8 @@
 		const isHeader = isTouchingHeader(e.target as HTMLElement)
 		if (!canDragSheet && !isHeader) return
 		if (refs.children?.scrollTop !== 0 && !isHeader) return
-		const translateY = getComputedStyle(dialog).translate.split(' ')[1] ?? '0'
 
+		const translateY = getComputedStyle(dialog).translate.split(' ')[1] ?? '0'
 		lastTranslate = parseFloat(translateY)
 		if (translateY.endsWith('%')) {
 			lastTranslate = (lastTranslate * dialogHeight) / 100
@@ -181,16 +183,14 @@
 		return clamp((mainHeight - ref.offsetHeight) / dialogHeight, 0, 1)
 	}
 
-	let headerSnappoint = 0
-
 	function handleHeaderClick(e: MouseEvent) {
 		if (!toggleOnHeaderTap) return
 		if (!stickyHeader) {
 			close()
 			return
 		}
-		// ignore clicks on focusable child elements, e.g. the close button
-		// buttons in iOS are not considered focusable so attempt to focus
+		// ignore clicks on focusable child elements, e.g. the close button.
+		// Buttons in iOS are not considered focusable so attempt to focus
 		// the target first. Obviously won't focus a non-focusable element
 		if (e.target !== e.currentTarget) (e.target as HTMLElement).focus()
 		if ((e.currentTarget as HTMLElement).contains(document.activeElement)) return
@@ -218,13 +218,6 @@
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
-	function handleEscape(e: KeyboardEvent) {
-		if (e.key === 'Escape' && dialog.contains(e.target as Node)) {
-			e.preventDefault()
-			close()
-		}
-	}
-
 	$effect(() => {
 		if (!refs.ref) return
 		requestAnimationFrame(() => {
@@ -244,7 +237,6 @@
 		initialized = true
 	})
 
-	let isMinimized = $state(false)
 	$effect(() => {
 		if (!initialized) return
 		let first = true
@@ -309,6 +301,13 @@
 			snapToIndex(index)
 		})
 	})
+
+	function handleEscape(e: KeyboardEvent) {
+		if (e.key === 'Escape' && dialog.contains(e.target as Node)) {
+			e.preventDefault()
+			close()
+		}
+	}
 
 	$effect(() => {
 		open && document.addEventListener('keydown', handleEscape)
