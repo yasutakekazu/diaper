@@ -183,6 +183,7 @@
 	let headerSnappoint = 0
 
 	function handleHeaderClick(e: MouseEvent) {
+		if (!toggleOnHeaderTap) return
 		if (!stickyHeader) {
 			close()
 			return
