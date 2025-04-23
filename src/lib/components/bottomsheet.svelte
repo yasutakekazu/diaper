@@ -219,9 +219,30 @@
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
+	// Effect 1 - open logic
+	$effect(() => {
+		console.log('$effect 1 OPEN', open, isOpen)
+		if (open) {
+			isOpen = true
+			startY = 0
+			lastTranslate = 0
+		} else {
+			if (isOpen) snapToIndex(-1)
+		}
+	})
+
+	// Effect 2 - escape key
+	$effect(() => {
+		if (!open) return
+		console.log('$effect 2 KEYDOWN')
+		document.addEventListener('keydown', handleEscape)
+		return () => document.removeEventListener('keydown', handleEscape)
+	})
+
+	// Effect 3 - init
 	$effect(() => {
 		if (!refs.ref) return
-		console.log('$effect INIT')
+		console.log('$effect 3 INIT')
 		requestAnimationFrame(() => {
 			duration = getRootProperty('--diaper-duration')
 			backdropOpacity = +getRootProperty('--diaper-backdrop-opacity')
@@ -239,12 +260,34 @@
 		initialized = true
 	})
 
-	let count = 0
+	// Effect 4 - autoheight
+	$effect(() => {
+		if (!refs.children) return
+		rendered = true
+		if (height !== 'auto') return
+		console.log('$effect 4 HEIGHT')
+		const offsetHeight = refs.children.offsetHeight + (headerOverlaysContent ? 0 : headerHeight)
+		dialogHeight = offsetHeight
+		autoHeight = `${offsetHeight}px`
+	})
 
+	let rendered = $state(false)
+	// Effect 5 - calc snappoints
 	$effect(() => {
 		if (!rendered) return
-		console.log('$effect OBSERVER')
-		console.log('snappoints', snappoints)
+		console.log('$effect 5 SNAPPOINTS')
+		snappoints = calcSnapPoints(snapPoints)
+		untrack(() => {
+			const index = stickyHeader && openSticky ? getSnapPointIndex(headerSnappoint) : (initialIndex ?? 0)
+			snapToIndex(index)
+		})
+	})
+
+	// Effect 6 - observer
+	$effect(() => {
+		if (!rendered) return
+		console.log('$effect 6 OBSERVER')
+		// console.log('snappoints', snappoints)
 		let first = true
 		// console.log('COUNT', ++count)
 		const observer = new IntersectionObserver(
@@ -271,9 +314,10 @@
 	})
 	// $inspect(isMinimized)
 
+	// Effect 7 - show
 	$effect(() => {
 		if (!rendered) return
-		console.log('$effect SHOW')
+		console.log('$effect 7 SHOW')
 		dialog.close()
 		if (stickyHeader && isMinimized) {
 			dialog.show()
@@ -282,51 +326,12 @@
 		}
 	})
 
-	$effect(() => {
-		console.log('$effect OPEN', open, isOpen)
-		if (open) {
-			isOpen = true
-			startY = 0
-			lastTranslate = 0
-		} else {
-			if (isOpen) snapToIndex(-1)
-		}
-	})
-
-	$effect(() => {
-		if (!refs.children) return
-		rendered = true
-		if (height !== 'auto') return
-		console.log('$effect HEIGHT')
-		const offsetHeight = refs.children.offsetHeight + (headerOverlaysContent ? 0 : headerHeight)
-		dialogHeight = offsetHeight
-		autoHeight = `${offsetHeight}px`
-	})
-
-	let rendered = $state(false)
-	$effect(() => {
-		if (!rendered) return
-		console.log('$effect SNAPPOINTS')
-		snappoints = calcSnapPoints(snapPoints)
-		untrack(() => {
-			const index = stickyHeader && openSticky ? getSnapPointIndex(headerSnappoint) : (initialIndex ?? 0)
-			snapToIndex(index)
-		})
-	})
-
 	function handleEscape(e: KeyboardEvent) {
 		if (e.key === 'Escape' && dialog.contains(e.target as Node)) {
 			e.preventDefault()
 			close()
 		}
 	}
-
-	$effect(() => {
-		if (!open) return
-		console.log('$effect KEYDOWN')
-		document.addEventListener('keydown', handleEscape)
-		return () => document.removeEventListener('keydown', handleEscape)
-	})
 
 	function onclick(e: MouseEvent) {
 		if (closeOnBackdropTap && e.target === e.currentTarget) close()
