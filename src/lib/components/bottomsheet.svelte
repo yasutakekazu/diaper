@@ -69,7 +69,7 @@
 		}
 		// Add 0.01 to get intersection observer to fire when minimized.
 		// Only seems to affext dialogs that have a specific height set.
-		translate(lastTranslate + translateMore + 0.01)
+		translate(lastTranslate + translateMore)
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
 		open = snapPoint !== 1
@@ -140,11 +140,7 @@
 		if (!canDragSheet && !isHeader) return
 		if (refs.children?.scrollTop !== 0 && !isHeader) return
 
-		const translateY = getComputedStyle(dialog).translate.split(' ')[1] ?? '0'
-		lastTranslate = parseFloat(translateY)
-		if (translateY.endsWith('%')) {
-			lastTranslate = (lastTranslate * dialogHeight) / 100
-		}
+		lastTranslate = dialog.getBoundingClientRect().top - dialog.offsetTop
 
 		startY = e.touches[0].clientY
 		isTouching = true
