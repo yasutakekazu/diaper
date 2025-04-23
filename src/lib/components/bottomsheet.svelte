@@ -153,6 +153,7 @@
 		if (!isTouching) return
 		const distance = e.touches[0].clientY - startY
 		newTranslate = lastTranslate + distance
+		// don't allow drag past top
 		if (newTranslate > 0) {
 			translate(newTranslate)
 		}
