@@ -215,6 +215,15 @@
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
+	// Effect 0 - root variables
+	$effect(() => {
+		requestAnimationFrame(() => {
+			duration = getRootProperty('--diaper-duration')
+			backdropOpacity = +getRootProperty('--diaper-backdrop-opacity')
+			console.log({ duration, backdropOpacity })
+		})
+	})
+
 	// Effect 1 - open logic
 	$effect(() => {
 		console.log('$effect 1 OPEN', open, isOpen)
@@ -239,10 +248,6 @@
 	$effect(() => {
 		if (!refs.ref) return
 		console.log('$effect 3 INIT')
-		requestAnimationFrame(() => {
-			duration = getRootProperty('--diaper-duration')
-			backdropOpacity = +getRootProperty('--diaper-backdrop-opacity')
-		})
 		document.body.style.setProperty('overflow', 'hidden')
 		dialog = refs.ref as HTMLDialogElement
 		const dialogs = [...document.querySelectorAll('dialog')]
