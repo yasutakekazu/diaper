@@ -251,7 +251,8 @@
 		document.body.style.setProperty('overflow', 'hidden')
 		dialog = refs.ref as HTMLDialogElement
 		const dialogs = [...document.querySelectorAll('dialog')]
-		if (stickyHeader && openSticky && dialogs.length < 2) {
+		dialog.close()
+		if (stickyHeader && openSticky && isMinimized && dialogs.length < 2) {
 			dialog.show()
 		} else {
 			dialog.showModal()
@@ -312,19 +313,6 @@
 		)
 		observer.observe(dialog)
 		return () => observer.disconnect()
-	})
-	// $inspect(isMinimized)
-
-	// Effect 7 - show
-	$effect(() => {
-		if (!rendered) return
-		console.log('$effect 7 SHOW')
-		dialog.close()
-		if (stickyHeader && isMinimized) {
-			dialog.show()
-		} else {
-			dialog.showModal()
-		}
 	})
 
 	function handleEscape(e: KeyboardEvent) {
