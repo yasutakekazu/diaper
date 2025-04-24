@@ -112,7 +112,6 @@
 		open = false
 		isOpen = false
 		snapPointIndex = initialIndex
-		newTranslate = 0
 		initialized = false
 		rendered = false
 		if (backgroundElement === document.body) {
@@ -134,6 +133,9 @@
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
 
 	function ontouchstart(e: TouchEvent) {
+		startY = 0
+		lastTranslate = 0
+		newTranslate = 0
 		// ignore multiple touches
 		if (isTouching) return
 		const isHeader = isTouchingHeader(e.target as HTMLElement)
@@ -171,7 +173,6 @@
 		// if (newTranslate === 0) return
 		if (!isTouching) return
 		snapToIndex(snapPointIndex)
-		startY = 0
 		isTouching = false
 	}
 
@@ -229,8 +230,6 @@
 		console.log('$effect 1 OPEN', open, isOpen)
 		if (open) {
 			isOpen = true
-			startY = 0
-			lastTranslate = 0
 		} else {
 			if (isOpen) snapToIndex(-1)
 		}
