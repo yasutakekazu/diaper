@@ -221,7 +221,7 @@
 
 	// Effect 1 - open logic
 	$effect(() => {
-		console.log('$effect 1 OPEN', open, isOpen)
+		// console.log('$effect 1 OPEN', open, isOpen)
 		if (open) isOpen = true
 		else if (isOpen) snapToIndex(-1)
 	})
@@ -229,7 +229,7 @@
 	// Effect 2 - escape key
 	$effect(() => {
 		if (!open) return
-		console.log('$effect 2 KEYDOWN')
+		// console.log('$effect 2 KEYDOWN')
 		document.addEventListener('keydown', handleEscape)
 		return () => document.removeEventListener('keydown', handleEscape)
 	})
@@ -237,7 +237,7 @@
 	// Effect 3 - init
 	$effect(() => {
 		if (!refs.ref) return
-		console.log('$effect 3 INIT')
+		// console.log('$effect 3 INIT')
 		document.body.style.setProperty('overflow', 'hidden')
 		dialog = refs.ref as HTMLDialogElement
 		const dialogs = [...document.querySelectorAll('dialog')]
@@ -257,7 +257,7 @@
 		if (!refs.children) return
 		rendered = true
 		if (height !== 'auto') return
-		console.log('$effect 4 HEIGHT')
+		// console.log('$effect 4 HEIGHT')
 		const offsetHeight = refs.children.offsetHeight + (headerOverlaysContent ? 0 : headerHeight)
 		dialogHeight = offsetHeight
 		autoHeight = `${offsetHeight}px`
@@ -266,7 +266,7 @@
 	// Effect 5 - calc snappoints
 	$effect(() => {
 		if (!rendered) return
-		console.log('$effect 5 SNAPPOINTS')
+		// console.log('$effect 5 SNAPPOINTS')
 		snappoints = calcSnapPoints(snapPoints)
 		untrack(() => snapToIndex(stickyHeader && openSticky ? getSnapPointIndex(headerSnappoint) : (initialIndex ?? 0)))
 	})
@@ -274,7 +274,7 @@
 	// Effect 6 - observer
 	$effect(() => {
 		if (!rendered) return
-		console.log('$effect 6 OBSERVER')
+		// console.log('$effect 6 OBSERVER')
 		let first = true
 		const observer = new IntersectionObserver(
 			(entries) => {
