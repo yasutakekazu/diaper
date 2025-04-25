@@ -271,10 +271,7 @@
 		if (!rendered) return
 		console.log('$effect 5 SNAPPOINTS')
 		snappoints = calcSnapPoints(snapPoints)
-		untrack(() => {
-			const index = stickyHeader && openSticky ? getSnapPointIndex(headerSnappoint) : (initialIndex ?? 0)
-			snapToIndex(index)
-		})
+		untrack(() => snapToIndex(stickyHeader && openSticky ? getSnapPointIndex(headerSnappoint) : (initialIndex ?? 0)))
 	})
 
 	// Effect 6 - observer
