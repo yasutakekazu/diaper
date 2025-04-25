@@ -282,9 +282,7 @@
 	$effect(() => {
 		if (!rendered) return
 		console.log('$effect 6 OBSERVER')
-		// console.log('snappoints', snappoints)
 		let first = true
-		// console.log('COUNT', ++count)
 		const observer = new IntersectionObserver(
 			(entries) => {
 				if (first) {
@@ -292,14 +290,10 @@
 					return
 				}
 				const entry = entries[0]
-				// console.log(entry)
 				const a = entry.intersectionRatio
 				const b = 1 - headerSnappoint
-				// console.log(snapPointIndex)
-				// console.log(a, b)
 				isMinimized = a <= b
 				const isClosed = a <= 0
-				// console.log({ isMinimized, isClosed })
 				if (isClosed) handleClose()
 			},
 			{ threshold: snappoints.map((p) => 1 - p), root: null, rootMargin: '0px 0px -1px 0px' }
