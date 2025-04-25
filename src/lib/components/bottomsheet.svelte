@@ -84,6 +84,7 @@
 
 	let isOpen = $state(false)
 	let initialized = $state(false)
+	let rendered = $state(false)
 	let isMinimized = $state(false)
 	let autoHeight = $state(height)
 	let dialogHeight = $state(0)
@@ -253,8 +254,6 @@
 		backgroundElement = dialogs.at(-2) ?? document.body
 		initialized = true
 	})
-
-	let rendered = $state(false)
 
 	// Effect 4 - autoheight
 	$effect(() => {
