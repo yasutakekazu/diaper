@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Bottomsheet from '$lib/components/bottomsheet.svelte'
+	import Bottomsheet from '@devantic/diaper'
 	import Header from './header.svelte'
 	let open = $state(false)
 </script>
