@@ -25,3 +25,10 @@
 	</header>
 	{@render children()}
 </div>
+
+<!-- <style>
+	:global(:root) {
+		--diaper-duration: 0.6s !important;
+		--diaper-backdrop-opacity: 0.7 !important;
+	}
+</style> -->

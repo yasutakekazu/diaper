@@ -125,7 +125,7 @@
 	}
 
 	function applyProgress(progress: number) {
-		dialog.style.setProperty('--diaper-backdrop-opacity', `${(1 - progress) * backdropOpacity}`)
+		dialog.style.setProperty('--diaper-progress-backdrop', `${progress}`)
 		// only scale body or dialog underneath if drag is between full and the first snap point
 		if (height === maxHeight) backgroundElement.style.setProperty('--diaper-progress', `${progress}`)
 	}
@@ -218,10 +218,8 @@
 
 	// Effect 0 - root variables
 	$effect(() => {
-		requestAnimationFrame(() => {
-			duration = getRootProperty('--diaper-duration')
-			console.log({ duration, backdropOpacity })
-		})
+		duration = getRootProperty('--diaper-duration')
+		backdropOpacity = +getRootProperty('--diaper-backdrop-opacity')
 	})
 
 	// Effect 1 - open logic
