@@ -30,7 +30,7 @@
 		snapPoint2Content,
 		headerOverlaysContent = false,
 		canDragSheet = true,
-		stickyHeader = true,
+		stickyHeader = false,
 		openSticky = false,
 		closeOnBackdropTap = true,
 		toggleOnHeaderTap = true,
