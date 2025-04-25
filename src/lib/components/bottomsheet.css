@@ -58,7 +58,7 @@ body {
 
 dialog[data-diaper] {
 	--diaper-progress: 1;
-	--diaper-box-shadow-color: #0001;
+	--diaper-shadow-color: rgba(0 0 0 / 0.1);
 	width: 100%;
 	margin-bottom: 0;
 	margin-top: auto;
@@ -72,7 +72,7 @@ dialog[data-diaper] {
 	border-radius: 1rem 1rem 0 0;
 	background-color: var(--diaper-bg);
 	color: var(--diaper-fg);
-	box-shadow: 0 -4px 4px 0 var(--diaper-box-shadow-color);
+	box-shadow: 0 -4px 6px -1px var(--diaper-shadow-color);
 	transition-property: transform, translate, scale;
 	transition-duration: var(--diaper-duration);
 	transition-timing-function: var(--diaper-easing);
@@ -95,7 +95,7 @@ dialog[data-diaper] {
 		/* only top 2 dialogs have backdrop and box-shadow */
 		&:not(:nth-last-of-type(-n + 2)) {
 			--diaper-backdrop-opacity: 0;
-			--diaper-box-shadow-color: #0000;
+			--diaper-shadow-color: #0000;
 		}
 		&:not(:last-of-type) {
 			scale: calc(0.94 + var(--diaper-progress) * 0.06);
