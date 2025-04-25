@@ -33,7 +33,7 @@
 		stickyHeader = false,
 		openSticky = false,
 		closeOnBackdropTap = true,
-		toggleOnHeaderTap = true,
+		toggleOnHeaderTap = false,
 		onclose = noop,
 		onsnap = noop,
 		header,

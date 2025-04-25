@@ -84,7 +84,7 @@ Boolean. When true, and stickyHeader is true, the sheet will open with the heade
 
 **`toggleOnHeaderTap` - optional**
 
-Boolean. Enables tap on header to minimize and maximize the sheet. If stickyHeader is false, a header tap will close the sheet. The maximized state is either the full height, or, if set, the intial snapPoint.
+Boolean. Enables tap on header to minimize and maximize the sheet when stickHeader is true. If stickyHeader is false, a header tap will close the sheet. The maximized state is either the full height, or, if set, the intial snapPoint. Default is false.
 
 **`closeOnBackdrop tap` - optional**
 
