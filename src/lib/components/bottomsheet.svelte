@@ -67,8 +67,6 @@
 		if (newTranslate > lastTranslate) {
 			newTranslate = lastTranslate
 		}
-		// Add 0.01 to get intersection observer to fire when minimized.
-		// Only seems to affext dialogs that have a specific height set.
 		translate(lastTranslate + translateMore)
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
