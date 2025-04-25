@@ -20,7 +20,7 @@ import Bottomsheet from '@devantic/diaper'
 
 See the [code for the examples](https://github.com/devantic/diaper/tree/main/src/routes/examples) used in the demo.
 
-## Types
+## Types and Props
 
 ```ts
 export type BottomsheetProps = {
@@ -40,11 +40,9 @@ export type BottomsheetProps = {
 } & HTMLAttributes<HTMLDialogElement>
 ```
 
-## Props
-
 **`open` - optional, bindable**
 
-A boolean value controlling the open/closed state of the bottom sheet. You can `bind:open` to it which is the prefered method of control. Or you can `bind:this` to the component instance and close it using the `close()` method. See [altopenmethod.svelte](https://github.com/devantic/diaper/tree/main/src/routes/examples/altopenmethod.svelte) for an example of the second approach. All other examples use the first approach.
+A boolean value controlling the open/closed state of the bottom sheet. You can `bind:open` to it which is the prefered method of control. Or you can `bind:this` to the component instance and control it using the `showModal()` and `close()` methods - see [Programmatic Control](#programmatic-control)
 
 **`height` - optional**
 
@@ -74,7 +72,23 @@ A boolean specifying if the sheet can be dragged on the content. Defaults to tru
 
 **`headerOverlaysContent` - optional**
 
-Boolean. For scrollable sheets, if set to true, the content will scroll behind the header. I.e. the scrollable region takes up the full height of the dialog. A background blur is applied to the header. Defaults to false.
+Boolean. For scrollable sheets, if set to true, the content will scroll behind the header. I.e. the scrollable region takes up the full height of the dialog. A background blur is applied to the header. Defaults is false.
+
+**`stickyHeader` - optional**
+
+Boolean. If true the header will stick to the bottom of the page and can only be closed programatically. Default is false.
+
+**`openSticky` - optional**
+
+Boolean. When true, and stickyHeader is true, the sheet will open with the header in the sticky position :wink:. Default is false.
+
+**`toggleOnHeaderTap` - optional**
+
+Boolean. Enables tap on header to minimize and maximize the sheet. If stickyHeader is false, a header tap will close the sheet. The maximized state is either the full height, or, if set, the intial snapPoint.
+
+**`closeOnBackdrop tap` - optional**
+
+Boolean. Defaults to TRUE.
 
 **`onClose()` - optional**
 
@@ -101,6 +115,16 @@ If specified, the content of the sheet will change to this content when dragged 
 **`snapPoint2Content()`**
 
 If specified, the content of the sheet will change to this content when dragged to the second snappoint.
+
+## Programmatic control
+
+Use the `bind:this` directive to expose the instance methods:
+
+- showModal()
+- close()
+- snapTo(index)
+
+See [programmaticcontrol.svelte](https://github.com/devantic/diaper/tree/main/src/routes/examples/ptogrammaticcontrol.svelte) for an example.
 
 ## Styling
 

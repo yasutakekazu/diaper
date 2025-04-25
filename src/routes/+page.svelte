@@ -11,6 +11,7 @@
 	import Dyanmiccontentwithfixedsnappoints from './examples/dyanmiccontentwithfixedsnappoints.svelte'
 	import Scollablewithdyanmiccontentandautosnappoints from './examples/scollablewithdyanmiccontentandautosnappoints.svelte'
 	import Stackable from './examples/stackable.svelte'
+	import Programmaticcontrol from './examples/programmaticcontrol.svelte'
 	import { Star } from '@lucide/svelte'
 </script>
 
@@ -64,5 +65,6 @@
 		<Dyanmiccontentwithfixedsnappoints />
 		<Scollablewithdyanmiccontentandautosnappoints />
 		<Stackable />
+		<Programmaticcontrol />
 	</div>
 </main>

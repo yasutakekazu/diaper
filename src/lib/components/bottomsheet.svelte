@@ -21,7 +21,7 @@
 
 <script lang="ts">
 	let {
-		open = $bindable(true),
+		open = $bindable(false),
 		maxHeight = '93%',
 		height = maxHeight,
 		snapPoints = [0, 1],
@@ -40,6 +40,10 @@
 		children,
 		...props
 	}: BottomsheetProps = $props()
+
+	export function showModal() {
+		open = true
+	}
 
 	export function close() {
 		open = false

@@ -9,7 +9,7 @@
 
 <!-- Sheet -->
 {#if open}
-	<Bottomsheet bind:this={bottomsheet} onclose={() => (open = false)}>
+	<Bottomsheet bind:this={bottomsheet} {open} onclose={() => (open = false)}>
 		<button onclick={bottomsheet.close}>Close</button>
 		<div style="padding: 1rem">
 			<p>The default sheet</p>
