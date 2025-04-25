@@ -232,7 +232,7 @@
 		return () => document.removeEventListener('keydown', handleEscape)
 	})
 
-	// Effect 3 - init
+	// Effect 3 - show
 	$effect(() => {
 		if (!refs.ref) return
 		document.body.style.setProperty('overflow', 'hidden')
@@ -272,15 +272,10 @@
 		let first = true
 		const observer = new IntersectionObserver(
 			(entries) => {
-				if (first) {
-					first = false
-					return
-				}
-				const entry = entries[0]
-				const a = entry.intersectionRatio
-				const b = 1 - headerSnappoint
-				isMinimized = a <= b
-				const isClosed = a <= 0
+				if (first) return (first = false)
+				const ratio = entries[0].intersectionRatio
+				isMinimized = ratio <= 1 - headerSnappoint
+				const isClosed = ratio <= 0
 				if (isClosed) handleClose()
 			},
 			{ threshold: snappoints.map((p) => 1 - p), root: null, rootMargin: '0px 0px -1px 0px' }
