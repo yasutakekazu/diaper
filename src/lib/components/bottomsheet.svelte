@@ -229,6 +229,13 @@
 		else if (isOpen) snapToIndex(-1)
 	})
 
+	function handleEscape(e: KeyboardEvent) {
+		if (e.key === 'Escape' && dialog.contains(e.target as Node)) {
+			e.preventDefault()
+			close()
+		}
+	}
+
 	// Effect 2 - escape key
 	$effect(() => {
 		if (!open) return
@@ -279,21 +286,13 @@
 				if (first) return (first = false)
 				const ratio = entries[0].intersectionRatio
 				isMinimized = ratio <= 1 - headerSnappoint
-				const isClosed = ratio <= 0
-				if (isClosed) handleClose()
+				if (ratio <= 0) handleClose()
 			},
 			{ threshold: snappoints.map((p) => 1 - p), root: null, rootMargin: '0px 0px -1px 0px' }
 		)
 		observer.observe(dialog)
 		return () => observer.disconnect()
 	})
-
-	function handleEscape(e: KeyboardEvent) {
-		if (e.key === 'Escape' && dialog.contains(e.target as Node)) {
-			e.preventDefault()
-			close()
-		}
-	}
 
 	function onclick(e: MouseEvent) {
 		if (closeOnBackdropTap && e.target === e.currentTarget) close()
