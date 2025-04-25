@@ -220,7 +220,6 @@
 	$effect(() => {
 		requestAnimationFrame(() => {
 			duration = getRootProperty('--diaper-duration')
-			backdropOpacity = +getRootProperty('--diaper-backdrop-opacity')
 			console.log({ duration, backdropOpacity })
 		})
 	})

@@ -1,7 +1,7 @@
 :root {
 	color-scheme: light dark;
-	--diaper-duration: 0.5s;
-	--diaper-backdrop-opacity: 0.25;
+	--diaper-duration: 0.9s;
+	--diaper-backdrop-opacity: 0;
 	--diaper-light: #fcfcfc;
 	--diaper-dark: #222222;
 	--diaper-lighter: hsl(from var(--diaper-light) h s 90%);
@@ -10,7 +10,25 @@
 	--diaper-bg: light-dark(var(--diaper-light), var(--diaper-dark));
 	--diaper-fg-tinted: light-dark(var(--diaper-darker), var(--diaper-lighter));
 	--diaper-bg-tinted: light-dark(var(--diaper-lighter), var(--diaper-darker));
-	--diaper-easing: cubic-bezier(0.22, 1, 0.36, 1);
+	/* --diaper-easing: cubic-bezier(0.22, 1, 0.36, 1); */
+	--diaper-easing: linear(
+		0,
+		0.012 0.9%,
+		0.049 2%,
+		0.409 9.3%,
+		0.513 11.9%,
+		0.606 14.7%,
+		0.691 17.9%,
+		0.762 21.3%,
+		0.82 25%,
+		0.868 29.1%,
+		0.907 33.6%,
+		0.937 38.7%,
+		0.976 51.3%,
+		0.994 68.8%,
+		1
+	);
+	/* --diaper-easing: cubic-bezier(0.33, 1, 0.68, 1); */
 }
 
 html {
@@ -89,9 +107,6 @@ dialog[data-diaper] {
 			transition: opacity;
 			transition-duration: var(--diaper-duration);
 			transition-timing-function: var(--diaper-easing);
-			@starting-style {
-				opacity: 0;
-			}
 			will-change: opacity;
 		}
 	}
