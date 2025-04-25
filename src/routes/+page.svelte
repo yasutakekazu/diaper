@@ -49,6 +49,7 @@
 		<Basicsheet />
 		<Basicwithfixedheight />
 		<Basicwithautoeight />
+		<Basicwithstickyheader />
 		<div class="space-y-2">
 			<h2 class="h3 border-b">Snap Points</h2>
 			<p>Snap points can be either fixed or auto</p>
@@ -56,7 +57,6 @@
 		<Basicwithautosnappoints />
 		<Basicwithfixedsnappoints />
 		<Basicwithinitialsnappoint />
-		<Basicwithstickyheader />
 		<Scrollable />
 		<Scrollablewithfixedsnappoint />
 		<div class="space-y-2">
