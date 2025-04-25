@@ -5,6 +5,7 @@
 	import Basicwithautosnappoints from './examples/basicwithautosnappoints.svelte'
 	import Basicwithfixedsnappoints from './examples/basicwithfixedsnappoints.svelte'
 	import Basicwithinitialsnappoint from './examples/basicwithinitialsnappoint.svelte'
+	import Basicwithstickyheader from './examples/basicwithstickyheader.svelte'
 	import Scrollable from './examples/scrollable.svelte'
 	import Scrollablewithfixedsnappoint from './examples/scrollablewithfixedsnappoint.svelte'
 	import Dyanmiccontentwithautosnappoints from './examples/dyanmiccontentwithautosnappoints.svelte'
@@ -55,6 +56,7 @@
 		<Basicwithautosnappoints />
 		<Basicwithfixedsnappoints />
 		<Basicwithinitialsnappoint />
+		<Basicwithstickyheader />
 		<Scrollable />
 		<Scrollablewithfixedsnappoint />
 		<div class="space-y-2">
