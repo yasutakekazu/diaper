@@ -250,7 +250,7 @@
 		dialog = refs.ref as HTMLDialogElement
 		const dialogs = [...document.querySelectorAll('dialog')]
 		dialog.close()
-		if (stickyHeader && openSticky && isMinimized && dialogs.length < 2) {
+		if (stickyHeader && isMinimized && dialogs.length < 2) {
 			dialog.show()
 		} else {
 			dialog.showModal()
