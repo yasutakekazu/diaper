@@ -124,7 +124,7 @@ Use the `bind:this` directive to expose the instance methods:
 - close()
 - snapTo(index)
 
-See [programmaticcontrol.svelte](https://github.com/devantic/diaper/tree/main/src/routes/examples/ptogrammaticcontrol.svelte) for an example.
+See [programmaticcontrol.svelte](https://github.com/devantic/diaper/tree/main/src/routes/examples/programmaticcontrol.svelte) for an example.
 
 ## Styling
 
