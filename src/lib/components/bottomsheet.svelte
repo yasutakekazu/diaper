@@ -154,7 +154,9 @@
 	function ontouchmove(e: TouchEvent) {
 		if (startY === 0) return
 		if (!isTouching) return
-		const distance = e.touches[0].clientY - startY
+		const clientY = e.touches[0].clientY
+		if (clientY > screen.height) return
+		const distance = clientY - startY
 		newTranslate = lastTranslate + distance
 		// don't allow drag past top
 		if (newTranslate > 0) {
