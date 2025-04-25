@@ -222,11 +222,8 @@
 	// Effect 1 - open logic
 	$effect(() => {
 		console.log('$effect 1 OPEN', open, isOpen)
-		if (open) {
-			isOpen = true
-		} else {
-			if (isOpen) snapToIndex(-1)
-		}
+		if (open) isOpen = true
+		else if (isOpen) snapToIndex(-1)
 	})
 
 	// Effect 2 - escape key
