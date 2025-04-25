@@ -99,7 +99,6 @@
 	let lastTranslate = 0
 	let isTouching = false
 	let duration = '0.5s'
-	let backdropOpacity = 0.25
 	let headerSnappoint = 0
 
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
@@ -217,7 +216,6 @@
 	// Effect 0 - root variables
 	$effect(() => {
 		duration = getRootProperty('--diaper-duration')
-		backdropOpacity = +getRootProperty('--diaper-backdrop-opacity')
 	})
 
 	// Effect 1 - open logic
@@ -256,6 +254,8 @@
 		initialized = true
 	})
 
+	let rendered = $state(false)
+
 	// Effect 4 - autoheight
 	$effect(() => {
 		if (!refs.children) return
@@ -267,7 +267,6 @@
 		autoHeight = `${offsetHeight}px`
 	})
 
-	let rendered = $state(false)
 	// Effect 5 - calc snappoints
 	$effect(() => {
 		if (!rendered) return
