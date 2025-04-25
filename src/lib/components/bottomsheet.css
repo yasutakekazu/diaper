@@ -59,7 +59,7 @@ body {
 
 dialog[data-diaper] {
 	--diaper-progress: 1;
-	--diaper-progress-backdrop: 1;
+	--diaper-backdrop-progress: 1;
 	--diaper-shadow-color: rgba(0 0 0 / 0.1);
 	width: 100%;
 	margin-bottom: 0;
@@ -105,7 +105,7 @@ dialog[data-diaper] {
 		}
 		&::backdrop {
 			background-color: var(--diaper-backdrop-color);
-			opacity: calc((1 - var(--diaper-progress-backdrop)) * var(--diaper-backdrop-opacity));
+			opacity: calc((1 - var(--diaper-backdrop-progress)) * var(--diaper-backdrop-opacity));
 			transition: opacity;
 			transition-duration: var(--diaper-duration);
 			transition-timing-function: var(--diaper-easing);
