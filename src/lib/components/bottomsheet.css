@@ -1,6 +1,7 @@
 :root {
 	color-scheme: light dark;
 	--diaper-duration: 0.7s;
+	--diaper-backdrop-color: black;
 	--diaper-backdrop-opacity: 0.25;
 	--diaper-light: #fcfcfc;
 	--diaper-dark: #222222;
@@ -103,7 +104,7 @@ dialog[data-diaper] {
 			transform: translateY(calc(var(--diaper-progress) * 8px - 8px));
 		}
 		&::backdrop {
-			background-color: black;
+			background-color: var(--diaper-backdrop-color);
 			opacity: calc((1 - var(--diaper-progress-backdrop)) * var(--diaper-backdrop-opacity));
 			transition: opacity;
 			transition-duration: var(--diaper-duration);
