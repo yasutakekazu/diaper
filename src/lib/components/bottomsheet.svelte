@@ -214,7 +214,7 @@
 			snappoints.push(...snapPoints)
 		}
 		if (stickyHeader) {
-			headerSnappoint = 1 - (header ? headerHeight / dialogHeight : 0)
+			headerSnappoint = 1 - headerHeight / dialogHeight
 			snappoints.push(headerSnappoint)
 		}
 		return [...new Set(snappoints)].sort((a, b) => a - b)
@@ -310,7 +310,9 @@
 				{#if header}
 					{@render header?.()}
 				{:else}
-					<div class="handle"></div>
+					<div style:padding-block="16px">
+						<div class="handle"></div>
+					</div>
 				{/if}
 			</header>
 			<main bind:this={refs.main} style:max-height="{mainHeight - newTranslate}px">
@@ -372,7 +374,7 @@
 		height: 4px;
 		background-color: #e0e0e0;
 		border-radius: 2px;
-		margin: 16px auto;
+		margin-inline: auto;
 	}
 	.headerOverlaysContent {
 		position: absolute;
