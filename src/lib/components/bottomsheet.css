@@ -89,11 +89,11 @@ dialog[data-diaper] {
 	contain: strict; /* isolates the element */
 	position: fixed;
 	inset: 0;
+	@starting-style {
+		translate: 0 100%;
+	}
 	&[open] {
 		max-width: 48rem;
-		@starting-style {
-			translate: 0 100%;
-		}
 		/* only top 2 dialogs have backdrop and box-shadow */
 		&:not(:nth-last-of-type(-n + 2)) {
 			--diaper-backdrop-opacity: 0;
