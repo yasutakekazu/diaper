@@ -310,7 +310,7 @@
 				{#if header}
 					{@render header?.()}
 				{:else}
-					<div style:padding-block="16px">
+					<div style:padding-block="8px">
 						<div class="handle"></div>
 					</div>
 				{/if}
@@ -370,10 +370,10 @@
 		max-height: 100%;
 	}
 	.handle {
-		width: 40px;
-		height: 4px;
-		background-color: #e0e0e0;
-		border-radius: 2px;
+		width: 52px;
+		height: 6px;
+		background-color: #aaa7;
+		border-radius: 3px;
 		margin-inline: auto;
 	}
 	.headerOverlaysContent {
