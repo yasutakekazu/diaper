@@ -142,7 +142,7 @@
 		if (isTouching) return
 		const isHeader = isTouchingHeader(e.target as HTMLElement)
 		if (!canDragSheet && !isHeader) return
-		if (refs.children?.scrollTop !== 0 && !isHeader) return
+		// if (refs.children?.scrollTop !== 0 && !isHeader) return
 
 		lastTranslate = dialog.getBoundingClientRect().top - dialog.offsetTop
 
@@ -315,9 +315,9 @@
 					</div>
 				{/if}
 			</header>
-			<main bind:this={refs.main} style:max-height="{mainHeight - newTranslate}px">
+			<main bind:this={refs.main} style:max-height="{mainHeight}px">
 				{#if initialized}
-					<!-- style:max-height={mainHeight - newTranslate + 'px'} is needed to make iOS scrollable -->
+					<!-- style:max-height="{mainHeight}px" is needed to make iOS scrollable -->
 					<section
 						bind:this={refs.children}
 						data-visible={snapPointIndex === 0 || (snapPointIndex === 1 && !snapPoint1Content) || (snapPointIndex === 2 && !snapPoint2Content) || null}
