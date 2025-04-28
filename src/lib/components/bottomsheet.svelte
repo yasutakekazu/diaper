@@ -151,10 +151,26 @@
 		setRootProperty('--diaper-duration', '0s')
 	}
 
+	let lastY = 0
+	let lastTime = 0
+	let velocityY = 0
+
 	function ontouchmove(e: TouchEvent) {
 		if (startY === 0) return
 		if (!isTouching) return
 		const clientY = e.touches[0].clientY
+
+		const now = performance.now()
+		const deltaY = clientY - lastY
+		const deltaTime = now - lastTime
+
+		if (deltaTime > 0) {
+			velocityY = deltaY / deltaTime // px/ms
+		}
+
+		lastY = clientY
+		lastTime = now
+
 		if (clientY > screen.height) return
 		const distance = clientY - startY
 		newTranslate = lastTranslate + distance
@@ -166,6 +182,14 @@
 		// can alternatively be done in ontouchend
 		const snapPoint = getNearestSnapPoint(newTranslate / dialogHeight)
 		snapPointIndex = getSnapPointIndex(snapPoint)
+
+		if (deltaY > 10) {
+			snapPointIndex++
+		} else if (deltaY < -10) {
+			snapPointIndex = Math.max(--snapPointIndex, 0)
+		}
+		// console.log({ deltaY, snapPointIndex })
+
 		const progress = clamp(newTranslate / (dialogHeight * snappoints[1]), 0, 1)
 		applyProgress(progress)
 	}
@@ -173,7 +197,22 @@
 	function ontouchend(e: TouchEvent) {
 		// if multiple fingers touching, do nothing until last finger is released
 		if (e.touches.length > 0) return
-		setRootProperty('--diaper-duration', duration)
+
+		// Estimate velocity at touchend
+		const speed = Math.abs(velocityY)
+
+		// Map speed to transition duration
+		// Faster swipe = shorter duration
+		const maxSpeed = 2 // px/ms
+		const minDuration = 400 // ms
+		const maxDuration = 900 // ms
+
+		let vduration = maxDuration - (speed / maxSpeed) * (maxDuration - minDuration)
+		vduration = Math.max(minDuration, Math.min(maxDuration, vduration))
+
+		// dialog.style.transition = `translate ${vduration}ms ease-out`
+
+		setRootProperty('--diaper-duration', vduration + 'ms')
 		// if (newTranslate === 0) return
 		if (!isTouching) return
 		snapToIndex(snapPointIndex)
