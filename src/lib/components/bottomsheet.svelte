@@ -143,7 +143,7 @@
 		if (isTouching) return
 		const isHeader = isTouchingHeader(e.target as HTMLElement)
 		if (!canDragSheet && !isHeader) return
-		// if (refs.children?.scrollTop !== 0 && !isHeader) return
+		if (refs.children?.scrollTop !== 0 && !isHeader) return
 
 		lastTranslate = dialog.getBoundingClientRect().top - dialog.offsetTop
 
