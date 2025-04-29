@@ -1,7 +1,6 @@
 <script module lang="ts">
 	import type { BottomsheetProps } from './types'
 	import { untrack } from 'svelte'
-	import './diaper.css'
 	import './bottomsheet.css'
 
 	const noop = () => {}
@@ -23,7 +22,7 @@
 <script lang="ts">
 	let {
 		open = $bindable(false),
-		maxHeight = 'calc(93% + 20px)',
+		maxHeight = '93%',
 		height = maxHeight,
 		snapPoints = [0, 1],
 		initialIndex = 0,
@@ -175,15 +174,10 @@
 		if (clientY > screen.height) return
 		const distance = clientY - startY
 		newTranslate = lastTranslate + distance
-		if (newTranslate < 0) {
-			newTranslate = newTranslate - distance + distance * 0.05
-			newTranslate = Math.max(newTranslate, -20)
-		}
-
 		// don't allow drag past top
-		// if (newTranslate > 0) {
-		translate(newTranslate)
-		// }
+		if (newTranslate > 0) {
+			translate(newTranslate)
+		}
 		// setting snapPointIndex here causes content to change on drag.
 		// can alternatively be done in ontouchend
 		const snapPoint = getNearestSnapPoint(newTranslate / dialogHeight)
