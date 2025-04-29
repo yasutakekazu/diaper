@@ -38,6 +38,7 @@
 		onsnap = noop,
 		header,
 		children,
+		threeD = true,
 		...props
 	}: BottomsheetProps = $props()
 
@@ -129,7 +130,12 @@
 	function applyProgress(progress: number) {
 		dialog.style.setProperty('--diaper-backdrop-progress', `${progress}`)
 		// only scale body or dialog underneath if drag is between full and the first snap point
-		if (height === maxHeight) backgroundElement.style.setProperty('--diaper-progress', `${progress}`)
+		if (!threeD) return
+		if (backgroundElement === document.body) {
+			if (height === maxHeight) backgroundElement.style.setProperty('--diaper-progress', `${progress}`)
+		} else {
+			backgroundElement.style.setProperty('--diaper-progress', `${progress}`)
+		}
 	}
 
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)

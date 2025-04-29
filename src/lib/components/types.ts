@@ -15,6 +15,7 @@ export type BottomsheetProps = {
 	openSticky?: boolean
 	closeOnBackdropTap?: boolean
 	toggleOnHeaderTap?: boolean
+	threeD?: boolean
 	onclose?: () => void
 	onsnap?: (progress: number) => void
 	header?: Snippet

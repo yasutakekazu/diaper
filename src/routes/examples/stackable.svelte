@@ -12,7 +12,7 @@
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open1 = true)}>Open</button>
 </div>
 
-<Bottomsheet bind:open={open1} snapPoints="auto">
+<Bottomsheet bind:open={open1} height="50vh">
 	{#snippet header()}
 		<Header title="Stackable Sheet" subtitle="First" onclick={() => (open1 = false)} />
 	{/snippet}
@@ -27,7 +27,7 @@
 	</div>
 </Bottomsheet>
 
-<Bottomsheet bind:open={open2}>
+<Bottomsheet bind:open={open2} height="calc(50vh - 1rem)">
 	{#snippet header()}
 		<Header title="Stackable Sheet" subtitle="Second" onclick={() => (open2 = false)} />
 	{/snippet}
@@ -42,7 +42,7 @@
 	</div>
 </Bottomsheet>
 
-<Bottomsheet bind:open={open3} height="auto">
+<Bottomsheet bind:open={open3} height="calc(50vh - 2rem)">
 	{#snippet header()}
 		<Header title="Stackable Sheet" subtitle="Third" onclick={() => (open3 = false)} />
 	{/snippet}
