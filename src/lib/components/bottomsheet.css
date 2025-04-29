@@ -62,7 +62,7 @@ dialog[data-diaper] {
 	--diaper-backdrop-progress: 1;
 	--diaper-shadow-color: rgba(0 0 0 / 0.1);
 	width: 100%;
-	margin-bottom: 0;
+	margin-bottom: -20px;
 	margin-top: auto;
 	margin-inline: auto;
 	padding: 0;
