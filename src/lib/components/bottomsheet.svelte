@@ -103,7 +103,7 @@
 	let startY = 0
 	let lastTranslate = 0
 	let isTouching = false
-	let duration = '0.5s'
+	let diaperDuration = '0.5s'
 	let headerSnappoint = 0
 
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
@@ -135,6 +135,7 @@
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
 
 	function ontouchstart(e: TouchEvent) {
+		setRootProperty('--diaper-duration', '0s')
 		startY = 0
 		lastTranslate = 0
 		newTranslate = 0
@@ -148,28 +149,27 @@
 
 		startY = e.touches[0].clientY
 		isTouching = true
-		setRootProperty('--diaper-duration', '0s')
 	}
 
 	let lastY = 0
-	let lastTime = 0
-	let velocityY = 0
+	let touchHistory: { y: number; time: number }[] = []
+	const HISTORY_MS = 100
 
 	function ontouchmove(e: TouchEvent) {
+		setRootProperty('--diaper-duration', '0s')
+
 		if (startY === 0) return
 		if (!isTouching) return
+
 		const clientY = e.touches[0].clientY
+		const deltaY = clientY - lastY
+		lastY = clientY
 
 		const now = performance.now()
-		const deltaY = clientY - lastY
-		const deltaTime = now - lastTime
+		touchHistory.push({ y: clientY, time: now })
 
-		if (deltaTime > 0) {
-			velocityY = deltaY / deltaTime // px/ms
-		}
-
-		lastY = clientY
-		lastTime = now
+		// Remove old touches beyond HISTORY_MS
+		touchHistory = touchHistory.filter((point) => now - point.time <= HISTORY_MS)
 
 		if (clientY > screen.height) return
 		const distance = clientY - startY
@@ -188,7 +188,6 @@
 		} else if (deltaY < -10) {
 			snapPointIndex = Math.max(--snapPointIndex, 0)
 		}
-		// console.log({ deltaY, snapPointIndex })
 
 		const progress = clamp(newTranslate / (dialogHeight * snappoints[1]), 0, 1)
 		applyProgress(progress)
@@ -198,25 +197,37 @@
 		// if multiple fingers touching, do nothing until last finger is released
 		if (e.touches.length > 0) return
 
-		// Estimate velocity at touchend
-		const speed = Math.abs(velocityY)
+		const now = performance.now()
 
-		// Map speed to transition duration
-		// Faster swipe = shorter duration
-		const maxSpeed = 2 // px/ms
-		const minDuration = 400 // ms
-		const maxDuration = 900 // ms
+		// Remove old touches again just to be safe
+		touchHistory = touchHistory.filter((point) => now - point.time <= HISTORY_MS)
 
-		let vduration = maxDuration - (speed / maxSpeed) * (maxDuration - minDuration)
-		vduration = Math.max(minDuration, Math.min(maxDuration, vduration))
+		if (touchHistory.length >= 2) {
+			const first = touchHistory.at(0)!
+			const last = touchHistory.at(-1)!
+			const deltaY = last.y - first.y
+			const deltaTime = last.time - first.time
+			const speed = Math.abs(deltaY / deltaTime) // px/ms
 
-		// dialog.style.transition = `translate ${vduration}ms ease-out`
+			// Map speed to transition duration
+			// Faster swipe = shorter duration
+			const maxSpeed = 2 // px/ms
+			const minDuration = 400 // ms
+			const maxDuration = 1400 // ms
 
-		setRootProperty('--diaper-duration', vduration + 'ms')
+			let dyanamicDuration = maxDuration - (speed / maxSpeed) * (maxDuration - minDuration)
+			dyanamicDuration = Math.max(minDuration, Math.min(maxDuration, dyanamicDuration)) // clamp
+
+			setRootProperty('--diaper-duration', dyanamicDuration + 'ms')
+		} else {
+			setRootProperty('--diaper-duration', diaperDuration)
+		}
+
 		// if (newTranslate === 0) return
 		if (!isTouching) return
 		snapToIndex(snapPointIndex)
 		isTouching = false
+		touchHistory = []
 	}
 
 	const calcAutoSnapPoint = (ref: HTMLElement | undefined) => {
@@ -261,7 +272,11 @@
 
 	// Effect 0 - root variables
 	$effect(() => {
-		duration = getRootProperty('--diaper-duration')
+		diaperDuration = getRootProperty('--diaper-duration')
+	})
+
+	$effect(() => {
+		open && setRootProperty('--diaper-duration', diaperDuration)
 	})
 
 	// Effect 1 - open logic
