@@ -362,8 +362,8 @@
 </script>
 
 {#if isOpen}
-	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight} {onclick}>
-		<div class={props?.class} style={props?.style} style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
+	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight} {onclick} class={props?.baseClass} style={props?.style}>
+		<div class={props?.class} style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<header bind:this={refs.header} class:headerOverlaysContent onclick={handleHeaderClick}>
