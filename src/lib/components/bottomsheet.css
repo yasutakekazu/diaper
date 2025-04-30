@@ -1,6 +1,6 @@
 :root {
 	color-scheme: light dark;
-	--diaper-duration: 0.7s;
+	--diaper-duration: 0.4s;
 	--diaper-backdrop-color: black;
 	--diaper-backdrop-opacity: 0.25;
 	--diaper-light: #fcfcfc;
