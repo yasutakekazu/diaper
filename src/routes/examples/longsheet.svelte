@@ -10,6 +10,12 @@
 </div>
 
 <Longsheet bind:open>
-	Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ea mollitia ipsum deleniti veritatis? Praesentium similique inventore, facilis nulla necessitatibus
-	reiciendis deserunt provident nemo dolor ipsum tempore iste consequatur quod ullam.
+	<button onclick={() => (open = false)}>Close</button>
+	Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ea mollitia ipsum deleniti veritatis? Praesentium similique inventore, facilis nulla necessitatibus reiciendis
+	deserunt provident nemo dolor ipsum tempore iste consequatur quod ullam.
+	<div class="space-y-2">
+		{#each { length: 125 }, i}
+			<div class="card preset-filled-surface-200-800 p-4">Item {i + 1}</div>
+		{/each}
+	</div>
 </Longsheet>
