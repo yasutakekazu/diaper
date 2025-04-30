@@ -13,6 +13,7 @@
 	import Scollablewithdyanmiccontentandautosnappoints from './examples/scollablewithdyanmiccontentandautosnappoints.svelte'
 	import Stackable from './examples/stackable.svelte'
 	import Programmaticcontrol from './examples/programmaticcontrol.svelte'
+	import Longsheet from './examples/longsheet.svelte'
 	import { Star } from '@lucide/svelte'
 </script>
 
@@ -68,5 +69,6 @@
 		<Scollablewithdyanmiccontentandautosnappoints />
 		<Stackable />
 		<Programmaticcontrol />
+		<Longsheet />
 	</div>
 </main>

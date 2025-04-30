@@ -3,7 +3,11 @@
 	let open = $state(false)
 </script>
 
-<button onclick={() => (open = true)}>Open</button>
+<div class="space -y-2">
+	<h2 class="h3 border-b">Longsheet</h2>
+	<p>Scrolls</p>
+	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
+</div>
 
 <Longsheet bind:open>
 	Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ea mollitia ipsum deleniti veritatis? Praesentium similique inventore, facilis nulla necessitatibus
