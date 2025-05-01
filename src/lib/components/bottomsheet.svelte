@@ -63,6 +63,7 @@
 	function snapToIndex(index: number) {
 		// translate 16px more when the dialog is closing to
 		// prevent box-shadow jumping at end of transition
+		// setRootProperty('--diaper-duration', diaperDuration)
 		const translateMore = index < 0 ? 16 : 0
 		if (index < 0) index = snappoints.length - 1
 		snapPointIndex = clamp(index, 0, snappoints.length - 1)
@@ -359,10 +360,24 @@
 	function onclick(e: MouseEvent) {
 		if (closeOnBackdropTap && e.target === e.currentTarget) close()
 	}
+
+	function ontransitionend(e: TransitionEvent) {
+		if (e.propertyName !== 'translate') return
+		setRootProperty('--diaper-duration', diaperDuration)
+	}
 </script>
 
 {#if isOpen}
-	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight} {onclick} class={props?.baseClass} style={props?.style}>
+	<dialog
+		data-diaper
+		bind:this={refs.ref}
+		{onclick}
+		{ontransitionend}
+		class={props?.baseClass}
+		style:height={autoHeight}
+		style:max-height={maxHeight}
+		style={props?.style}
+	>
 		<div class={props?.class} style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
