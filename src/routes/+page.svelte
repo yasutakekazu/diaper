@@ -17,6 +17,7 @@
 	import { Star } from '@lucide/svelte'
 	import Detached from './examples/detached.svelte'
 	import Full from './examples/full.svelte'
+	import Stackabledetached from './examples/stackabledetached.svelte'
 </script>
 
 <main class="overflow-auto pt-2">
@@ -71,7 +72,11 @@
 		<Dyanmiccontentwithfixedsnappoints />
 		<Scollablewithdyanmiccontentandautosnappoints />
 		<Stackable />
+		<Stackabledetached />
 		<Programmaticcontrol />
+		<div class="space-y-2">
+			<h2 class="h3 border-b">Other</h2>
+		</div>
 		<Longsheet />
 		<Full />
 	</div>

@@ -1,7 +1,15 @@
 <script lang="ts">
 	import Bottomsheet from '$lib/components/bottomsheet.svelte'
-	import Header from './header.svelte'
 	let open = $state(false)
+	let bs: Bottomsheet
+
+	let imageId = $state('1')
+	function handleThumbClick(e: MouseEvent) {
+		let target = e.target as HTMLImageElement
+		console.log(target.src)
+		imageId = target.src.match(/id\/(\d+)/)?.[1] || '1'
+		bs.snapTo(0)
+	}
 </script>
 
 <div class="space-y-2">
@@ -10,35 +18,40 @@
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
 </div>
 
-<Bottomsheet bind:open snapPoints="auto">
+<link rel="preload" as="image" href="https://picsum.photos/id/322/600/400" />
+<link rel="preload" as="image" href="https://picsum.photos/id/323/600/400" />
+<link rel="preload" as="image" href="https://picsum.photos/id/324/600/400" />
+<link rel="preload" as="image" href="https://picsum.photos/id/325/600/400" />
+<link rel="preload" as="image" href="https://picsum.photos/id/326/600/400" />
+<link rel="preload" as="image" href="https://picsum.photos/id/327/600/400" />
+
+<Bottomsheet bind:this={bs} bind:open snapPoints="auto" initialIndex={1}>
 	{#snippet header()}
-		<Header title="Dynamic Content Sheet" subtitle="with auto snap points" onclick={() => (open = false)} />
+		<!-- <Header title="Dynamic Content Sheet" subtitle="with auto snap points" onclick={() => (open = false)} /> -->
 	{/snippet}
+	<img src="https://picsum.photos/id/{imageId}/600/400" class="w-full" alt="" />
+
 	<div class="p-4">
-		<p>Auto-calculates snap points to fit content</p>
+		<p>
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis fuga at sed porro minus, nulla dolorum nesciunt dolor dolorem sunt eligendi numquam
+			expedita facilis odit, tempora voluptatibus voluptates quas! Animi?
+		</p>
 		<br />
 		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum
-			autem laboriosam consectetur repellendus voluptates ut sint impedit quam? Praesentium.
+			Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut facere reiciendis hic modi. Quo rerum quaerat consequuntur tempore dolorum recusandae, quidem
+			illum sint, iste deleniti officiis ea ipsa nam eligendi!
 		</p>
 	</div>
 	{#snippet snapPoint1Content()}
-		<div class="p-4">
-			<p>
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis fuga at sed porro minus, nulla dolorum nesciunt dolor dolorem sunt eligendi numquam
-				expedita facilis odit, tempora voluptatibus voluptates quas! Animi?
-			</p>
-			<br />
-			<p>
-				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut facere reiciendis hic modi. Quo rerum quaerat consequuntur tempore dolorum recusandae,
-				quidem illum sint, iste deleniti officiis ea ipsa nam eligendi!
-			</p>
-		</div>
-	{/snippet}
-	{#snippet snapPoint2Content()}
-		<div class="p-4">
-			Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam dolorem nihil perspiciatis natus, animi facere veniam magni doloribus, at commodi
-			expedita vel voluptate? Similique molestiae rerum, praesentium explicabo sint dolorum.
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div class="flex p-0 h-16" onclick={handleThumbClick} data-scrollable={false}>
+			<img src="https://picsum.photos/id/322/600/400" alt="" />
+			<img src="https://picsum.photos/id/323/600/400" alt="" />
+			<img src="https://picsum.photos/id/324/600/400" alt="" />
+			<img src="https://picsum.photos/id/325/600/400" alt="" />
+			<img src="https://picsum.photos/id/326/600/400" alt="" />
+			<img src="https://picsum.photos/id/327/600/400" alt="" />
 		</div>
 	{/snippet}
 </Bottomsheet>

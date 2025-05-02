@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Longsheet from '$lib/components/longsheet.svelte'
-	import { X } from '@lucide/svelte'
+	import { ChevronDownIcon, X } from '@lucide/svelte'
 	let open = $state(false)
 </script>
 
@@ -17,8 +17,9 @@
 		<button class="absolute top-4 right-4 btn-icon preset-filled-surface-500 rounded-full" onclick={() => (open = false)}><X /></button>
 
 		<img src="https://picsum.photos/id/69/300/400" alt="" />
-		<div class="flex flex-col items-center pt-6 pb-6 px-4 gap-4 text-pretty">
-			<h1 class=" text-center h2 pt-4">Scrolls all the way down</h1>
+		<div class="flex flex-col items-center pt-2 pb-6 px-4 gap-4 text-pretty">
+			<h1 class="text-center h2 pt-4">Scroll down</h1>
+			<icon class="btn btn-icon btn-icon-lg"><ChevronDownIcon /></icon>
 			<p>
 				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione cum animi assumenda neque, aliquam unde ea corporis corrupti, id culpa veritatis
 				nihil! Iure, unde modi numquam laudantium soluta provident inventore.
