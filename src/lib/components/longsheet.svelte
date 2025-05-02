@@ -55,7 +55,7 @@
 		overflow: clip;
 		width: 100%;
 		padding: 0rem;
-		border-radius: 1.5rem;
+		border-radius: var(--diaper-radius);
 		margin-top: calc(env(safe-area-inset-top) + 2rem);
 		margin-bottom: calc(env(safe-area-inset-bottom) + 2rem);
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);

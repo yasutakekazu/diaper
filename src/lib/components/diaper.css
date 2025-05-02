@@ -11,6 +11,7 @@
 	--diaper-bg: light-dark(var(--diaper-light), var(--diaper-dark));
 	--diaper-fg-tinted: light-dark(var(--diaper-darker), var(--diaper-lighter));
 	--diaper-bg-tinted: light-dark(var(--diaper-lighter), var(--diaper-darker));
+	--diaper-radius: 1rem;
 	/* --diaper-easing: cubic-bezier(0.33, 1, 0.68, 1); */
 	--diaper-easing: cubic-bezier(0.22, 1, 0.36, 1);
 	/* --diaper-easing: linear(
@@ -34,7 +35,7 @@
 
 html {
 	background-color: black;
-	/* min-height: calc(100% + env(safe-area-inset-top)); */
+	min-height: calc(100% + env(safe-area-inset-top));
 	padding-bottom: env(safe-area-inset-bottom);
 	overscroll-behavior-y: none;
 }

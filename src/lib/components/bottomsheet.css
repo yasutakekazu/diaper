@@ -34,14 +34,14 @@
 
 html {
 	background-color: black;
-	/* min-height: calc(100% + env(safe-area-inset-top)); */
+	min-height: calc(100% + env(safe-area-inset-top));
 	padding-bottom: env(safe-area-inset-bottom);
 	overscroll-behavior-y: none;
 }
 
 body {
 	--diaper-progress: 1;
-	--diaper-roundness: calc((1 - var(--diaper-progress)) * 1rem);
+	--diaper-roundness: calc((1 - var(--diaper-progress)) * var(--diaper-radius));
 	transition: scale, clip-path;
 	transition-duration: var(--diaper-duration);
 	transform-origin: bottom;
@@ -71,7 +71,7 @@ dialog[data-diaper] {
 	box-sizing: border-box;
 	border: none;
 	outline: none;
-	border-radius: 1rem 1rem 0 0;
+	border-radius: var(--diaper-radius) var(--diaper-radius) 0 0;
 	background-color: var(--diaper-bg);
 	color: var(--diaper-fg);
 	box-shadow: 0 -4px 6px -1px var(--diaper-shadow-color);
