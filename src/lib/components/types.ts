@@ -21,6 +21,13 @@ export type BottomsheetProps = {
 	header?: Snippet
 	children?: Snippet
 	baseClass?: string
+	// class?: string
+	// style?: string
+} & HTMLAttributes<HTMLDialogElement>
+
+export type LongsheetProps = {
+	open?: boolean
+	children?: Snippet
 	class?: string
 	style?: string
-} & HTMLAttributes<HTMLDialogElement>
+}

@@ -1,7 +1,8 @@
 <script lang="ts">
 	import '$lib/components/diaper.css'
+	import type { LongsheetProps } from './types'
 
-	let { open = $bindable(false), children } = $props()
+	let { open = $bindable(false), children, ...props }: LongsheetProps = $props()
 	let isOpen = $state(false)
 
 	$effect(() => {
@@ -22,7 +23,7 @@
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div class="dialog-backdrop" data-closed={(!open && isOpen) || null}></div>
 	<div class="dialog-container">
-		<dialog open {ontransitionend} data-closed={(!open && isOpen) || null}>
+		<dialog open {ontransitionend} data-closed={(!open && isOpen) || null} class={props?.class} style={props?.style}>
 			{@render children?.()}
 		</dialog>
 	</div>
@@ -59,6 +60,8 @@
 		margin-top: calc(env(safe-area-inset-top) + 2rem);
 		margin-bottom: calc(env(safe-area-inset-bottom) + 2rem);
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		background-color: var(--diaper-bg);
+		color: var(--diaper-fg);
 		transition: transform var(--diaper-duration) var(--diaper-easing);
 		transform: translateY(100vh);
 		&[open] {
