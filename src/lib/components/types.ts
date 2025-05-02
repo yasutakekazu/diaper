@@ -21,4 +21,6 @@ export type BottomsheetProps = {
 	header?: Snippet
 	children?: Snippet
 	baseClass?: string
+	class?: string
+	style?: string
 } & HTMLAttributes<HTMLDialogElement>

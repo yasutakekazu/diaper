@@ -15,6 +15,8 @@
 	import Programmaticcontrol from './examples/programmaticcontrol.svelte'
 	import Longsheet from './examples/longsheet.svelte'
 	import { Star } from '@lucide/svelte'
+	import Detached from './examples/detached.svelte'
+	import Full from './examples/full.svelte'
 </script>
 
 <main class="overflow-auto pt-2">
@@ -51,6 +53,7 @@
 		<Basicwithfixedheight />
 		<Basicwithautoeight />
 		<Basicwithstickyheader />
+		<Detached />
 		<div class="space-y-2">
 			<h2 class="h3 border-b">Snap Points</h2>
 			<p>Snap points can be either fixed or auto</p>
@@ -70,5 +73,6 @@
 		<Stackable />
 		<Programmaticcontrol />
 		<Longsheet />
+		<Full />
 	</div>
 </main>
