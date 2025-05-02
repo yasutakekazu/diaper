@@ -30,12 +30,13 @@
 
 <style>
 	.dialog-container {
+		margin: 0;
 		position: fixed;
 		inset: 0;
 		overflow-y: auto;
 	}
 	.dialog-backdrop {
-		all: unset;
+		margin: 0;
 		position: fixed;
 		inset: 0;
 		background-color: rgba(0, 0, 0, 0.5);
@@ -51,10 +52,12 @@
 
 	dialog {
 		position: relative;
+		overflow: clip;
 		width: 100%;
-		padding: 1rem;
-		border-radius: 10px;
-		margin-block: 4rem;
+		padding: 0rem;
+		border-radius: 1.5rem;
+		margin-top: calc(env(safe-area-inset-top) + 2rem);
+		margin-bottom: calc(env(safe-area-inset-bottom) + 2rem);
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 		transition: transform var(--diaper-duration) var(--diaper-easing);
 		transform: translateY(100vh);
