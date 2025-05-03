@@ -11,9 +11,9 @@
 
 <link rel="preload" as="image" href="https://picsum.photos/id/102/170/170" />
 
-<Bottomsheet bind:open height="70vh">
+<Bottomsheet bind:open height="auto">
 	<div class="text-center flex flex-col items-center pt-6 pb-6 px-4 gap-4">
-		<img class="rounded-2xl h-[170px]" src="https://picsum.photos/id/102/170/170" alt="" />
+		<!-- <img class="rounded-2xl h-[170px]" src="https://picsum.photos/id/102/170/170" alt="" /> -->
 		<h1 class="h2 pt-4 text-balance">Auto height</h1>
 		<p class="opacity-75">Auto sizes to fit content</p>
 		<code class="code">{`height="auto"`}</code>
