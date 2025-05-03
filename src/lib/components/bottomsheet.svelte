@@ -237,11 +237,6 @@
 		touchHistory = []
 	}
 
-	const calcAutoSnapPoint = (ref: HTMLElement | undefined) => {
-		if (!ref) return 0
-		return clamp((mainHeight - ref.offsetHeight) / dialogHeight, 0, 1)
-	}
-
 	function handleHeaderClick(e: MouseEvent) {
 		if (!toggleOnHeaderTap) return
 		if (!stickyHeader) {
@@ -258,6 +253,11 @@
 		} else {
 			snapToIndex(getSnapPointIndex(headerSnappoint))
 		}
+	}
+
+	const calcAutoSnapPoint = (ref: HTMLElement | undefined) => {
+		if (!ref) return 0
+		return clamp((mainHeight - ref.offsetHeight) / dialogHeight, 0, 1)
 	}
 
 	function calcSnapPoints(snapPoints: number[] | 'auto') {
@@ -399,6 +399,7 @@
 						style:overflow="auto"
 						style:padding-top="{headerOverlaysContent ? headerHeight : 0}px"
 						style:max-height="{mainHeight}px"
+						style:height={height === 'auto' || snapPoints === 'auto' ? 'fit-content' : '100%'}
 					>
 						{@render children?.()}
 					</section>
