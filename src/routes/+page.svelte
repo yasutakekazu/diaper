@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Basicsheet from './examples/basic.svelte'
 	import Basicwithfixedheight from './examples/basicwithfixedheight.svelte'
-	import Basicwithautoeight from './examples/basicwithautoeight.svelte'
+	import Basicwithautoheight from './examples/basicwithautoheight.svelte'
 	import Basicwithautosnappoints from './examples/basicwithautosnappoints.svelte'
 	import Basicwithfixedsnappoints from './examples/basicwithfixedsnappoints.svelte'
 	import Basicwithinitialsnappoint from './examples/basicwithinitialsnappoint.svelte'
@@ -52,7 +52,7 @@
 		</div>
 		<Basicsheet />
 		<Basicwithfixedheight />
-		<Basicwithautoeight />
+		<Basicwithautoheight />
 		<Basicwithstickyheader />
 		<Detached />
 		<div class="space-y-2">
