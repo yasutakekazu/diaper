@@ -4,6 +4,6 @@
 	const customStyle = 'border-radius: 0;'
 </script>
 
-<Bottomsheet bind:open class="sheet" maxHeight="100%" threeD={false} style="{customStyle} {style}" {...props}>
+<Bottomsheet bind:open class="sheet" maxHeight="100%" flat style="{customStyle} {style}" {...props}>
 	{@render props.children?.()}
 </Bottomsheet>
