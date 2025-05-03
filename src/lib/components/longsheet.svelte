@@ -10,8 +10,16 @@
 		isOpen = true
 	})
 
+	function ontransitionstart(e: TransitionEvent) {
+		if (e.propertyName !== 'transform') return
+		const target = e.target as HTMLDialogElement
+		target.style.setProperty('pointer-events', 'none')
+	}
+
 	function ontransitionend(e: TransitionEvent) {
 		if (e.propertyName !== 'transform') return
+		const target = e.target as HTMLDialogElement
+		target.style.setProperty('pointer-events', '')
 		if (!open && isOpen) {
 			isOpen = false
 		}
@@ -23,35 +31,15 @@
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div class="dialog-backdrop" data-closed={(!open && isOpen) || null}></div>
 	<div class="dialog-container">
-		<dialog open {ontransitionend} data-closed={(!open && isOpen) || null} class={props?.class} style={props?.style}>
+		<dialog open {ontransitionstart} {ontransitionend} data-closed={(!open && isOpen) || null} class={props?.class} style={props?.style}>
 			{@render children?.()}
 		</dialog>
 	</div>
 {/if}
 
 <style>
-	.dialog-container {
-		margin: 0;
-		position: fixed;
-		inset: 0;
-		overflow-y: auto;
-	}
-	.dialog-backdrop {
-		margin: 0;
-		position: fixed;
-		inset: 0;
-		background-color: rgba(0, 0, 0, 0.5);
-		transition: opacity var(--diaper-duration) var(--diaper-easing);
-		opacity: 1;
-		@starting-style {
-			opacity: 0;
-		}
-		&[data-closed] {
-			opacity: 0;
-		}
-	}
-
 	dialog {
+		pointer-events: all;
 		position: relative;
 		overflow: clip;
 		width: 100%;
@@ -72,6 +60,27 @@
 		}
 		&[data-closed] {
 			transform: translateY(100vh);
+		}
+	}
+	.dialog-container {
+		pointer-events: none;
+		margin: 0;
+		position: fixed;
+		inset: 0;
+		overflow-y: auto;
+	}
+	.dialog-backdrop {
+		margin: 0;
+		position: fixed;
+		inset: 0;
+		background-color: rgba(0, 0, 0, 0.5);
+		transition: opacity var(--diaper-duration) var(--diaper-easing);
+		opacity: 1;
+		@starting-style {
+			opacity: 0;
+		}
+		&[data-closed] {
+			opacity: 0;
 		}
 	}
 </style>
