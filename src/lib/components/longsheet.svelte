@@ -24,14 +24,24 @@
 			isOpen = false
 		}
 	}
+
+	function noscroll(node: HTMLElement) {
+		function touchstart(e: TouchEvent) {
+			if (e.target === e.currentTarget) e.preventDefault()
+		}
+		$effect(() => {
+			node.addEventListener('touchstart', touchstart)
+			return () => node.removeEventListener('touchstart', touchstart)
+		})
+	}
 </script>
 
 {#if isOpen}
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div class="dialog-backdrop" data-closed={(!open && isOpen) || null}></div>
-	<div class="dialog-container">
-		<dialog open {ontransitionstart} {ontransitionend} data-closed={(!open && isOpen) || null} class={props?.class} style={props?.style}>
+	<div class="dialog-container" use:noscroll>
+		<dialog open {ontransitionstart} {ontransitionend} data-closed={(!open && isOpen) || null} class={props?.class} style={props?.style} use:noscroll>
 			{@render children?.()}
 		</dialog>
 	</div>
@@ -39,7 +49,6 @@
 
 <style>
 	dialog {
-		pointer-events: all;
 		position: relative;
 		overflow: clip;
 		width: 100%;
@@ -63,7 +72,6 @@
 		}
 	}
 	.dialog-container {
-		pointer-events: none;
 		margin: 0;
 		position: fixed;
 		inset: 0;
