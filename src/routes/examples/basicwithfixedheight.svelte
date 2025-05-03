@@ -10,16 +10,14 @@
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
 </div>
 
+<link rel="preload" as="image" href="https://picsum.photos/id/102/170/170" />
+
 <Bottomsheet bind:open height="70vh">
-	{#snippet header()}
-		<Header title="Basic Sheet" subtitle="with fixed height" onclick={() => (open = false)} />
-	{/snippet}
-	<div class="p-4">
-		<p>This sheet is 70% of the view height</p>
-		<br />
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum
-			autem laboriosam consectetur repellendus voluptates ut sint impedit quam? Praesentium.
-		</p>
+	<div class="text-center flex flex-col items-center pt-6 pb-6 px-4 gap-4">
+		<img class="rounded-2xl h-[170px]" src="https://picsum.photos/id/102/170/170" alt="" />
+		<h1 class="h2 pt-4 text-balance">Fixed height</h1>
+		<code class="code">{`height="70vh"`}</code>
+		<article class="opacity-75">Accepts any valid css value.</article>
+		<button class="btn preset-filled-surface-800-200 rounded-full px-8" onclick={() => (open = false)}>Got It</button>
 	</div>
 </Bottomsheet>

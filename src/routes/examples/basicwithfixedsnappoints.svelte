@@ -16,7 +16,7 @@
 	{/snippet}
 	<div class="p-4">
 		<p>Opens at max height but can be snapped to specified points</p>
-		<br />
+		<code class="code">snapPoints={[0.25, 0.7]}</code>
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum
 			autem laboriosam consectetur repellendus voluptates ut sint impedit quam? Praesentium.
