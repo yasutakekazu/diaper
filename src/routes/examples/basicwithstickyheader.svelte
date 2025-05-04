@@ -12,12 +12,9 @@
 		bs.snapTo(0)
 	}
 
-	let headerSnappoint = $state(1)
+	let snappointIndex = $state(1)
 	function handleSnap(index: number) {
-		if (index === 0) {
-			console.log('snap to 0')
-		}
-		headerSnappoint = index
+		snappointIndex = index
 	}
 </script>
 
@@ -36,7 +33,8 @@
 
 <Bottomsheet bind:this={bs} bind:open snapPoints="auto" initialIndex={1} stickyHeader onsnap={handleSnap}>
 	{#snippet header()}
-		{#if headerSnappoint > 0}
+		{#if snappointIndex > 0}
+			<h1 class="h5 p-1 text-center">Photos</h1>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<div class="flex p-0 h-16" onclick={handleThumbClick}>

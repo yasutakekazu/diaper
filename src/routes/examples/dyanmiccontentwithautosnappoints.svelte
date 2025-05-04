@@ -43,6 +43,7 @@
 		</p>
 	</div>
 	{#snippet snapPoint1Content()}
+		<h1 class="h5 p-1 text-center">Photos</h1>
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div class="flex p-0 h-16" onclick={handleThumbClick} data-scrollable={false}>
