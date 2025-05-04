@@ -76,6 +76,9 @@
 		position: fixed;
 		inset: 0;
 		overflow-y: auto;
+		scrollbar-width: none;
+		scrollbar-color: transparent transparent;
+		-webkit-scrollbar: hidden;
 	}
 	.dialog-backdrop {
 		margin: 0;
