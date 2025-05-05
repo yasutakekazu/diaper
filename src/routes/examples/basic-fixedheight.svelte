@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Bottomsheet from '$lib/components/bottomsheet.svelte'
-	import Header from './header.svelte'
 	let open = $state(false)
 </script>
 
@@ -16,6 +15,7 @@
 	<div class="text-center flex flex-col items-center pt-6 pb-6 px-4 gap-4">
 		<img class="rounded-2xl h-[170px]" src="https://picsum.photos/id/102/170/170" alt="" />
 		<h1 class="h2 pt-4 text-balance">Fixed height</h1>
+		<p class="opacity-75">Opens at specified height. This one has:</p>
 		<code class="code">{`height="70vh"`}</code>
 		<article class="opacity-75">Accepts any valid css value.</article>
 		<button class="btn preset-filled-surface-800-200 rounded-full px-8" onclick={() => (open = false)}>Got It</button>

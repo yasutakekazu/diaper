@@ -5,8 +5,8 @@
 </script>
 
 <div class="space-y-2">
-	<h2 class="h4">Long sheet</h2>
-	<p>The default sheet. Opens at full height</p>
+	<h2 class="h3 border-b">Long sheet</h2>
+	<p>The entire sheet is scrollable.</p>
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Cross</button>
 </div>
 

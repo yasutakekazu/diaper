@@ -5,7 +5,7 @@
 
 <div class="space-y-2">
 	<h2 class="h4">Basic with full height</h2>
-	<p>The default sheet. Opens at full height</p>
+	<p>The default sheet. Opens at full height.</p>
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
 </div>
 

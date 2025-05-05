@@ -4,23 +4,29 @@
 	let open2 = $state(false)
 	let open3 = $state(false)
 	let open4 = $state(false)
+
+	let images = [
+		'https://picsum.photos/id/132/600/400',
+		'https://picsum.photos/id/134/600/400',
+		'https://picsum.photos/id/135/600/400',
+		'https://picsum.photos/id/136/600/400'
+	]
 </script>
 
 <div class="space-y-2">
-	<h2 class="h4">Stackable Detached</h2>
-	<p>You can open multiple sheets on top of each other</p>
+	<h2 class="h3 border-b">Stackable Detached</h2>
+	<p>Detached sheets can be stacked too.</p>
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open1 = true)}>Open</button>
 </div>
 
-<link rel="preload" as="image" href="https://picsum.photos/id/132/600/400" />
-<link rel="preload" as="image" href="https://picsum.photos/id/134/600/400" />
-<link rel="preload" as="image" href="https://picsum.photos/id/135/600/400" />
-<link rel="preload" as="image" href="https://picsum.photos/id/136/600/400" />
+<link rel="preload" as="image" href={images[0]} />
+<link rel="preload" as="image" href={images[1]} />
+<link rel="preload" as="image" href={images[2]} />
+<link rel="preload" as="image" href={images[3]} />
 
 <Bottomsheet bind:open={open1} height="auto">
 	{#snippet header()}
-		<!-- <Header title="Stackable Sheet" subtitle="Second" onclick={() => (open2 = false)} /> -->
-		<img src="https://picsum.photos/id/132/600/400" class="w-full" alt="" />
+		<img src={images[0]} class="w-full" alt="" />
 	{/snippet}
 	<div class="p-4">
 		<div class="text-center p-8">
@@ -31,8 +37,7 @@
 
 <Bottomsheet bind:open={open2} height="auto">
 	{#snippet header()}
-		<!-- <Header title="Stackable Sheet" subtitle="Second" onclick={() => (open2 = false)} /> -->
-		<img src="https://picsum.photos/id/134/600/400" class="w-full" alt="" />
+		<img src={images[1]} class="w-full" alt="" />
 	{/snippet}
 	<div class="p-4">
 		<div class="text-center p-8">
@@ -43,8 +48,7 @@
 
 <Bottomsheet bind:open={open3} height="auto">
 	{#snippet header()}
-		<!-- <Header title="Stackable Sheet" subtitle="Second" onclick={() => (open2 = false)} /> -->
-		<img src="https://picsum.photos/id/135/600/400" class="w-full" alt="" />
+		<img src={images[2]} class="w-full" alt="" />
 	{/snippet}
 	<div class="p-4">
 		<div class="text-center p-8">
@@ -55,12 +59,11 @@
 
 <Bottomsheet bind:open={open4} height="auto">
 	{#snippet header()}
-		<!-- <Header title="Stackable Sheet" subtitle="Second" onclick={() => (open2 = false)} /> -->
-		<img src="https://picsum.photos/id/136/600/400" class="w-full" alt="" />
+		<img src={images[3]} class="w-full" alt="" />
 	{/snippet}
 	<div class="p-4">
 		<div class="text-center p-8">
-			<button class=" m-auto btn btn-sm text-center preset-outlined-secondary-600-400" onclick={() => (open4 = false)}>Okay, that's enough</button>
+			<button class="m-auto btn btn-sm text-center preset-outlined-secondary-600-400" onclick={() => (open4 = false)}>Okay, that's enough</button>
 		</div>
 	</div>
 </Bottomsheet>

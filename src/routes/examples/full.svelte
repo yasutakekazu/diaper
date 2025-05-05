@@ -4,8 +4,8 @@
 </script>
 
 <div class="space-y-2">
-	<h2 class="h4">Full sheet</h2>
-	<p>Opens at auto height to fit content</p>
+	<h2 class="h3 border-b">Full sheet</h2>
+	<p>Covers the entire page.</p>
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
 </div>
 

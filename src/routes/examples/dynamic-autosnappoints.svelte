@@ -1,21 +1,21 @@
 <script lang="ts">
-	import Bottomsheet from '$lib/components/bottomsheet.svelte'
+	import Bottomsheet from '@devantic/diaper'
 	import Header from './header.svelte'
 	let open = $state(false)
 </script>
 
 <div class="space-y-2">
-	<h2 class="h4">Dynamic content with fixed snap points</h2>
-	<p>Specify fixed snappoints at which the content will change</p>
+	<h2 class="h4">Dynamic content with auto snap points</h2>
+	<p>Auto-calculates snap points to fit content</p>
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
 </div>
 
-<Bottomsheet bind:open snapPoints={[0.25, 0.7]}>
+<Bottomsheet bind:open snapPoints="auto">
 	{#snippet header()}
-		<Header title="Dynamic Content Sheet" subtitle="with fixed snap points" onclick={() => (open = false)} />
+		<Header title="Dynamic Content Sheet" subtitle="with auto snap points" onclick={() => (open = false)} />
 	{/snippet}
 	<div class="p-4">
-		<p>This sheet has snap points at 0.25 and 0.7</p>
+		<p>Auto-calculates snap points to fit content.</p>
 		<br />
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum

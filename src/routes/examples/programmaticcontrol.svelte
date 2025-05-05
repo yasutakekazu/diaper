@@ -6,7 +6,7 @@
 
 <div class="space-y-2">
 	<h2 class="h3 border-b">Programmatic Control</h2>
-	<p>Use instance methods to control the sheet: showModal, close, snapTo</p>
+	<p>Use instance methods to control the sheet: showModal, close, snapTo.</p>
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={bottomsheet.showModal}>Open</button>
 </div>
 

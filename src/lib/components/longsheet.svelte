@@ -52,6 +52,8 @@
 		position: relative;
 		overflow: clip;
 		width: 100%;
+		max-width: 48rem;
+		margin-inline: auto;
 		padding: 0rem;
 		border-radius: var(--diaper-radius);
 		margin-top: calc(env(safe-area-inset-top) + 2rem);
