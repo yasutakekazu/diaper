@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '$lib/components/diaper.css'
+	import './diaper.css'
 	import type { LongsheetProps } from './types'
 
 	let { open = $bindable(false), children, ...props }: LongsheetProps = $props()

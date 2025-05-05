@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Longsheet from '$lib/components/longsheet.svelte'
+	import { Longsheet } from '@devantic/diaper'
 	let open = $state(false)
 </script>
 

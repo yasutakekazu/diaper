@@ -1,6 +1,7 @@
 <script module lang="ts">
 	import type { BottomsheetProps } from './types'
 	import { untrack } from 'svelte'
+	import './diaper.css'
 	import './bottomsheet.css'
 
 	const noop = () => {}

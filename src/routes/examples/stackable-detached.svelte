@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Bottomsheet from '$lib/components/detachedsheet.svelte'
+	import { Detachedsheet } from '@devantic/diaper'
 	let open1 = $state(false)
 	let open2 = $state(false)
 	let open3 = $state(false)
@@ -24,7 +24,7 @@
 <link rel="preload" as="image" href={images[2]} />
 <link rel="preload" as="image" href={images[3]} />
 
-<Bottomsheet bind:open={open1} height="auto">
+<Detachedsheet bind:open={open1} height="auto">
 	{#snippet header()}
 		<img src={images[0]} class="w-full" alt="" />
 	{/snippet}
@@ -33,9 +33,9 @@
 			<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open2 = true)}>Open another</button>
 		</div>
 	</div>
-</Bottomsheet>
+</Detachedsheet>
 
-<Bottomsheet bind:open={open2} height="auto">
+<Detachedsheet bind:open={open2} height="auto">
 	{#snippet header()}
 		<img src={images[1]} class="w-full" alt="" />
 	{/snippet}
@@ -44,9 +44,9 @@
 			<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open3 = true)}>Open another</button>
 		</div>
 	</div>
-</Bottomsheet>
+</Detachedsheet>
 
-<Bottomsheet bind:open={open3} height="auto">
+<Detachedsheet bind:open={open3} height="auto">
 	{#snippet header()}
 		<img src={images[2]} class="w-full" alt="" />
 	{/snippet}
@@ -55,9 +55,9 @@
 			<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open4 = true)}>Open another</button>
 		</div>
 	</div>
-</Bottomsheet>
+</Detachedsheet>
 
-<Bottomsheet bind:open={open4} height="auto">
+<Detachedsheet bind:open={open4} height="auto">
 	{#snippet header()}
 		<img src={images[3]} class="w-full" alt="" />
 	{/snippet}
@@ -66,4 +66,4 @@
 			<button class="m-auto btn btn-sm text-center preset-outlined-secondary-600-400" onclick={() => (open4 = false)}>Okay, that's enough</button>
 		</div>
 	</div>
-</Bottomsheet>
+</Detachedsheet>

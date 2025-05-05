@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Fullsheet from '$lib/components/fullsheet.svelte'
+	import { Fullsheet } from '@devantic/diaper'
 	let open = $state(false)
 </script>
 
