@@ -14,12 +14,8 @@
 	{#snippet header()}
 		<Header title="Basic Sheet" subtitle="with sticky header" onclick={() => (open = false)} />
 	{/snippet}
-	<div class="p-4">
-		<p>Tap the header to minimize or maximize. The sheet can also open in the minimized state.</p>
-		<br />
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum
-			autem laboriosam consectetur repellendus voluptates ut sint impedit quam? Praesentium.
-		</p>
+	<div class="p-4 space-y-4">
+		<p>Tap the header to minimize or maximize with the <code class="code">toggleOnHeaderTap</code> prop.</p>
+		<p>Open it minimized using the <code class="code">{`openSticky`}</code> prop.</p>
 	</div>
 </Bottomsheet>

@@ -1,6 +1,7 @@
 <script module lang="ts">
 	import type { BottomsheetProps } from './types'
 	import { untrack } from 'svelte'
+	import './diaper.css'
 	import './bottomsheet.css'
 
 	const noop = () => {}
@@ -38,6 +39,7 @@
 		onsnap = noop,
 		header,
 		children,
+		flat = false,
 		...props
 	}: BottomsheetProps = $props()
 
@@ -62,6 +64,7 @@
 	function snapToIndex(index: number) {
 		// translate 16px more when the dialog is closing to
 		// prevent box-shadow jumping at end of transition
+		// setRootProperty('--diaper-duration', diaperDuration)
 		const translateMore = index < 0 ? 16 : 0
 		if (index < 0) index = snappoints.length - 1
 		snapPointIndex = clamp(index, 0, snappoints.length - 1)
@@ -103,7 +106,7 @@
 	let startY = 0
 	let lastTranslate = 0
 	let isTouching = false
-	let duration = '0.5s'
+	let diaperDuration = '0.5s'
 	let headerSnappoint = 0
 
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
@@ -129,12 +132,18 @@
 	function applyProgress(progress: number) {
 		dialog.style.setProperty('--diaper-backdrop-progress', `${progress}`)
 		// only scale body or dialog underneath if drag is between full and the first snap point
-		if (height === maxHeight) backgroundElement.style.setProperty('--diaper-progress', `${progress}`)
+		if (flat) return
+		if (backgroundElement === document.body) {
+			if (height === maxHeight) backgroundElement.style.setProperty('--diaper-progress', `${progress}`)
+		} else {
+			backgroundElement.style.setProperty('--diaper-progress', `${progress}`)
+		}
 	}
 
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
 
 	function ontouchstart(e: TouchEvent) {
+		setRootProperty('--diaper-duration', '0s')
 		startY = 0
 		lastTranslate = 0
 		newTranslate = 0
@@ -148,13 +157,28 @@
 
 		startY = e.touches[0].clientY
 		isTouching = true
-		setRootProperty('--diaper-duration', '0s')
 	}
 
+	let lastY = 0
+	let touchHistory: { y: number; time: number }[] = []
+	const HISTORY_MS = 100
+
 	function ontouchmove(e: TouchEvent) {
+		setRootProperty('--diaper-duration', '0s')
+
 		if (startY === 0) return
 		if (!isTouching) return
+
 		const clientY = e.touches[0].clientY
+		const deltaY = clientY - lastY
+		lastY = clientY
+
+		const now = performance.now()
+		touchHistory.push({ y: clientY, time: now })
+
+		// Remove old touches beyond HISTORY_MS
+		touchHistory = touchHistory.filter((point) => now - point.time <= HISTORY_MS)
+
 		if (clientY > screen.height) return
 		const distance = clientY - startY
 		newTranslate = lastTranslate + distance
@@ -166,6 +190,13 @@
 		// can alternatively be done in ontouchend
 		const snapPoint = getNearestSnapPoint(newTranslate / dialogHeight)
 		snapPointIndex = getSnapPointIndex(snapPoint)
+
+		if (deltaY > 10) {
+			snapPointIndex++
+		} else if (deltaY < -10) {
+			snapPointIndex = Math.max(--snapPointIndex, 0)
+		}
+
 		const progress = clamp(newTranslate / (dialogHeight * snappoints[1]), 0, 1)
 		applyProgress(progress)
 	}
@@ -173,16 +204,38 @@
 	function ontouchend(e: TouchEvent) {
 		// if multiple fingers touching, do nothing until last finger is released
 		if (e.touches.length > 0) return
-		setRootProperty('--diaper-duration', duration)
+
+		const now = performance.now()
+
+		// Remove old touches again just to be safe
+		touchHistory = touchHistory.filter((point) => now - point.time <= HISTORY_MS)
+
+		if (touchHistory.length >= 2) {
+			const first = touchHistory.at(0)!
+			const last = touchHistory.at(-1)!
+			const deltaY = last.y - first.y
+			const deltaTime = last.time - first.time
+			const speed = Math.abs(deltaY / deltaTime) // px/ms
+
+			// Map speed to transition duration
+			// Faster swipe = shorter duration
+			const maxSpeed = 2 // px/ms
+			const minDuration = 400 // ms
+			const maxDuration = 1400 // ms
+
+			let dyanamicDuration = maxDuration - (speed / maxSpeed) * (maxDuration - minDuration)
+			dyanamicDuration = Math.max(minDuration, Math.min(maxDuration, dyanamicDuration)) // clamp
+
+			setRootProperty('--diaper-duration', dyanamicDuration + 'ms')
+		} else {
+			setRootProperty('--diaper-duration', diaperDuration)
+		}
+
 		// if (newTranslate === 0) return
 		if (!isTouching) return
 		snapToIndex(snapPointIndex)
 		isTouching = false
-	}
-
-	const calcAutoSnapPoint = (ref: HTMLElement | undefined) => {
-		if (!ref) return 0
-		return clamp((mainHeight - ref.offsetHeight) / dialogHeight, 0, 1)
+		touchHistory = []
 	}
 
 	function handleHeaderClick(e: MouseEvent) {
@@ -196,11 +249,17 @@
 		// the target first. Obviously won't focus a non-focusable element
 		if (e.target !== e.currentTarget) (e.target as HTMLElement).focus()
 		if ((e.currentTarget as HTMLElement).contains(document.activeElement)) return
+		const headerIndex = getSnapPointIndex(headerSnappoint)
 		if (isMinimized) {
-			snapToIndex(initialIndex ?? 1)
+			snapToIndex(initialIndex !== headerIndex ? initialIndex : 0)
 		} else {
-			snapToIndex(getSnapPointIndex(headerSnappoint))
+			snapToIndex(headerIndex)
 		}
+	}
+
+	const calcAutoSnapPoint = (ref: HTMLElement | undefined) => {
+		if (!ref) return 0
+		return clamp((mainHeight - ref.offsetHeight) / dialogHeight, 0, 1)
 	}
 
 	function calcSnapPoints(snapPoints: number[] | 'auto') {
@@ -208,21 +267,27 @@
 		if (snapPoints === 'auto') {
 			const sp0 = snapPoint1Content || snapPoint2Content ? 0 : calcAutoSnapPoint(refs.children)
 			const sp1 = snapPoint1Content ? calcAutoSnapPoint(refs.snapPoint1) : 0
-			const sp2 = snapPoint1Content ? calcAutoSnapPoint(refs.snapPoint2) : 0
+			const sp2 = snapPoint2Content ? calcAutoSnapPoint(refs.snapPoint2) : 0
 			snappoints.push(sp0, sp1, sp2)
 		} else {
 			snappoints.push(...snapPoints)
 		}
 		if (stickyHeader) {
-			headerSnappoint = 1 - (header ? headerHeight / dialogHeight : 0)
+			headerSnappoint = 1 - headerHeight / dialogHeight
 			snappoints.push(headerSnappoint)
 		}
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
+	let saib = '0px'
 	// Effect 0 - root variables
 	$effect(() => {
-		duration = getRootProperty('--diaper-duration')
+		diaperDuration = getRootProperty('--diaper-duration')
+		saib = getRootProperty('--diaper-saib')
+	})
+
+	$effect(() => {
+		open && setRootProperty('--diaper-duration', diaperDuration)
 	})
 
 	// Effect 1 - open logic
@@ -290,7 +355,7 @@
 				isMinimized = ratio <= 1 - headerSnappoint
 				if (ratio <= 0) handleClose()
 			},
-			{ threshold: snappoints.map((p) => 1 - p), root: null, rootMargin: '0px 0px -1px 0px' }
+			{ threshold: snappoints.map((p) => 1 - p), root: null, rootMargin: `0px 0px -${parseInt(saib) + 1}px 0px` }
 		)
 		observer.observe(dialog)
 		return () => observer.disconnect()
@@ -299,29 +364,47 @@
 	function onclick(e: MouseEvent) {
 		if (closeOnBackdropTap && e.target === e.currentTarget) close()
 	}
+
+	function ontransitionend(e: TransitionEvent) {
+		if (e.propertyName !== 'translate') return
+		setRootProperty('--diaper-duration', diaperDuration)
+	}
 </script>
 
 {#if isOpen}
-	<dialog data-diaper bind:this={refs.ref} style:height={autoHeight} style:max-height={maxHeight} {onclick}>
-		<div class={props?.class} style={props?.style} style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
+	<dialog
+		data-diaper
+		bind:this={refs.ref}
+		{onclick}
+		{ontransitionend}
+		class={props?.baseClass}
+		style:height={autoHeight}
+		style:max-height={maxHeight}
+		style={props?.style}
+	>
+		<div class={props?.class} style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<header bind:this={refs.header} class:headerOverlaysContent onclick={handleHeaderClick}>
 				{#if header}
 					{@render header?.()}
 				{:else}
-					<div class="handle"></div>
+					<div style:padding-block="8px">
+						<div class="handle"></div>
+					</div>
 				{/if}
 			</header>
-			<main bind:this={refs.main} style:max-height="{mainHeight - newTranslate}px">
+			<main bind:this={refs.main} style:max-height="{mainHeight}px">
 				{#if initialized}
-					<!-- style:max-height={mainHeight - newTranslate + 'px'} is needed to make iOS scrollable -->
+					<!-- style:max-height="{mainHeight}px" is needed to make iOS scrollable -->
 					<section
 						bind:this={refs.children}
 						data-visible={snapPointIndex === 0 || (snapPointIndex === 1 && !snapPoint1Content) || (snapPointIndex === 2 && !snapPoint2Content) || null}
 						style:overflow="auto"
 						style:padding-top="{headerOverlaysContent ? headerHeight : 0}px"
 						style:max-height="{mainHeight}px"
+						style:height={height === 'auto' || snapPoints === 'auto' ? 'fit-content' : '100%'}
+						style:padding-bottom={children ? saib : 0}
 					>
 						{@render children?.()}
 					</section>
@@ -330,6 +413,7 @@
 						data-visible={snapPointIndex === 1 || null}
 						style:overflow="auto"
 						style:padding-top="{headerOverlaysContent ? headerHeight : 0}px"
+						style:padding-bottom={snapPoint1Content ? saib : 0}
 					>
 						{@render snapPoint1Content?.()}
 					</section>
@@ -338,6 +422,7 @@
 						data-visible={snapPointIndex === 2 || null}
 						style:overflow="auto"
 						style:padding-top="{headerOverlaysContent ? headerHeight : 0}px"
+						style:padding-bottom={snapPoint2Content ? saib : 0}
 					>
 						{@render snapPoint2Content?.()}
 					</section>
@@ -368,11 +453,11 @@
 		max-height: 100%;
 	}
 	.handle {
-		width: 40px;
-		height: 4px;
-		background-color: #e0e0e0;
-		border-radius: 2px;
-		margin: 16px auto;
+		width: 52px;
+		height: 6px;
+		background-color: #aaa7;
+		border-radius: 3px;
+		margin-inline: auto;
 	}
 	.headerOverlaysContent {
 		position: absolute;

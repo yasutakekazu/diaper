@@ -6,7 +6,7 @@
 
 <div class="space-y-2">
 	<h2 class="h4">Dynamic content with fixed snap points</h2>
-	<p>Specify fixed snappoints at which the content will change</p>
+	<p>Specify fixed snappoints at which the content will change.</p>
 	<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open = true)}>Open</button>
 </div>
 
@@ -15,7 +15,7 @@
 		<Header title="Dynamic Content Sheet" subtitle="with fixed snap points" onclick={() => (open = false)} />
 	{/snippet}
 	<div class="p-4">
-		<p>This sheet has snap points at 0.25 and 0.7</p>
+		<p>This sheet has snap points at 0.25 and 0.7.</p>
 		<br />
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum

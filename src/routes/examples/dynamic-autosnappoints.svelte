@@ -15,7 +15,7 @@
 		<Header title="Dynamic Content Sheet" subtitle="with auto snap points" onclick={() => (open = false)} />
 	{/snippet}
 	<div class="p-4">
-		<p>Auto-calculates snap points to fit content</p>
+		<p>Auto-calculates snap points to fit content.</p>
 		<br />
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum

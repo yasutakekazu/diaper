@@ -15,7 +15,7 @@
 		<Header title="Scrollable Sheet" subtitle="with dynamic content and auto snap points" onclick={() => (open = false)} />
 	{/snippet}
 	<div class="p-4">
-		<p>The content changes based on the snap point. The scroll position is restored when the scrollable content is made visible again</p>
+		<p>The content changes based on the snap point. The scroll position is restored when the scrollable content is made visible again.</p>
 		<br />
 		<p>
 			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima, qui! Maiores praesentium veniam delectus illo, quod facere necessitatibus quasi cum

@@ -1,19 +1,25 @@
 <script lang="ts">
 	import Basicsheet from './examples/basic.svelte'
-	import Basicwithfixedheight from './examples/basicwithfixedheight.svelte'
-	import Basicwithautoeight from './examples/basicwithautoeight.svelte'
-	import Basicwithautosnappoints from './examples/basicwithautosnappoints.svelte'
-	import Basicwithfixedsnappoints from './examples/basicwithfixedsnappoints.svelte'
-	import Basicwithinitialsnappoint from './examples/basicwithinitialsnappoint.svelte'
-	import Basicwithstickyheader from './examples/basicwithstickyheader.svelte'
+	import Basicwithfixedheight from './examples/basic-fixedheight.svelte'
+	import Basicwithautoheight from './examples/basic-autoheight.svelte'
+	import Basicwithautosnappoints from './examples/snappoints-auto.svelte'
+	import Basicwithfixedsnappoints from './examples/snappoints-fixed.svelte'
+	import Basicwithinitialsnappoint from './examples/snappoints-initial.svelte'
+	import Basicwithstickyheader from './examples/basic-stickyheader.svelte'
 	import Scrollable from './examples/scrollable.svelte'
-	import Scrollablewithfixedsnappoint from './examples/scrollablewithfixedsnappoint.svelte'
-	import Dyanmiccontentwithautosnappoints from './examples/dyanmiccontentwithautosnappoints.svelte'
-	import Dyanmiccontentwithfixedsnappoints from './examples/dyanmiccontentwithfixedsnappoints.svelte'
-	import Scollablewithdyanmiccontentandautosnappoints from './examples/scollablewithdyanmiccontentandautosnappoints.svelte'
+	import Scrollablewithfixedsnappoint from './examples/scrollable-fixedsnappoint.svelte'
+	import Dyanmiccontentwithautosnappoints from './examples/dynamic-autosnappoints.svelte'
+	import Dyanmiccontentwithfixedsnappoints from './examples/dynamic-fixedsnappoints.svelte'
+	import Scollablewithdyanmiccontentandautosnappoints from './examples/scollable-dyanmiccontent_autosnappoints.svelte'
 	import Stackable from './examples/stackable.svelte'
 	import Programmaticcontrol from './examples/programmaticcontrol.svelte'
+	import Long from './examples/long.svelte'
 	import { Star } from '@lucide/svelte'
+	import Detached from './examples/detached.svelte'
+	import Full from './examples/full.svelte'
+	import Stackabledetached from './examples/stackable-detached.svelte'
+	import ExperimentsStickyheader from './examples/experiments-stickyheader.svelte'
+	import ExpermentsSnappoints from './examples/experiments-snappoints.svelte'
 </script>
 
 <main class="overflow-auto pt-2">
@@ -34,7 +40,7 @@
 			<li>Svelte5</li>
 			<li>Native html dialog element uth</li>
 			<li>Light/dark mode out of the box</li>
-			<li>Mobile first, in fact mobile only ;)</li>
+			<li>Mobile first, in fact mobile only😉</li>
 			<li>Many more buzzwords</li>
 		</ul>
 		<p class="text-center">
@@ -43,12 +49,12 @@
 			>
 		</p>
 		<div class="space-y-2">
-			<h2 class="h3 border-b">Basic</h2>
-			<p>Basic sheets can be opened and closed but not resized</p>
+			<h2 class="h3 border-b">Basic sheets</h2>
+			<p>Basic sheets can be opened and closed but not resized.</p>
 		</div>
 		<Basicsheet />
 		<Basicwithfixedheight />
-		<Basicwithautoeight />
+		<Basicwithautoheight />
 		<Basicwithstickyheader />
 		<div class="space-y-2">
 			<h2 class="h3 border-b">Snap Points</h2>
@@ -66,7 +72,16 @@
 		<Dyanmiccontentwithautosnappoints />
 		<Dyanmiccontentwithfixedsnappoints />
 		<Scollablewithdyanmiccontentandautosnappoints />
+		<Detached />
+		<Full />
+		<Long />
 		<Stackable />
+		<Stackabledetached />
 		<Programmaticcontrol />
+		<div class="space-y-2">
+			<h2 class="h3 border-b">Experiments</h2>
+		</div>
+		<ExperimentsStickyheader />
+		<ExpermentsSnappoints />
 	</div>
 </main>

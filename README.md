@@ -10,10 +10,44 @@ See the [demo.](https://diaperbs.vercel.app)
 npm install @devantic/diaper
 ```
 
-## Import
+## Components
+
+**`Bottomsheet`**
+
+The main component.
 
 ```ts
 import Bottomsheet from '@devantic/diaper'
+```
+
+\- or -
+
+```ts
+import { Bottomsheet } from '@devantic/diaper'
+```
+
+**`Detachedsheet`**
+
+A convenience component - a thin wrapper around `Bottomsheet` with small margin and more rounded corners. Same props as Bottomsheet, but don't go nuts.
+
+```ts
+import { Detachedsheet } from '@devantic/diaper'
+```
+
+**`Fullsheet`**
+
+A convenience component - a thin wrapper around `Bottomsheet` for sheets that cover the entire screen. Same props as Bottomsheet.
+
+```ts
+import { Fullsheet } from '@devantic/diaper'
+```
+
+**`Longsheet`**
+
+For long content. The entire sheet scrolls in the viewport rather than just the content. Only needs the `open` prop.
+
+```ts
+import { Longsheet } from '@devantic/diaper'
 ```
 
 ## Usage
@@ -25,19 +59,34 @@ See the [code for the examples](https://github.com/devantic/diaper/tree/main/src
 ```ts
 export type BottomsheetProps = {
 	open?: boolean
-	maxHeight?: string
 	height?: string
+	maxHeight?: string
 	snapPoints?: number[] | 'auto'
 	initialIndex?: number
-	snapPoint1Content?: Snippet
-	snapPoint2Content?: Snippet
-	headerOverlaysContent?: boolean
 	canDragSheet?: boolean
+	headerOverlaysContent?: boolean
+	stickyHeader?: boolean
+	openSticky?: boolean
+	toggleOnHeaderTap?: boolean
+	closeOnBackdropTap?: boolean
+	flat?: boolean
 	onclose?: () => void
 	onsnap?: (progress: number) => void
 	header?: Snippet
 	children?: Snippet
-} & HTMLAttributes<HTMLDialogElement>
+	snapPoint1Content?: Snippet
+	snapPoint2Content?: Snippet
+	baseClass?: string
+	class?: string
+	style?: string
+}
+
+export type LongsheetProps = {
+	open?: boolean
+	children?: Snippet
+	class?: string
+	style?: string
+}
 ```
 
 **`open` - optional, bindable**
@@ -46,7 +95,7 @@ A boolean value controlling the open/closed state of the bottom sheet. You can `
 
 **`height` - optional**
 
-A string specifying the the height of the dialog. Defaults to maxHeight (93% of view height). Values can be specified using any valid css unit, e.g. <kbd>'75%', '75vh', '400px'</kbd>, etc. A value of <kbd>'auto'</kbd> will auto-size the sheet to fit content.
+A string specifying the the height of the dialog. Defaults to maxHeight (93% of view height). Values can be specified using any valid css unit, e.g. `'75%'`, `'75vh'`, `'400px'`, etc. A value of `'auto'` will auto-size the sheet to fit content.
 
 **`maxHeight` - optional**
 
@@ -54,11 +103,11 @@ Overrides the maxHeight of the sheet, defaults to 93% of the view height to acco
 
 **`snapPoints` - optional**
 
-Accepts an array of numbers between 0 and 1 or the string value <kdb>'auto'</kbd>. E.g. <kbd>[0.25, 0.5, 0.75]</kbd>. Values are relative to the height of the sheet and specified top down. I.e. 0.25 is 1/4 from the top of the sheet and 0.75 is 1/4 from the bottom.
+Accepts an array of numbers between 0 and 1 or the string value `'auto'`. E.g. `[0.25, 0.5, 0.75]`. Values are relative to the height of the sheet and specified top down. I.e. 0.25 is 1/4 from the top of the sheet and 0.75 is 1/4 from the bottom.
 
-The special value <kdb>'auto'</kbd> will auto-calculate snappoints where possible. E.g. If there is a lot of space at the bottom of the sheet, a snapoint will be set to allow the sheet to be minimized to fit content.
+The special value `'auto'` will auto-calculate snappoints where possible. E.g. If there is a lot of space at the bottom of the sheet, a snappoint will be set to allow the sheet to be minimized to fit content.
 
-Snappoints are also auto-calculated when this value is set and the sheet has dynamic sheet content. See [snippets](#snippets).
+Snappoints are also auto-calculated when this value is set to `'auto'` and the sheet has dynamic sheet content. See [snippets](#snippets).
 
 **`initialIndex` - optional**
 
@@ -76,7 +125,7 @@ Boolean. For scrollable sheets, if set to true, the content will scroll behind t
 
 **`stickyHeader` - optional**
 
-Boolean. If true the header will stick to the bottom of the page and can only be closed programatically. Default is false.
+Boolean. If true the header will stick to the bottom of the page ~~and can only be closed programatically~~. Default is false.
 
 **`openSticky` - optional**
 
@@ -84,17 +133,21 @@ Boolean. When true, and stickyHeader is true, the sheet will open with the heade
 
 **`toggleOnHeaderTap` - optional**
 
-Boolean. Enables tap on header to minimize and maximize the sheet when stickHeader is true. If stickyHeader is false, a header tap will close the sheet. The maximized state is either the full height, or, if set, the intial snapPoint. Default is false.
+Boolean. Enables tap on header to minimize and maximize the sheet when stickyHeader is true. If stickyHeader is false, a header tap will close the sheet. The maximized state is either the full height, or, if set, the intial snapPoint. Default is false.
 
-**`closeOnBackdrop tap` - optional**
+**`closeOnBackdropTap` - optional**
 
-Boolean. Defaults to TRUE.
+Boolean. Defaults to true.
 
-**`onClose()` - optional**
+**`flat` - optional**
+
+Boolean. Don't scale the background. Defaults to false.
+
+**`onclose()` - optional**
 
 A function to run when the sheet has completely closed, i.e. the close transition has completed.
 
-**`onSnap()` - optional**
+**`onsnap()` - optional**
 
 A function to run when the snappoint changes. Runs before the the transition to the new snappoint. Passes the snappoint as parameter, e.g. 0.25, not the index
 
@@ -104,15 +157,15 @@ A function to run when the snappoint changes. Runs before the the transition to 
 
 The main content for the bottom sheet
 
-**`header()`**
+**`header()`- optional**
 
 The header content
 
-**`snapPoint1Content()`**
+**`snapPoint1Content()` - optional**
 
 If specified, the content of the sheet will change to this content when dragged to the first snappoint.
 
-**`snapPoint2Content()`**
+**`snapPoint2Content()`- optional**
 
 If specified, the content of the sheet will change to this content when dragged to the second snappoint.
 
@@ -135,6 +188,8 @@ The sheet can be styled using tailwind or css by passing a `class` prop or `styl
 ```svelte
 <Bottomsheet bind:open class="p-4 pt-0 bg-red-500">...</Bottomsheet>
 ```
+
+If you want to modify instrinsic styles like the `border-radius` using tailwind, use the `baseClass` prop with the important (!) modifier, e.g. `baseClass="!rounded-xl".` Always prefer `class` over `baseClass`, you can use both at the same time.
 
 ### CSS
 

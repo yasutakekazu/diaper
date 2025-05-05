@@ -1,47 +1,6 @@
-:root {
-	color-scheme: light dark;
-	--diaper-duration: 0.7s;
-	--diaper-backdrop-color: black;
-	--diaper-backdrop-opacity: 0.25;
-	--diaper-light: #fcfcfc;
-	--diaper-dark: #222222;
-	--diaper-lighter: hsl(from var(--diaper-light) h s 90%);
-	--diaper-darker: hsl(from var(--diaper-dark) h s 11%);
-	--diaper-fg: light-dark(var(--diaper-dark), var(--diaper-light));
-	--diaper-bg: light-dark(var(--diaper-light), var(--diaper-dark));
-	--diaper-fg-tinted: light-dark(var(--diaper-darker), var(--diaper-lighter));
-	--diaper-bg-tinted: light-dark(var(--diaper-lighter), var(--diaper-darker));
-	/* --diaper-easing: cubic-bezier(0.33, 1, 0.68, 1); */
-	/* --diaper-easing: cubic-bezier(0.22, 1, 0.36, 1); */
-	--diaper-easing: linear(
-		0,
-		0.012 0.9%,
-		0.049 2%,
-		0.409 9.3%,
-		0.513 11.9%,
-		0.606 14.7%,
-		0.691 17.9%,
-		0.762 21.3%,
-		0.82 25%,
-		0.868 29.1%,
-		0.907 33.6%,
-		0.937 38.7%,
-		0.976 51.3%,
-		0.994 68.8%,
-		1
-	);
-}
-
-html {
-	background-color: black;
-	/* min-height: calc(100% + env(safe-area-inset-top)); */
-	padding-bottom: env(safe-area-inset-bottom);
-	overscroll-behavior-y: none;
-}
-
 body {
 	--diaper-progress: 1;
-	--diaper-roundness: calc((1 - var(--diaper-progress)) * 1rem);
+	--diaper-roundness: calc((1 - var(--diaper-progress)) * var(--diaper-radius));
 	transition: scale, clip-path;
 	transition-duration: var(--diaper-duration);
 	transform-origin: bottom;
@@ -71,7 +30,7 @@ dialog[data-diaper] {
 	box-sizing: border-box;
 	border: none;
 	outline: none;
-	border-radius: 1rem 1rem 0 0;
+	border-radius: var(--diaper-radius) var(--diaper-radius) 0 0;
 	background-color: var(--diaper-bg);
 	color: var(--diaper-fg);
 	box-shadow: 0 -4px 6px -1px var(--diaper-shadow-color);
@@ -89,11 +48,11 @@ dialog[data-diaper] {
 	contain: strict; /* isolates the element */
 	position: fixed;
 	inset: 0;
+	@starting-style {
+		translate: 0 100%;
+	}
 	&[open] {
 		max-width: 48rem;
-		@starting-style {
-			translate: 0 100%;
-		}
 		/* only top 2 dialogs have backdrop and box-shadow */
 		&:not(:nth-last-of-type(-n + 2)) {
 			--diaper-backdrop-opacity: 0;
