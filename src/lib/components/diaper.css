@@ -1,5 +1,6 @@
 :root {
 	color-scheme: light dark;
+	--diaper-saib: env(safe-area-inset-bottom);
 	--diaper-duration: 0.4s;
 	--diaper-backdrop-color: black;
 	--diaper-backdrop-opacity: 0.25;

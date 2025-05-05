@@ -265,7 +265,7 @@
 		if (snapPoints === 'auto') {
 			const sp0 = snapPoint1Content || snapPoint2Content ? 0 : calcAutoSnapPoint(refs.children)
 			const sp1 = snapPoint1Content ? calcAutoSnapPoint(refs.snapPoint1) : 0
-			const sp2 = snapPoint1Content ? calcAutoSnapPoint(refs.snapPoint2) : 0
+			const sp2 = snapPoint2Content ? calcAutoSnapPoint(refs.snapPoint2) : 0
 			snappoints.push(sp0, sp1, sp2)
 		} else {
 			snappoints.push(...snapPoints)
@@ -277,9 +277,11 @@
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
+	let saib = '0px'
 	// Effect 0 - root variables
 	$effect(() => {
 		diaperDuration = getRootProperty('--diaper-duration')
+		saib = getRootProperty('--diaper-saib')
 	})
 
 	$effect(() => {
@@ -351,7 +353,7 @@
 				isMinimized = ratio <= 1 - headerSnappoint
 				if (ratio <= 0) handleClose()
 			},
-			{ threshold: snappoints.map((p) => 1 - p), root: null, rootMargin: '0px 0px -1px 0px' }
+			{ threshold: snappoints.map((p) => 1 - p), root: null, rootMargin: `0px 0px -${parseInt(saib) + 1}px 0px` }
 		)
 		observer.observe(dialog)
 		return () => observer.disconnect()
@@ -400,6 +402,7 @@
 						style:padding-top="{headerOverlaysContent ? headerHeight : 0}px"
 						style:max-height="{mainHeight}px"
 						style:height={height === 'auto' || snapPoints === 'auto' ? 'fit-content' : '100%'}
+						style:padding-bottom={children ? saib : 0}
 					>
 						{@render children?.()}
 					</section>
@@ -408,6 +411,7 @@
 						data-visible={snapPointIndex === 1 || null}
 						style:overflow="auto"
 						style:padding-top="{headerOverlaysContent ? headerHeight : 0}px"
+						style:padding-bottom={snapPoint1Content ? saib : 0}
 					>
 						{@render snapPoint1Content?.()}
 					</section>
@@ -416,6 +420,7 @@
 						data-visible={snapPointIndex === 2 || null}
 						style:overflow="auto"
 						style:padding-top="{headerOverlaysContent ? headerHeight : 0}px"
+						style:padding-bottom={snapPoint2Content ? saib : 0}
 					>
 						{@render snapPoint2Content?.()}
 					</section>
