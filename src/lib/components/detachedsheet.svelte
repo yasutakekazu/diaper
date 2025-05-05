@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Bottomsheet from '$lib/components/bottomsheet.svelte'
+	import Bottomsheet from './bottomsheet.svelte'
 	import type { BottomsheetProps } from './types'
 
 	let { open = $bindable(false), style = '', ...props }: BottomsheetProps = $props()

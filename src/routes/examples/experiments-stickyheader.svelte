@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Bottomsheet from '$lib/components/bottomsheet.svelte'
+	import Bottomsheet from '@devantic/diaper'
 	import { ChevronDown } from '@lucide/svelte'
 	let open = $state(false)
 	let bs: Bottomsheet
