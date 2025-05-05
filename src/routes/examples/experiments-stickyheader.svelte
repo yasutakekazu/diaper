@@ -7,7 +7,6 @@
 	let imageId = $state('1')
 	function handleThumbClick(e: MouseEvent) {
 		let target = e.target as HTMLImageElement
-		console.log(target.src)
 		imageId = target.src.match(/id\/(\d+)/)?.[1] || '1'
 		bs.snapTo(0)
 	}
