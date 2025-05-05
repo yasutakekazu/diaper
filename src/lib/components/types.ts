@@ -1,5 +1,4 @@
 import type { Snippet } from 'svelte'
-import type { HTMLAttributes } from 'svelte/elements'
 
 export type BottomsheetProps = {
 	open?: boolean
@@ -21,11 +20,13 @@ export type BottomsheetProps = {
 	header?: Snippet
 	children?: Snippet
 	baseClass?: string
-	// class?: string
-	// style?: string
-} & HTMLAttributes<HTMLDialogElement>
+	class?: string
+	style?: string
+}
 
 export type LongsheetProps = {
 	open?: boolean
 	children?: Snippet
-} & HTMLAttributes<HTMLDialogElement>
+	class?: string
+	style?: string
+}

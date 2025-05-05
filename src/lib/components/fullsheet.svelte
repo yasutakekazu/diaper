@@ -1,6 +1,8 @@
-<script>
+<script lang="ts">
 	import Bottomsheet from '$lib/components/bottomsheet.svelte'
-	let { open = $bindable(false), style = '', ...props } = $props()
+	import type { BottomsheetProps } from './types'
+
+	let { open = $bindable(false), style = '', ...props }: BottomsheetProps = $props()
 	const customStyle = 'border-radius: 0; padding-top: env(safe-area-inset-top);'
 </script>
 
