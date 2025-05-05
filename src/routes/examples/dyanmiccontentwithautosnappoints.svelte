@@ -46,7 +46,7 @@
 		<h1 class="h5 p-1 text-center">Photos</h1>
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
-		<div class="flex p-0 h-16" onclick={handleThumbClick} data-scrollable={false}>
+		<div class="flex p-0 h-16 w-full overflow-x-auto" onclick={handleThumbClick}>
 			<img src="https://picsum.photos/id/322/600/400" alt="" />
 			<img src="https://picsum.photos/id/323/600/400" alt="" />
 			<img src="https://picsum.photos/id/324/600/400" alt="" />
