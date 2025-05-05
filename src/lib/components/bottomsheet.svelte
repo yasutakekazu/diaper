@@ -248,10 +248,11 @@
 		// the target first. Obviously won't focus a non-focusable element
 		if (e.target !== e.currentTarget) (e.target as HTMLElement).focus()
 		if ((e.currentTarget as HTMLElement).contains(document.activeElement)) return
+		const headerIndex = getSnapPointIndex(headerSnappoint)
 		if (isMinimized) {
-			snapToIndex(initialIndex ?? 1)
+			snapToIndex(initialIndex !== headerIndex ? initialIndex : 0)
 		} else {
-			snapToIndex(getSnapPointIndex(headerSnappoint))
+			snapToIndex(headerIndex)
 		}
 	}
 
