@@ -6,10 +6,10 @@
 	let open4 = $state(false)
 
 	let images = [
-		'https://picsum.photos/id/132/600/400',
-		'https://picsum.photos/id/134/600/400',
-		'https://picsum.photos/id/135/600/400',
-		'https://picsum.photos/id/136/600/400'
+		'https://picsum.photos/id/400/600/400',
+		'https://picsum.photos/id/401/600/400',
+		'https://picsum.photos/id/402/600/400',
+		'https://picsum.photos/id/403/600/400'
 	]
 </script>
 
@@ -26,7 +26,7 @@
 
 <Detachedsheet bind:open={open1} height="auto">
 	{#snippet header()}
-		<img src={images[0]} class="w-full" alt="" />
+		<img src={images[0]} class="aspect-[3/2]" alt="" />
 	{/snippet}
 	<div class="p-4">
 		<div class="text-center p-8">
@@ -37,7 +37,7 @@
 
 <Detachedsheet bind:open={open2} height="auto">
 	{#snippet header()}
-		<img src={images[1]} class="w-full" alt="" />
+		<img src={images[1]} class="aspect-[3/2]" alt="" />
 	{/snippet}
 	<div class="p-4">
 		<div class="text-center p-8">
@@ -48,7 +48,7 @@
 
 <Detachedsheet bind:open={open3} height="auto">
 	{#snippet header()}
-		<img src={images[2]} class="w-full" alt="" />
+		<img src={images[2]} class="aspect-[3/2]" alt="" />
 	{/snippet}
 	<div class="p-4">
 		<div class="text-center p-8">
