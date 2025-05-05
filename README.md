@@ -16,6 +16,30 @@ npm install @devantic/diaper
 import Bottomsheet from '@devantic/diaper'
 ```
 
+\- or -
+
+```ts
+import { Bottomsheet } from '@devantic/diaper'
+```
+
+## Components
+
+**`Bottomsheet`**
+
+The main component.
+
+**`Detachedsheet`**
+
+A convenience component - a thin wrapper around `Bottomsheet` with small margin and more rounded corners. Same props as Bottomsheet, but don't go nuts.
+
+**`Fullsheet`**
+
+A convenience component - a thin wrapper around `Bottomsheet` for sheets that cover the entire screen. Same props as Bottomsheet.
+
+**`Longsheet`**
+
+For long content. The entire sheet scrolls in the viewport rather than just the content.
+
 ## Usage
 
 See the [code for the examples](https://github.com/devantic/diaper/tree/main/src/routes/examples) used in the demo.
@@ -25,19 +49,34 @@ See the [code for the examples](https://github.com/devantic/diaper/tree/main/src
 ```ts
 export type BottomsheetProps = {
 	open?: boolean
-	maxHeight?: string
 	height?: string
+	maxHeight?: string
 	snapPoints?: number[] | 'auto'
 	initialIndex?: number
-	snapPoint1Content?: Snippet
-	snapPoint2Content?: Snippet
-	headerOverlaysContent?: boolean
 	canDragSheet?: boolean
+	headerOverlaysContent?: boolean
+	stickyHeader?: boolean
+	openSticky?: boolean
+	toggleOnHeaderTap?: boolean
+	closeOnBackdropTap?: boolean
+	flat?: boolean
 	onclose?: () => void
 	onsnap?: (progress: number) => void
 	header?: Snippet
 	children?: Snippet
-} & HTMLAttributes<HTMLDialogElement>
+	snapPoint1Content?: Snippet
+	snapPoint2Content?: Snippet
+	baseClass?: string
+	class?: string
+	style?: string
+}
+
+export type LongsheetProps = {
+	open?: boolean
+	children?: Snippet
+	class?: string
+	style?: string
+}
 ```
 
 **`open` - optional, bindable**
@@ -90,11 +129,15 @@ Boolean. Enables tap on header to minimize and maximize the sheet when stickHead
 
 Boolean. Defaults to TRUE.
 
-**`onClose()` - optional**
+**`flat` - optional**
+
+Boolean. Don't scale the background. Defaults to FALSE.
+
+**`onclose()` - optional**
 
 A function to run when the sheet has completely closed, i.e. the close transition has completed.
 
-**`onSnap()` - optional**
+**`onsnap()` - optional**
 
 A function to run when the snappoint changes. Runs before the the transition to the new snappoint. Passes the snappoint as parameter, e.g. 0.25, not the index
 
@@ -135,6 +178,8 @@ The sheet can be styled using tailwind or css by passing a `class` prop or `styl
 ```svelte
 <Bottomsheet bind:open class="p-4 pt-0 bg-red-500">...</Bottomsheet>
 ```
+
+If you want to modify instrinsic styles like the `border-radius` using tailwind, use the `baseClass` prop with the important (!) modifier, e.g. `baseClass="!rounded-xl".` Always prefer `class` over `baseClass`, you can use both at the same time.
 
 ### CSS
 
