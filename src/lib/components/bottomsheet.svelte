@@ -273,17 +273,17 @@
 			snappoints.push(...snapPoints)
 		}
 		if (stickyHeader) {
-			headerSnappoint = 1 - headerHeight / dialogHeight
+			headerSnappoint = 1 - (headerHeight + saib) / dialogHeight
 			snappoints.push(headerSnappoint)
 		}
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
-	let saib = '0px'
+	let saib = 0
 	// Effect 0 - root variables
 	$effect(() => {
 		diaperDuration = getRootProperty('--diaper-duration')
-		saib = getRootProperty('--diaper-saib')
+		saib = parseInt(getRootProperty('--diaper-saib'))
 	})
 
 	$effect(() => {
@@ -355,7 +355,7 @@
 				isMinimized = ratio <= 1 - headerSnappoint
 				if (ratio <= 0) handleClose()
 			},
-			{ threshold: snappoints.map((p) => 1 - p), root: null, rootMargin: `0px 0px -${parseInt(saib) + 1}px 0px` }
+			{ threshold: snappoints.map((p) => 1 - p), root: null, rootMargin: `0px 0px -${saib + 1}px 0px` }
 		)
 		observer.observe(dialog)
 		return () => observer.disconnect()
@@ -396,15 +396,16 @@
 			</header>
 			<main bind:this={refs.main} style:max-height="{mainHeight}px">
 				{#if initialized}
+					{@const paddingTop = headerOverlaysContent ? headerHeight : 0}
 					<!-- style:max-height="{mainHeight}px" is needed to make iOS scrollable -->
 					<section
 						bind:this={refs.children}
 						data-visible={snapPointIndex === 0 || (snapPointIndex === 1 && !snapPoint1Content) || (snapPointIndex === 2 && !snapPoint2Content) || null}
 						style:overflow="auto"
-						style:padding-top="{headerOverlaysContent ? headerHeight : 0}px"
-						style:max-height="{mainHeight}px"
 						style:height={height === 'auto' || snapPoints === 'auto' ? 'fit-content' : '100%'}
-						style:padding-bottom={children ? saib : 0}
+						style:max-height="{mainHeight}px"
+						style:padding-top="{paddingTop}px"
+						style:padding-bottom={children ? saib + 'px' : 0}
 					>
 						{@render children?.()}
 					</section>
@@ -412,8 +413,8 @@
 						bind:this={refs.snapPoint1}
 						data-visible={snapPointIndex === 1 || null}
 						style:overflow="auto"
-						style:padding-top="{headerOverlaysContent ? headerHeight : 0}px"
-						style:padding-bottom={snapPoint1Content ? saib : 0}
+						style:padding-top="{paddingTop}px"
+						style:padding-bottom={snapPoint1Content ? saib + 'px' : 0}
 					>
 						{@render snapPoint1Content?.()}
 					</section>
@@ -421,8 +422,8 @@
 						bind:this={refs.snapPoint2}
 						data-visible={snapPointIndex === 2 || null}
 						style:overflow="auto"
-						style:padding-top="{headerOverlaysContent ? headerHeight : 0}px"
-						style:padding-bottom={snapPoint2Content ? saib : 0}
+						style:padding-top="{paddingTop}px"
+						style:padding-bottom={snapPoint2Content ? saib + 'px' : 0}
 					>
 						{@render snapPoint2Content?.()}
 					</section>
