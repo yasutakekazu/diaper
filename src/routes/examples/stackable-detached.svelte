@@ -55,9 +55,8 @@
 </Detachedsheet>
 
 <Detachedsheet bind:open={open4} height="auto">
-	{#snippet header()}
-		<img src={images[3]} class="w-full aspect-[3/2]" alt="" />
-	{/snippet}
+	{#snippet header()}{/snippet}
+	<img src={images[3]} class="w-full aspect-[3/2]" alt="" />
 	<div class="p-4">
 		<div class="text-center p-8">
 			<button class="m-auto btn btn-sm text-center preset-outlined-secondary-600-400" onclick={() => (open4 = false)}>Okay, that's enough</button>
