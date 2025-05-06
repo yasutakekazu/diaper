@@ -25,9 +25,8 @@
 <link rel="preload" as="image" href={images[3]} />
 
 <Detachedsheet bind:open={open1} height="auto">
-	{#snippet header()}
-		<img src={images[0]} class="aspect-[3/2]" alt="" />
-	{/snippet}
+	{#snippet header()}{/snippet}
+	<img src={images[0]} class="w-full aspect-[3/2]" alt="" />
 	<div class="p-4">
 		<div class="text-center p-8">
 			<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open2 = true)}>Open another</button>
@@ -36,9 +35,8 @@
 </Detachedsheet>
 
 <Detachedsheet bind:open={open2} height="auto">
-	{#snippet header()}
-		<img src={images[1]} class="aspect-[3/2]" alt="" />
-	{/snippet}
+	{#snippet header()}{/snippet}
+	<img src={images[1]} class="w-full aspect-[3/2]" alt="" />
 	<div class="p-4">
 		<div class="text-center p-8">
 			<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open3 = true)}>Open another</button>
@@ -47,9 +45,8 @@
 </Detachedsheet>
 
 <Detachedsheet bind:open={open3} height="auto">
-	{#snippet header()}
-		<img src={images[2]} class="aspect-[3/2]" alt="" />
-	{/snippet}
+	{#snippet header()}{/snippet}
+	<img src={images[2]} class="w-full aspect-[3/2]" alt="" />
 	<div class="p-4">
 		<div class="text-center p-8">
 			<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open4 = true)}>Open another</button>
@@ -58,9 +55,8 @@
 </Detachedsheet>
 
 <Detachedsheet bind:open={open4} height="auto">
-	{#snippet header()}
-		<img src={images[3]} class="w-full" alt="" />
-	{/snippet}
+	{#snippet header()}{/snippet}
+	<img src={images[3]} class="w-full aspect-[3/2]" alt="" />
 	<div class="p-4">
 		<div class="text-center p-8">
 			<button class="m-auto btn btn-sm text-center preset-outlined-secondary-600-400" onclick={() => (open4 = false)}>Okay, that's enough</button>
