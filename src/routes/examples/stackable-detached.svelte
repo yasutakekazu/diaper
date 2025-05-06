@@ -26,7 +26,7 @@
 
 <Detachedsheet bind:open={open1} height="auto">
 	{#snippet header()}{/snippet}
-	<img src={images[0]} class="w-full" alt="" />
+	<img src={images[0]} class="w-full aspect-[3/2]" alt="" />
 	<div class="p-4">
 		<div class="text-center p-8">
 			<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open2 = true)}>Open another</button>
@@ -36,7 +36,7 @@
 
 <Detachedsheet bind:open={open2} height="auto">
 	{#snippet header()}{/snippet}
-	<img src={images[1]} class="w-full" alt="" />
+	<img src={images[1]} class="w-full aspect-[3/2]" alt="" />
 	<div class="p-4">
 		<div class="text-center p-8">
 			<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open3 = true)}>Open another</button>
@@ -46,7 +46,7 @@
 
 <Detachedsheet bind:open={open3} height="auto">
 	{#snippet header()}{/snippet}
-	<img src={images[2]} class="w-full" alt="" />
+	<img src={images[2]} class="w-full aspect-[3/2]" alt="" />
 	<div class="p-4">
 		<div class="text-center p-8">
 			<button class="btn btn-sm preset-outlined-secondary-600-400" onclick={() => (open4 = true)}>Open another</button>
@@ -56,7 +56,7 @@
 
 <Detachedsheet bind:open={open4} height="auto">
 	{#snippet header()}
-		<img src={images[3]} class="w-full" alt="" />
+		<img src={images[3]} class="w-full aspect-[3/2]" alt="" />
 	{/snippet}
 	<div class="p-4">
 		<div class="text-center p-8">
