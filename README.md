@@ -1,3 +1,11 @@
+![NPM Version](https://img.shields.io/npm/v/%40devantic%2Fdiaper?color=red)
+
+# Version 2.0
+
+- _**Breaking change:**_ no longer accepts `baseClass` prop. Use the `class` prop instead with the important (!) modifier for all tailwind classes.
+
+- Added subtle overdrag resistance when dragging beyond max height
+
 # Diaper
 
 A advanced bottom sheet component for Svelte5
