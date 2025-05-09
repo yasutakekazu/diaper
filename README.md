@@ -1,3 +1,11 @@
+![NPM Version](https://img.shields.io/npm/v/%40devantic%2Fdiaper?color=red)
+
+# Version 2.0
+
+- _**Breaking change:**_ no longer accepts `baseClass` prop. Use the `class` prop instead with the important (!) modifier for all tailwind classes.
+
+- Added subtle overdrag resistance when dragging beyond max height
+
 # Diaper
 
 A advanced bottom sheet component for Svelte5
@@ -76,7 +84,6 @@ export type BottomsheetProps = {
 	children?: Snippet
 	snapPoint1Content?: Snippet
 	snapPoint2Content?: Snippet
-	baseClass?: string
 	class?: string
 	style?: string
 }
@@ -185,11 +192,11 @@ The sheet can be styled using tailwind or css by passing a `class` prop or `styl
 
 ### Tailwind
 
-```svelte
-<Bottomsheet bind:open class="p-4 pt-0 bg-red-500">...</Bottomsheet>
-```
+You must use the important (!) modifier!
 
-If you want to modify instrinsic styles like the `border-radius` using tailwind, use the `baseClass` prop with the important (!) modifier, e.g. `baseClass="!rounded-xl".` Always prefer `class` over `baseClass`, you can use both at the same time.
+```svelte
+<Bottomsheet bind:open class="p-4! pt-0! bg-red-500!">...</Bottomsheet>
+```
 
 ### CSS
 
