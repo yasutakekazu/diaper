@@ -76,7 +76,6 @@ export type BottomsheetProps = {
 	children?: Snippet
 	snapPoint1Content?: Snippet
 	snapPoint2Content?: Snippet
-	baseClass?: string
 	class?: string
 	style?: string
 }
@@ -185,11 +184,11 @@ The sheet can be styled using tailwind or css by passing a `class` prop or `styl
 
 ### Tailwind
 
-```svelte
-<Bottomsheet bind:open class="p-4 pt-0 bg-red-500">...</Bottomsheet>
-```
+You must use the important (!) modifier!
 
-If you want to modify instrinsic styles like the `border-radius` using tailwind, use the `baseClass` prop with the important (!) modifier, e.g. `baseClass="!rounded-xl".` Always prefer `class` over `baseClass`, you can use both at the same time.
+```svelte
+<Bottomsheet bind:open class="p-4! pt-0! bg-red-500!">...</Bottomsheet>
+```
 
 ### CSS
 

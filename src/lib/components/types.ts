@@ -19,7 +19,6 @@ export type BottomsheetProps = {
 	onsnap?: (progress: number) => void
 	header?: Snippet
 	children?: Snippet
-	baseClass?: string
 	class?: string
 	style?: string
 }

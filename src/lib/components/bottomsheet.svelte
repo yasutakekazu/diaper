@@ -95,7 +95,6 @@
 	let isMinimized = $state(false)
 	let autoHeight = $state(height)
 	let dialogHeight = $state(0)
-	let newTranslate = $state(0)
 	let snappoints = $state.raw([0, 1])
 	let snapPointIndex = $state(initialIndex)
 	let headerHeight = $derived(refs.header?.offsetHeight ?? 0)
@@ -105,6 +104,7 @@
 	let backgroundElement: HTMLElement
 	let startY = 0
 	let lastTranslate = 0
+	let newTranslate = 0
 	let isTouching = false
 	let diaperDuration = '0.5s'
 	let headerSnappoint = 0
@@ -179,18 +179,22 @@
 		// Remove old touches beyond HISTORY_MS
 		touchHistory = touchHistory.filter((point) => now - point.time <= HISTORY_MS)
 
+		// Prevent touch loss when dragging off bottom edge of screen
 		if (clientY > screen.height) return
-		const distance = clientY - startY
-		newTranslate = lastTranslate + distance
-		// don't allow drag past top
-		if (newTranslate > 0) {
-			translate(newTranslate)
+
+		newTranslate = lastTranslate + clientY - startY
+
+		// overdrag resistance
+		if (newTranslate < 0) {
+			newTranslate = Math.pow(Math.abs(newTranslate), 0.5) * Math.sign(newTranslate)
 		}
+
+		translate(newTranslate)
+
 		// setting snapPointIndex here causes content to change on drag.
 		// can alternatively be done in ontouchend
 		const snapPoint = getNearestSnapPoint(newTranslate / dialogHeight)
 		snapPointIndex = getSnapPointIndex(snapPoint)
-
 		if (deltaY > 10) {
 			snapPointIndex++
 		} else if (deltaY < -10) {
@@ -337,6 +341,18 @@
 		autoHeight = `${offsetHeight}px`
 	})
 
+	$effect(() => {
+		if (!rendered) return
+		const styles = getComputedStyle(dialog)
+		const sheetBackgroundColor = styles.getPropertyValue('background-color')
+		const marginBottom = styles.getPropertyValue('margin-bottom')
+		if (parseInt(marginBottom) > 0) {
+			dialog.style.setProperty('--diaper-overdrag-fill-color', 'transparent')
+		} else {
+			dialog.style.setProperty('--diaper-overdrag-fill-color', sheetBackgroundColor)
+		}
+	})
+
 	// Effect 5 - calc snappoints
 	$effect(() => {
 		if (!rendered) return
@@ -377,12 +393,12 @@
 		bind:this={refs.ref}
 		{onclick}
 		{ontransitionend}
-		class={props?.baseClass}
+		class={props?.class}
 		style:height={autoHeight}
 		style:max-height={maxHeight}
 		style={props?.style}
 	>
-		<div class={props?.class} style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
+		<div style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<header bind:this={refs.header} class:headerOverlaysContent onclick={handleHeaderClick}>
