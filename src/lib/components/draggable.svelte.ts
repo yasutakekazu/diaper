@@ -1,6 +1,5 @@
 import type { ActionReturn } from 'svelte/action'
-
-const setRootProperty = (property: string, value: string) => document.documentElement.style.setProperty(property, value)
+import { setRootProperty } from './helpers'
 
 interface Parameter {}
 interface Attributes {
@@ -73,6 +72,7 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 	let lastY = 0
 	let currentY = 0
 	let translateY = 0
+	let deltaY = 0
 	let isTouching = false
 	let dialog = node.parentElement!
 
@@ -102,7 +102,7 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 		if (!isTouching) return
 
 		const clientY = e.touches[0].clientY
-		const deltaY = clientY - lastY
+		deltaY = clientY - lastY
 		lastY = clientY
 
 		// Prevent touch loss when dragging off bottom edge of screen
@@ -127,7 +127,7 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 
 		// if (translateY === 0) return
 		if (!isTouching) return
-		const event = new CustomEvent('end', { detail: { message: 'Hello from action!' } })
+		const event = new CustomEvent('end', { detail: { translateY, deltaY } })
 		node.dispatchEvent(event)
 		isTouching = false
 	}

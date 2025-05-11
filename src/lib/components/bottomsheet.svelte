@@ -1,24 +1,10 @@
 <script module lang="ts">
 	import type { BottomsheetProps } from './types'
 	import { untrack } from 'svelte'
+	import { draggable } from './draggable.svelte'
+	import { noop, clamp, getNearestValue, getRootProperty, setRootProperty, indexOf } from './helpers'
 	import './diaper.css'
 	import './bottomsheet.css'
-	import { draggable } from './draggable.svelte'
-
-	const noop = () => {}
-
-	const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max)
-
-	const getNearestValue = (value: any, array: any[]) =>
-		array.reduce((nearest, current) => (Math.abs(value - current) < Math.abs(value - nearest) ? current : nearest), array[0])
-
-	const getRootProperty = (property: string) => getComputedStyle(document.documentElement).getPropertyValue(property)
-	const setRootProperty = (property: string, value: string) => document.documentElement.style.setProperty(property, value)
-
-	function indexOf(value: any, array: any[] = [], indexIfNotFound = -1) {
-		const index = array.indexOf(value)
-		return index > -1 ? index : indexIfNotFound
-	}
 </script>
 
 <script lang="ts">
@@ -144,11 +130,13 @@
 	}
 
 	function onmove(e: CustomEvent) {
-		const { deltaY, translateY } = e.detail
-		// setting snapPointIndex here causes content to change on drag.
-		// can alternatively be done in ontouchend
-		const snapPoint = getNearestSnapPoint(translateY / dialogHeight)
-		snapPointIndex = getSnapPointIndex(snapPoint)
+		const translateY = e.detail.translateY
+		snapPointIndex = getSnapPointIndex(getNearestSnapPoint(translateY / dialogHeight))
+		applyProgress(clamp(translateY / (dialogHeight * snappoints[1]), 0, 1))
+	}
+
+	function onend(e: CustomEvent) {
+		const deltaY = e.detail.deltaY
 		if (deltaY > 20) {
 			snapPointIndex += 2
 		} else if (deltaY > 5) {
@@ -156,11 +144,6 @@
 		} else if (deltaY < -5) {
 			snapPointIndex = Math.max(--snapPointIndex, 0)
 		}
-		const progress = clamp(translateY / (dialogHeight * snappoints[1]), 0, 1)
-		applyProgress(progress)
-	}
-
-	function onend(e: CustomEvent) {
 		snapToIndex(snapPointIndex)
 	}
 
