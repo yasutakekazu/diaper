@@ -70,8 +70,8 @@ class TouchHistory {
 
 export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes> {
 	let startY = 0
-	let lastTranslate = 0
-	let newTranslate = 0
+	let currentTranslateY = 0
+	let translateY = 0
 	let isTouching = false
 	let dialog = node.parentElement!
 
@@ -80,15 +80,15 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 	function ontouchstart(e: TouchEvent) {
 		setRootProperty('--diaper-duration', '0s')
 		startY = 0
-		lastTranslate = 0
-		newTranslate = 0
+		currentTranslateY = 0
+		translateY = 0
 		// ignore multiple touches
 		if (isTouching) return
 
 		const event = new CustomEvent('start', { detail: { target: e.target as HTMLElement }, cancelable: true })
 		if (!node.dispatchEvent(event)) return
 
-		lastTranslate = dialog.getBoundingClientRect().top - dialog.offsetTop
+		currentTranslateY = dialog.getBoundingClientRect().top - dialog.offsetTop
 
 		startY = e.touches[0].clientY
 		isTouching = true
@@ -109,16 +109,16 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 		// Prevent touch loss when dragging off bottom edge of screen
 		if (clientY > screen.height) return
 
-		newTranslate = lastTranslate + clientY - startY
+		translateY = currentTranslateY + clientY - startY
 
 		// overdrag resistance
-		if (newTranslate < 0) {
-			newTranslate = Math.pow(Math.abs(newTranslate), 0.5) * Math.sign(newTranslate)
+		if (translateY < 0) {
+			translateY = Math.pow(Math.abs(translateY), 0.5) * Math.sign(translateY)
 		}
 
-		dialog.style.setProperty('translate', `0 ${newTranslate}px`)
+		dialog.style.setProperty('translate', `0 ${translateY}px`)
 
-		const event = new CustomEvent('move', { detail: { translateY: newTranslate, deltaY } })
+		const event = new CustomEvent('move', { detail: { translateY, deltaY } })
 		node.dispatchEvent(event)
 	}
 
@@ -126,7 +126,7 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 		// if multiple fingers touching, do nothing until last finger is released
 		if (e.touches.length > 0) return
 
-		// if (newTranslate === 0) return
+		// if (translateY === 0) return
 		if (!isTouching) return
 		const event = new CustomEvent('end', { detail: { message: 'Hello from action!' } })
 		node.dispatchEvent(event)

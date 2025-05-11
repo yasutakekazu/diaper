@@ -71,11 +71,8 @@
 		snapPointIndex = clamp(index, 0, snappoints.length - 1)
 		const snapPoint = snappoints[snapPointIndex]
 		onsnap?.(snapPoint)
-		lastTranslate = snapPoint * dialogHeight
-		if (newTranslate > lastTranslate) {
-			newTranslate = lastTranslate
-		}
-		translate(lastTranslate + translateMore)
+		const translateY = snapPoint * dialogHeight
+		translate(translateY + translateMore)
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
 		open = snapPoint !== 1
@@ -103,8 +100,6 @@
 
 	let dialog: HTMLDialogElement
 	let backgroundElement: HTMLElement
-	let lastTranslate = 0
-	let newTranslate = 0
 	let isTouching = false
 	let diaperDuration = '0.5s'
 	let headerSnappoint = 0
@@ -149,23 +144,19 @@
 	}
 
 	function onmove(e: CustomEvent) {
-		const newTranslate = e.detail.translateY
-		const deltaY = e.detail.deltaY
+		const { deltaY, translateY } = e.detail
 		// setting snapPointIndex here causes content to change on drag.
 		// can alternatively be done in ontouchend
-		const snapPoint = getNearestSnapPoint(newTranslate / dialogHeight)
+		const snapPoint = getNearestSnapPoint(translateY / dialogHeight)
 		snapPointIndex = getSnapPointIndex(snapPoint)
-		console.log({ deltaY })
 		if (deltaY > 20) {
-			console.log('*****')
 			snapPointIndex += 2
 		} else if (deltaY > 5) {
 			snapPointIndex += 1
 		} else if (deltaY < -5) {
 			snapPointIndex = Math.max(--snapPointIndex, 0)
 		}
-
-		const progress = clamp(newTranslate / (dialogHeight * snappoints[1]), 0, 1)
+		const progress = clamp(translateY / (dialogHeight * snappoints[1]), 0, 1)
 		applyProgress(progress)
 	}
 
