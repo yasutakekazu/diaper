@@ -70,7 +70,8 @@ class TouchHistory {
 
 export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes> {
 	let startY = 0
-	let currentTranslateY = 0
+	let lastY = 0
+	let currentY = 0
 	let translateY = 0
 	let isTouching = false
 	let dialog = node.parentElement!
@@ -80,7 +81,7 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 	function ontouchstart(e: TouchEvent) {
 		setRootProperty('--diaper-duration', '0s')
 		startY = 0
-		currentTranslateY = 0
+		currentY = 0
 		translateY = 0
 		// ignore multiple touches
 		if (isTouching) return
@@ -88,13 +89,11 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 		const event = new CustomEvent('start', { detail: { target: e.target as HTMLElement }, cancelable: true })
 		if (!node.dispatchEvent(event)) return
 
-		currentTranslateY = dialog.getBoundingClientRect().top - dialog.offsetTop
+		currentY = dialog.getBoundingClientRect().top - dialog.offsetTop
 
 		startY = e.touches[0].clientY
 		isTouching = true
 	}
-
-	let lastY = 0
 
 	function ontouchmove(e: TouchEvent) {
 		setRootProperty('--diaper-duration', '0s')
@@ -109,7 +108,7 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 		// Prevent touch loss when dragging off bottom edge of screen
 		if (clientY > screen.height) return
 
-		translateY = currentTranslateY + clientY - startY
+		translateY = currentY + clientY - startY
 
 		// overdrag resistance
 		if (translateY < 0) {
