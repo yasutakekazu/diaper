@@ -3,6 +3,7 @@
 	import { untrack } from 'svelte'
 	import './diaper.css'
 	import './bottomsheet.css'
+	import { draggable } from './draggable.svelte'
 
 	const noop = () => {}
 
@@ -102,7 +103,6 @@
 
 	let dialog: HTMLDialogElement
 	let backgroundElement: HTMLElement
-	let startY = 0
 	let lastTranslate = 0
 	let newTranslate = 0
 	let isTouching = false
@@ -142,62 +142,26 @@
 
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
 
-	function ontouchstart(e: TouchEvent) {
-		setRootProperty('--diaper-duration', '0s')
-		startY = 0
-		lastTranslate = 0
-		newTranslate = 0
-		// ignore multiple touches
-		if (isTouching) return
-		const isHeader = isTouchingHeader(e.target as HTMLElement)
-		if (!canDragSheet && !isHeader) return
-		if (refs.children?.scrollTop !== 0 && !isHeader) return
-
-		lastTranslate = dialog.getBoundingClientRect().top - dialog.offsetTop
-
-		startY = e.touches[0].clientY
-		isTouching = true
+	function onstart(e: CustomEvent) {
+		const isHeader = isTouchingHeader(e.detail.target)
+		if (!canDragSheet && !isHeader) e.preventDefault()
+		if (refs.children?.scrollTop !== 0 && !isHeader) e.preventDefault()
 	}
 
-	let lastY = 0
-	let touchHistory: { y: number; time: number }[] = []
-	const HISTORY_MS = 100
-
-	function ontouchmove(e: TouchEvent) {
-		setRootProperty('--diaper-duration', '0s')
-
-		if (startY === 0) return
-		if (!isTouching) return
-
-		const clientY = e.touches[0].clientY
-		const deltaY = clientY - lastY
-		lastY = clientY
-
-		const now = performance.now()
-		touchHistory.push({ y: clientY, time: now })
-
-		// Remove old touches beyond HISTORY_MS
-		touchHistory = touchHistory.filter((point) => now - point.time <= HISTORY_MS)
-
-		// Prevent touch loss when dragging off bottom edge of screen
-		if (clientY > screen.height) return
-
-		newTranslate = lastTranslate + clientY - startY
-
-		// overdrag resistance
-		if (newTranslate < 0) {
-			newTranslate = Math.pow(Math.abs(newTranslate), 0.5) * Math.sign(newTranslate)
-		}
-
-		translate(newTranslate)
-
+	function onmove(e: CustomEvent) {
+		const newTranslate = e.detail.translateY
+		const deltaY = e.detail.deltaY
 		// setting snapPointIndex here causes content to change on drag.
 		// can alternatively be done in ontouchend
 		const snapPoint = getNearestSnapPoint(newTranslate / dialogHeight)
 		snapPointIndex = getSnapPointIndex(snapPoint)
-		if (deltaY > 10) {
-			snapPointIndex++
-		} else if (deltaY < -10) {
+		console.log({ deltaY })
+		if (deltaY > 20) {
+			console.log('*****')
+			snapPointIndex += 2
+		} else if (deltaY > 5) {
+			snapPointIndex += 1
+		} else if (deltaY < -5) {
 			snapPointIndex = Math.max(--snapPointIndex, 0)
 		}
 
@@ -205,41 +169,8 @@
 		applyProgress(progress)
 	}
 
-	function ontouchend(e: TouchEvent) {
-		// if multiple fingers touching, do nothing until last finger is released
-		if (e.touches.length > 0) return
-
-		const now = performance.now()
-
-		// Remove old touches again just to be safe
-		touchHistory = touchHistory.filter((point) => now - point.time <= HISTORY_MS)
-
-		if (touchHistory.length >= 2) {
-			const first = touchHistory.at(0)!
-			const last = touchHistory.at(-1)!
-			const deltaY = last.y - first.y
-			const deltaTime = last.time - first.time
-			const speed = Math.abs(deltaY / deltaTime) // px/ms
-
-			// Map speed to transition duration
-			// Faster swipe = shorter duration
-			const maxSpeed = 2 // px/ms
-			const minDuration = 400 // ms
-			const maxDuration = 1400 // ms
-
-			let dyanamicDuration = maxDuration - (speed / maxSpeed) * (maxDuration - minDuration)
-			dyanamicDuration = Math.max(minDuration, Math.min(maxDuration, dyanamicDuration)) // clamp
-
-			setRootProperty('--diaper-duration', dyanamicDuration + 'ms')
-		} else {
-			setRootProperty('--diaper-duration', diaperDuration)
-		}
-
-		// if (newTranslate === 0) return
-		if (!isTouching) return
+	function onend(e: CustomEvent) {
 		snapToIndex(snapPointIndex)
-		isTouching = false
-		touchHistory = []
 	}
 
 	function handleHeaderClick(e: MouseEvent) {
@@ -398,7 +329,7 @@
 		style:max-height={maxHeight}
 		style={props?.style}
 	>
-		<div style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
+		<div style:flex="1" {onstart} {onmove} {onend} use:draggable>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<header bind:this={refs.header} class:headerOverlaysContent onclick={handleHeaderClick}>
