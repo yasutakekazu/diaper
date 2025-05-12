@@ -16,7 +16,7 @@ class TouchHistory {
 	private node: HTMLElement
 	private touchstart = () => this.clearAll()
 	private touchmove = (e: TouchEvent) => this.push(e.touches[0].clientY)
-	private touchend = () => this.do()
+	private touchend = () => this.calcDyanamicDuration()
 
 	constructor(node: HTMLElement) {
 		node.addEventListener('touchstart', this.touchstart)
@@ -29,13 +29,19 @@ class TouchHistory {
 	}
 	clearOld() {
 		const now = performance.now()
-		this.touchHistory = this.touchHistory.filter((point) => now - point.time <= this.HISTORY_MS)
+		for (let i = 0; i < this.touchHistory.length; i++) {
+			if (now - this.touchHistory[i].time > this.HISTORY_MS) {
+				this.touchHistory.splice(0, i)
+				break
+			}
+		}
+		// this.touchHistory = this.touchHistory.filter((point) => now - point.time <= this.HISTORY_MS)
 	}
 	push(y: number) {
 		this.clearOld()
 		this.touchHistory.push({ y, time: performance.now() })
 	}
-	do() {
+	calcDyanamicDuration() {
 		this.clearOld()
 
 		if (this.touchHistory.length >= 2) {
