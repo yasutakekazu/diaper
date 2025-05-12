@@ -14,7 +14,7 @@ class TouchHistory {
 	private HISTORY_MS = 100
 	private touchHistory: { y: number; time: number }[] = []
 	private node: HTMLElement
-	private touchstart = () => this.clear()
+	private touchstart = () => this.clearAll()
 	private touchmove = (e: TouchEvent) => this.push(e.touches[0].clientY)
 	private touchend = () => this.do()
 
@@ -24,19 +24,19 @@ class TouchHistory {
 		node.addEventListener('touchend', this.touchend)
 		this.node = node
 	}
-	clear() {
+	clearAll() {
 		this.touchHistory = []
 	}
-	push(y: number) {
+	clearOld() {
 		const now = performance.now()
 		this.touchHistory = this.touchHistory.filter((point) => now - point.time <= this.HISTORY_MS)
+	}
+	push(y: number) {
+		this.clearOld()
 		this.touchHistory.push({ y, time: performance.now() })
 	}
 	do() {
-		const now = performance.now()
-
-		// Remove old touches again just to be safe
-		this.touchHistory = this.touchHistory.filter((point) => now - point.time <= this.HISTORY_MS)
+		this.clearOld()
 
 		if (this.touchHistory.length >= 2) {
 			const first = this.touchHistory.at(0)!
