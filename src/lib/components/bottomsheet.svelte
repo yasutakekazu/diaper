@@ -1,23 +1,11 @@
 <script module lang="ts">
 	import type { BottomsheetProps } from './types'
 	import { untrack } from 'svelte'
+	import { draggable, dyanamicDuration } from './actions.svelte'
+	import { noop, clamp, getNearestValue, indexOf } from './helpers'
 	import './diaper.css'
 	import './bottomsheet.css'
-
-	const noop = () => {}
-
-	const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max)
-
-	const getNearestValue = (value: any, array: any[]) =>
-		array.reduce((nearest, current) => (Math.abs(value - current) < Math.abs(value - nearest) ? current : nearest), array[0])
-
-	const getRootProperty = (property: string) => getComputedStyle(document.documentElement).getPropertyValue(property)
-	const setRootProperty = (property: string, value: string) => document.documentElement.style.setProperty(property, value)
-
-	function indexOf(value: any, array: any[] = [], indexIfNotFound = -1) {
-		const index = array.indexOf(value)
-		return index > -1 ? index : indexIfNotFound
-	}
+	import { insets } from './device.svelte'
 </script>
 
 <script lang="ts">
@@ -70,11 +58,8 @@
 		snapPointIndex = clamp(index, 0, snappoints.length - 1)
 		const snapPoint = snappoints[snapPointIndex]
 		onsnap?.(snapPoint)
-		lastTranslate = snapPoint * dialogHeight
-		if (newTranslate > lastTranslate) {
-			newTranslate = lastTranslate
-		}
-		translate(lastTranslate + translateMore)
+		const translateY = snapPoint * dialogHeight
+		dialog.style.setProperty('translate', `0 ${translateY + translateMore}px`)
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
 		open = snapPoint !== 1
@@ -102,11 +87,7 @@
 
 	let dialog: HTMLDialogElement
 	let backgroundElement: HTMLElement
-	let startY = 0
-	let lastTranslate = 0
-	let newTranslate = 0
 	let isTouching = false
-	let diaperDuration = '0.5s'
 	let headerSnappoint = 0
 
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
@@ -125,10 +106,6 @@
 		onclose?.()
 	}
 
-	function translate(y: number) {
-		dialog.style.setProperty('translate', `0 ${y}px`)
-	}
-
 	function applyProgress(progress: number) {
 		dialog.style.setProperty('--diaper-backdrop-progress', `${progress}`)
 		// only scale body or dialog underneath if drag is between full and the first snap point
@@ -142,104 +119,28 @@
 
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
 
-	function ontouchstart(e: TouchEvent) {
-		setRootProperty('--diaper-duration', '0s')
-		startY = 0
-		lastTranslate = 0
-		newTranslate = 0
-		// ignore multiple touches
-		if (isTouching) return
-		const isHeader = isTouchingHeader(e.target as HTMLElement)
-		if (!canDragSheet && !isHeader) return
-		if (refs.children?.scrollTop !== 0 && !isHeader) return
-
-		lastTranslate = dialog.getBoundingClientRect().top - dialog.offsetTop
-
-		startY = e.touches[0].clientY
-		isTouching = true
+	function onmovestart(e: CustomEvent) {
+		const isHeader = isTouchingHeader(e.detail.target)
+		if (!canDragSheet && !isHeader) e.preventDefault()
+		if (refs.children?.scrollTop !== 0 && !isHeader) e.preventDefault()
 	}
 
-	let lastY = 0
-	let touchHistory: { y: number; time: number }[] = []
-	const HISTORY_MS = 100
+	function onmove(e: CustomEvent) {
+		const translateY = e.detail.translateY
+		snapPointIndex = getSnapPointIndex(getNearestSnapPoint(translateY / dialogHeight))
+		applyProgress(clamp(translateY / (dialogHeight * snappoints[1]), 0, 1))
+	}
 
-	function ontouchmove(e: TouchEvent) {
-		setRootProperty('--diaper-duration', '0s')
-
-		if (startY === 0) return
-		if (!isTouching) return
-
-		const clientY = e.touches[0].clientY
-		const deltaY = clientY - lastY
-		lastY = clientY
-
-		const now = performance.now()
-		touchHistory.push({ y: clientY, time: now })
-
-		// Remove old touches beyond HISTORY_MS
-		touchHistory = touchHistory.filter((point) => now - point.time <= HISTORY_MS)
-
-		// Prevent touch loss when dragging off bottom edge of screen
-		if (clientY > screen.height) return
-
-		newTranslate = lastTranslate + clientY - startY
-
-		// overdrag resistance
-		if (newTranslate < 0) {
-			newTranslate = Math.pow(Math.abs(newTranslate), 0.5) * Math.sign(newTranslate)
-		}
-
-		translate(newTranslate)
-
-		// setting snapPointIndex here causes content to change on drag.
-		// can alternatively be done in ontouchend
-		const snapPoint = getNearestSnapPoint(newTranslate / dialogHeight)
-		snapPointIndex = getSnapPointIndex(snapPoint)
-		if (deltaY > 10) {
-			snapPointIndex++
-		} else if (deltaY < -10) {
+	function onmoveend(e: CustomEvent) {
+		const deltaY = e.detail.deltaY
+		if (deltaY > 20) {
+			snapPointIndex += 2
+		} else if (deltaY > 5) {
+			snapPointIndex += 1
+		} else if (deltaY < -5) {
 			snapPointIndex = Math.max(--snapPointIndex, 0)
 		}
-
-		const progress = clamp(newTranslate / (dialogHeight * snappoints[1]), 0, 1)
-		applyProgress(progress)
-	}
-
-	function ontouchend(e: TouchEvent) {
-		// if multiple fingers touching, do nothing until last finger is released
-		if (e.touches.length > 0) return
-
-		const now = performance.now()
-
-		// Remove old touches again just to be safe
-		touchHistory = touchHistory.filter((point) => now - point.time <= HISTORY_MS)
-
-		if (touchHistory.length >= 2) {
-			const first = touchHistory.at(0)!
-			const last = touchHistory.at(-1)!
-			const deltaY = last.y - first.y
-			const deltaTime = last.time - first.time
-			const speed = Math.abs(deltaY / deltaTime) // px/ms
-
-			// Map speed to transition duration
-			// Faster swipe = shorter duration
-			const maxSpeed = 2 // px/ms
-			const minDuration = 400 // ms
-			const maxDuration = 1400 // ms
-
-			let dyanamicDuration = maxDuration - (speed / maxSpeed) * (maxDuration - minDuration)
-			dyanamicDuration = Math.max(minDuration, Math.min(maxDuration, dyanamicDuration)) // clamp
-
-			setRootProperty('--diaper-duration', dyanamicDuration + 'ms')
-		} else {
-			setRootProperty('--diaper-duration', diaperDuration)
-		}
-
-		// if (newTranslate === 0) return
-		if (!isTouching) return
 		snapToIndex(snapPointIndex)
-		isTouching = false
-		touchHistory = []
 	}
 
 	function handleHeaderClick(e: MouseEvent) {
@@ -283,16 +184,7 @@
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
-	let saib = 0
-	// Effect 0 - root variables
-	$effect(() => {
-		diaperDuration = getRootProperty('--diaper-duration')
-		saib = parseInt(getRootProperty('--diaper-saib'))
-	})
-
-	$effect(() => {
-		open && setRootProperty('--diaper-duration', diaperDuration)
-	})
+	const saib = insets.bottom
 
 	// Effect 1 - open logic
 	$effect(() => {
@@ -380,25 +272,11 @@
 	function onclick(e: MouseEvent) {
 		if (closeOnBackdropTap && e.target === e.currentTarget) close()
 	}
-
-	function ontransitionend(e: TransitionEvent) {
-		if (e.propertyName !== 'translate') return
-		setRootProperty('--diaper-duration', diaperDuration)
-	}
 </script>
 
 {#if isOpen}
-	<dialog
-		data-diaper
-		bind:this={refs.ref}
-		{onclick}
-		{ontransitionend}
-		class={props?.class}
-		style:height={autoHeight}
-		style:max-height={maxHeight}
-		style={props?.style}
-	>
-		<div style:flex="1" {ontouchstart} {ontouchmove} {ontouchend}>
+	<dialog data-diaper bind:this={refs.ref} {onclick} class={props?.class} style:height={autoHeight} style:max-height={maxHeight} style={props?.style}>
+		<div style:flex="1" {onmovestart} {onmove} {onmoveend} use:draggable use:dyanamicDuration>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<header bind:this={refs.header} class:headerOverlaysContent onclick={handleHeaderClick}>

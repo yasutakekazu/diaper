@@ -1,7 +1,11 @@
 :root {
 	color-scheme: light dark;
+	--diaper-sait: env(safe-area-inset-top);
+	--diaper-sair: env(safe-area-inset-right);
 	--diaper-saib: env(safe-area-inset-bottom);
-	--diaper-duration: 0.4s;
+	--diaper-sail: env(safe-area-inset-left);
+	--diaper-default-duration: 0.4s;
+	--diaper-duration: var(--diaper-default-duration);
 	--diaper-backdrop-color: black;
 	--diaper-backdrop-opacity: 0.25;
 	--diaper-light: #fcfcfc;
@@ -36,7 +40,7 @@
 
 html {
 	background-color: black;
-	min-height: calc(100% + env(safe-area-inset-top));
-	padding-bottom: env(safe-area-inset-bottom);
+	min-height: calc(100% + var(--diaper-sait));
+	padding-bottom: env(var(--diaper-saib));
 	overscroll-behavior-y: none;
 }
