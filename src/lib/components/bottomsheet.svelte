@@ -120,6 +120,7 @@
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
 
 	function onmovestart(e: CustomEvent) {
+		if (!open) e.preventDefault() // it's closing!
 		const isHeader = isTouchingHeader(e.detail.target)
 		if (!canDragSheet && !isHeader) e.preventDefault()
 		if (refs.children?.scrollTop !== 0 && !isHeader) e.preventDefault()
