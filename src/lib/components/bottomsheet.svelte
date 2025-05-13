@@ -2,9 +2,10 @@
 	import type { BottomsheetProps } from './types'
 	import { untrack } from 'svelte'
 	import { draggable, dyanamicDuration } from './actions.svelte'
-	import { noop, clamp, getNearestValue, getRootProperty, indexOf } from './helpers'
+	import { noop, clamp, getNearestValue, indexOf } from './helpers'
 	import './diaper.css'
 	import './bottomsheet.css'
+	import { insets } from './device.svelte'
 </script>
 
 <script lang="ts">
@@ -58,7 +59,7 @@
 		const snapPoint = snappoints[snapPointIndex]
 		onsnap?.(snapPoint)
 		const translateY = snapPoint * dialogHeight
-		translate(translateY + translateMore)
+		dialog.style.setProperty('translate', `0 ${translateY + translateMore}px`)
 		const progress = clamp(snapPoint / snappoints[1], 0, 1)
 		applyProgress(progress)
 		open = snapPoint !== 1
@@ -103,10 +104,6 @@
 			document.body.style.setProperty('overflow', 'visible')
 		}
 		onclose?.()
-	}
-
-	function translate(y: number) {
-		dialog.style.setProperty('translate', `0 ${y}px`)
 	}
 
 	function applyProgress(progress: number) {
@@ -187,11 +184,7 @@
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
-	let saib = 0
-	// Effect 0 - root variables
-	$effect(() => {
-		saib = parseInt(getRootProperty('--diaper-saib'))
-	})
+	const saib = insets.bottom
 
 	// Effect 1 - open logic
 	$effect(() => {
