@@ -3,9 +3,9 @@
 	import { untrack } from 'svelte'
 	import { draggable, dyanamicDuration } from './actions.svelte'
 	import { noop, clamp, getNearestValue, indexOf } from './helpers'
+	import { insets } from './device.svelte'
 	import './diaper.css'
 	import './bottomsheet.css'
-	import { insets } from './device.svelte'
 </script>
 
 <script lang="ts">
