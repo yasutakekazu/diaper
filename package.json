@@ -1,7 +1,7 @@
 {
 	"name": "@devantic/diaper",
 	"private": true,
-	"version": "1.3.2",
+	"version": "2.1.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
