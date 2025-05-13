@@ -119,7 +119,7 @@
 
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
 
-	function onstart(e: CustomEvent) {
+	function onmovestart(e: CustomEvent) {
 		const isHeader = isTouchingHeader(e.detail.target)
 		if (!canDragSheet && !isHeader) e.preventDefault()
 		if (refs.children?.scrollTop !== 0 && !isHeader) e.preventDefault()
@@ -131,7 +131,7 @@
 		applyProgress(clamp(translateY / (dialogHeight * snappoints[1]), 0, 1))
 	}
 
-	function onend(e: CustomEvent) {
+	function onmoveend(e: CustomEvent) {
 		const deltaY = e.detail.deltaY
 		if (deltaY > 20) {
 			snapPointIndex += 2
@@ -276,7 +276,7 @@
 
 {#if isOpen}
 	<dialog data-diaper bind:this={refs.ref} {onclick} class={props?.class} style:height={autoHeight} style:max-height={maxHeight} style={props?.style}>
-		<div style:flex="1" {onstart} {onmove} {onend} use:draggable use:dyanamicDuration>
+		<div style:flex="1" {onmovestart} {onmove} {onmoveend} use:draggable use:dyanamicDuration>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<header bind:this={refs.header} class:headerOverlaysContent onclick={handleHeaderClick}>

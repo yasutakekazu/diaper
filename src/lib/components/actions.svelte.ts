@@ -3,9 +3,9 @@ import { getRootProperty, setRootProperty } from './helpers'
 
 interface Parameter {}
 interface Attributes {
-	onstart: (e: CustomEvent<'start'>) => void
+	onmovestart: (e: CustomEvent<'movestart'>) => void
 	onmove: (e: CustomEvent<'move'>) => void
-	onend: (e: CustomEvent<'end'>) => void
+	onmoveend: (e: CustomEvent<'moveend'>) => void
 }
 
 export function dyanamicDuration(node: HTMLElement) {
@@ -99,7 +99,7 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 		// ignore multiple touches
 		if (isTouching) return
 
-		const event = new CustomEvent('start', { detail: { target: e.target as HTMLElement }, cancelable: true })
+		const event = new CustomEvent('movestart', { detail: { target: e.target as HTMLElement }, cancelable: true })
 		if (!node.dispatchEvent(event)) return
 
 		currentY = dialog.getBoundingClientRect().top - dialog.offsetTop
@@ -138,7 +138,7 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 
 		// if (translateY === 0) return
 		if (!isTouching) return
-		const event = new CustomEvent('end', { detail: { translateY, deltaY } })
+		const event = new CustomEvent('moveend', { detail: { translateY, deltaY } })
 		node.dispatchEvent(event)
 		isTouching = false
 	}
