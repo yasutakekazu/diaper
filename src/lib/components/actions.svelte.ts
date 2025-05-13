@@ -8,6 +8,8 @@ interface Attributes {
 	onmoveend: (e: CustomEvent<'moveend'>) => void
 }
 
+const setDuration = (duration: string) => setRootProperty('--diaper-duration', duration)
+
 export function dyanamicDuration(node: HTMLElement) {
 	const HISTORY_MS = 100
 	let diaperDuration = '0.4s'
@@ -16,20 +18,19 @@ export function dyanamicDuration(node: HTMLElement) {
 
 	const touchstart = () => {
 		clearAll()
-		setRootProperty('--diaper-duration', '0s')
+		setDuration('0s')
 	}
 	const touchmove = (e: TouchEvent) => {
 		push(e.touches[0].clientY)
-		setRootProperty('--diaper-duration', '0s')
+		setDuration('0s')
 	}
 	const touchend = () => {
-		const duration = calcDyanamicDuration()
-		setRootProperty('--diaper-duration', duration)
+		setDuration(calcDyanamicDuration())
 	}
 
 	$effect(() => {
 		diaperDuration = getRootProperty('--diaper-default-duration')
-		setRootProperty('--diaper-duration', diaperDuration)
+		setDuration(diaperDuration)
 
 		dialog.addEventListener('touchstart', touchstart)
 		dialog.addEventListener('touchmove', touchmove)
