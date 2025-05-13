@@ -40,7 +40,7 @@
 
 html {
 	background-color: black;
-	min-height: calc(100% + env(safe-area-inset-top));
-	padding-bottom: env(safe-area-inset-bottom);
+	min-height: calc(100% + var(--diaper-sait));
+	padding-bottom: env(var(--diaper-saib));
 	overscroll-behavior-y: none;
 }

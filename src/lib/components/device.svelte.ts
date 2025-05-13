@@ -1,5 +1,3 @@
-import { getRootProperty } from './helpers'
-
 const insets = {
 	top: 0,
 	right: 0,
@@ -8,12 +6,11 @@ const insets = {
 }
 
 $effect.root(() => {
-	$effect(() => {
-		insets.top = parseInt(getRootProperty('--diaper-sait'))
-		insets.right = parseInt(getRootProperty('--diaper-sair'))
-		insets.bottom = parseInt(getRootProperty('--diaper-saib'))
-		insets.left = parseInt(getRootProperty('--diaper-sail'))
-	})
+	const rootStyle = getComputedStyle(document.documentElement)
+	insets.top = parseInt(rootStyle.getPropertyValue('--diaper-sait'))
+	insets.right = parseInt(rootStyle.getPropertyValue('--diaper-sair'))
+	insets.bottom = parseInt(rootStyle.getPropertyValue('--diaper-saib'))
+	insets.left = parseInt(rootStyle.getPropertyValue('--diaper-sail'))
 })
 
 export { insets }
