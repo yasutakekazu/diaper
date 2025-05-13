@@ -1,5 +1,5 @@
 import type { ActionReturn } from 'svelte/action'
-import { setRootProperty } from './helpers'
+import { getRootProperty, setRootProperty } from './helpers'
 
 interface Parameter {}
 interface Attributes {
@@ -8,45 +8,61 @@ interface Attributes {
 	onend: (e: CustomEvent<'end'>) => void
 }
 
-let diaperDuration = '0.5s'
+export function dyanamicDuration(node: HTMLElement) {
+	const HISTORY_MS = 100
+	let diaperDuration = '0.4s'
+	let touchHistory: { y: number; time: number }[] = []
+	let dialog = node.parentElement!
 
-class TouchHistory {
-	private HISTORY_MS = 100
-	private touchHistory: { y: number; time: number }[] = []
-	private node: HTMLElement
-	private touchstart = () => this.clearAll()
-	private touchmove = (e: TouchEvent) => this.push(e.touches[0].clientY)
-	private touchend = () => this.calcDyanamicDuration()
+	const touchstart = () => {
+		clearAll()
+		setRootProperty('--diaper-duration', '0s')
+	}
+	const touchmove = (e: TouchEvent) => {
+		push(e.touches[0].clientY)
+		setRootProperty('--diaper-duration', '0s')
+	}
+	const touchend = () => {
+		const duration = calcDyanamicDuration()
+		setRootProperty('--diaper-duration', duration)
+	}
 
-	constructor(node: HTMLElement) {
-		node.addEventListener('touchstart', this.touchstart)
-		node.addEventListener('touchmove', this.touchmove)
-		node.addEventListener('touchend', this.touchend)
-		this.node = node
+	$effect(() => {
+		diaperDuration = getRootProperty('--diaper-default-duration')
+		setRootProperty('--diaper-duration', diaperDuration)
+
+		dialog.addEventListener('touchstart', touchstart)
+		dialog.addEventListener('touchmove', touchmove)
+		dialog.addEventListener('touchend', touchend)
+		return () => {
+			dialog.removeEventListener('touchstart', touchstart)
+			dialog.removeEventListener('touchmove', touchmove)
+			dialog.removeEventListener('touchend', touchend)
+		}
+	})
+
+	function clearAll() {
+		touchHistory = []
 	}
-	clearAll() {
-		this.touchHistory = []
-	}
-	clearOld() {
+	function clearOld() {
 		const now = performance.now()
-		for (let i = 0; i < this.touchHistory.length; i++) {
-			if (now - this.touchHistory[i].time > this.HISTORY_MS) {
-				this.touchHistory.splice(0, i)
+		for (let i = 0; i < touchHistory.length; i++) {
+			if (now - touchHistory[i].time > HISTORY_MS) {
+				touchHistory.splice(0, i)
 				break
 			}
 		}
 		// this.touchHistory = this.touchHistory.filter((point) => now - point.time <= this.HISTORY_MS)
 	}
-	push(y: number) {
-		this.clearOld()
-		this.touchHistory.push({ y, time: performance.now() })
+	function push(y: number) {
+		clearOld()
+		touchHistory.push({ y, time: performance.now() })
 	}
-	calcDyanamicDuration() {
-		this.clearOld()
-
-		if (this.touchHistory.length >= 2) {
-			const first = this.touchHistory.at(0)!
-			const last = this.touchHistory.at(-1)!
+	function calcDyanamicDuration(): string {
+		clearOld()
+		if (touchHistory.length >= 2) {
+			const first = touchHistory.at(0)!
+			const last = touchHistory.at(-1)!
 			const deltaY = last.y - first.y
 			const deltaTime = last.time - first.time
 			const speed = Math.abs(deltaY / deltaTime) // px/ms
@@ -61,15 +77,9 @@ class TouchHistory {
 			let dyanamicDuration = maxDuration - (speed / maxSpeed) * (maxDuration - minDuration)
 			dyanamicDuration = Math.max(minDuration, Math.min(maxDuration, dyanamicDuration)) // clamp
 
-			setRootProperty('--diaper-duration', dyanamicDuration + 'ms')
-		} else {
-			setRootProperty('--diaper-duration', diaperDuration)
+			return dyanamicDuration + 'ms'
 		}
-	}
-	destroy() {
-		this.node.removeEventListener('touchstart', this.touchstart)
-		this.node.removeEventListener('touchmove', this.touchmove)
-		this.node.removeEventListener('touchend', this.touchend)
+		return diaperDuration
 	}
 }
 
@@ -82,10 +92,7 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 	let isTouching = false
 	let dialog = node.parentElement!
 
-	let touchHistory = new TouchHistory(node)
-
 	function ontouchstart(e: TouchEvent) {
-		setRootProperty('--diaper-duration', '0s')
 		startY = 0
 		currentY = 0
 		translateY = 0
@@ -102,8 +109,6 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 	}
 
 	function ontouchmove(e: TouchEvent) {
-		setRootProperty('--diaper-duration', '0s')
-
 		if (startY === 0) return
 		if (!isTouching) return
 
@@ -146,7 +151,6 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 			node.removeEventListener('touchstart', ontouchstart)
 			node.removeEventListener('touchmove', ontouchmove)
 			node.removeEventListener('touchend', ontouchend)
-			touchHistory.destroy()
 		}
 	})
 	return {}

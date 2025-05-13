@@ -1,8 +1,8 @@
 <script module lang="ts">
 	import type { BottomsheetProps } from './types'
 	import { untrack } from 'svelte'
-	import { draggable } from './draggable.svelte'
-	import { noop, clamp, getNearestValue, getRootProperty, setRootProperty, indexOf } from './helpers'
+	import { draggable, dyanamicDuration } from './actions.svelte'
+	import { noop, clamp, getNearestValue, getRootProperty, indexOf } from './helpers'
 	import './diaper.css'
 	import './bottomsheet.css'
 </script>
@@ -87,7 +87,6 @@
 	let dialog: HTMLDialogElement
 	let backgroundElement: HTMLElement
 	let isTouching = false
-	let diaperDuration = '0.5s'
 	let headerSnappoint = 0
 
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
@@ -191,12 +190,7 @@
 	let saib = 0
 	// Effect 0 - root variables
 	$effect(() => {
-		diaperDuration = getRootProperty('--diaper-duration')
 		saib = parseInt(getRootProperty('--diaper-saib'))
-	})
-
-	$effect(() => {
-		open && setRootProperty('--diaper-duration', diaperDuration)
 	})
 
 	// Effect 1 - open logic
@@ -285,25 +279,11 @@
 	function onclick(e: MouseEvent) {
 		if (closeOnBackdropTap && e.target === e.currentTarget) close()
 	}
-
-	function ontransitionend(e: TransitionEvent) {
-		if (e.propertyName !== 'translate') return
-		setRootProperty('--diaper-duration', diaperDuration)
-	}
 </script>
 
 {#if isOpen}
-	<dialog
-		data-diaper
-		bind:this={refs.ref}
-		{onclick}
-		{ontransitionend}
-		class={props?.class}
-		style:height={autoHeight}
-		style:max-height={maxHeight}
-		style={props?.style}
-	>
-		<div style:flex="1" {onstart} {onmove} {onend} use:draggable>
+	<dialog data-diaper bind:this={refs.ref} {onclick} class={props?.class} style:height={autoHeight} style:max-height={maxHeight} style={props?.style}>
+		<div style:flex="1" {onstart} {onmove} {onend} use:draggable use:dyanamicDuration>
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<header bind:this={refs.header} class:headerOverlaysContent onclick={handleHeaderClick}>
