@@ -274,11 +274,11 @@
 	<dialog
 		data-diaper
 		bind:this={refs.ref}
-		{onclick}
 		class={props?.class}
 		style:height={autoHeight}
 		style:max-height={maxHeight}
 		style={props?.style}
+		{onclick}
 		{onmovestart}
 		{onmove}
 		{onmoveend}
