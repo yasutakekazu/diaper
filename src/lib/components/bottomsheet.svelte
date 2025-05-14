@@ -49,22 +49,6 @@
 		snapPointIndex = index
 	}
 
-	function snapToIndex(index: number) {
-		// translate 16px more when the dialog is closing to
-		// prevent box-shadow jumping at end of transition
-		// setRootProperty('--diaper-duration', diaperDuration)
-		const translateMore = index < 0 ? 16 : 0
-		if (index < 0) index = snappoints.length - 1
-		snapPointIndex = clamp(index, 0, snappoints.length - 1)
-		const snapPoint = snappoints[snapPointIndex]
-		onsnap?.(snapPoint)
-		const translateY = snapPoint * dialogHeight
-		dialog.style.setProperty('translate', `0 ${translateY + translateMore}px`)
-		const progress = clamp(snapPoint / snappoints[1], 0, 1)
-		applyProgress(progress)
-		open = snapPoint !== 1
-	}
-
 	const refs = $state<Record<string, HTMLElement | undefined>>({
 		ref: undefined,
 		header: undefined,
@@ -90,8 +74,26 @@
 	let isTouching = false
 	let headerSnappoint = 0
 
+	const saib = insets.bottom
 	const getSnapPointIndex = (value: number) => indexOf(value, snappoints, 0)
 	const getNearestSnapPoint = (value: number) => getNearestValue(value, snappoints)
+	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
+
+	function snapToIndex(index: number) {
+		// translate 16px more when the dialog is closing to
+		// prevent box-shadow jumping at end of transition
+		// setRootProperty('--diaper-duration', diaperDuration)
+		const translateMore = index < 0 ? 16 : 0
+		if (index < 0) index = snappoints.length - 1
+		snapPointIndex = clamp(index, 0, snappoints.length - 1)
+		const snapPoint = snappoints[snapPointIndex]
+		onsnap?.(snapPoint)
+		const translateY = snapPoint * dialogHeight
+		dialog.style.setProperty('translate', `0 ${translateY + translateMore}px`)
+		const progress = clamp(snapPoint / snappoints[1], 0, 1)
+		applyProgress(progress)
+		open = snapPoint !== 1
+	}
 
 	function handleClose() {
 		dialog.close()
@@ -116,8 +118,6 @@
 			backgroundElement.style.setProperty('--diaper-progress', `${progress}`)
 		}
 	}
-
-	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
 
 	function onmovestart(e: CustomEvent) {
 		if (!open) e.preventDefault() // it's closing!
@@ -163,7 +163,7 @@
 		}
 	}
 
-	const calcAutoSnapPoint = (ref: HTMLElement | undefined) => {
+	function calcAutoSnapPoint(ref: HTMLElement | undefined) {
 		if (!ref) return 0
 		return clamp((mainHeight - ref.offsetHeight) / dialogHeight, 0, 1)
 	}
@@ -185,13 +185,9 @@
 		return [...new Set(snappoints)].sort((a, b) => a - b)
 	}
 
-	const saib = insets.bottom
-
-	// Effect 1 - open logic
-	$effect(() => {
-		if (open) isOpen = true
-		else if (isOpen) snapToIndex(-1)
-	})
+	function onclick(e: MouseEvent) {
+		if (closeOnBackdropTap && e.target === e.currentTarget) close()
+	}
 
 	function handleEscape(e: KeyboardEvent) {
 		if (e.key === 'Escape' && dialog.contains(e.target as Node)) {
@@ -199,6 +195,12 @@
 			close()
 		}
 	}
+
+	// Effect 1 - open logic
+	$effect(() => {
+		if (open) isOpen = true
+		else if (isOpen) snapToIndex(-1)
+	})
 
 	// Effect 2 - escape key
 	$effect(() => {
@@ -234,6 +236,7 @@
 		autoHeight = `${offsetHeight}px`
 	})
 
+	// Effect 5 - overdrag
 	$effect(() => {
 		if (!rendered) return
 		const styles = getComputedStyle(dialog)
@@ -246,14 +249,14 @@
 		}
 	})
 
-	// Effect 5 - calc snappoints
+	// Effect 6 - calc snappoints
 	$effect(() => {
 		if (!rendered) return
 		snappoints = calcSnapPoints(snapPoints)
 		untrack(() => snapToIndex(stickyHeader && openSticky ? getSnapPointIndex(headerSnappoint) : (initialIndex ?? 0)))
 	})
 
-	// Effect 6 - observer
+	// Effect 7 - minimize observer
 	$effect(() => {
 		if (!rendered) return
 		let first = true
@@ -269,10 +272,6 @@
 		observer.observe(dialog)
 		return () => observer.disconnect()
 	})
-
-	function onclick(e: MouseEvent) {
-		if (closeOnBackdropTap && e.target === e.currentTarget) close()
-	}
 </script>
 
 {#if isOpen}
