@@ -120,6 +120,7 @@
 	const isTouchingHeader = (target: HTMLElement) => refs.header!.contains(target)
 
 	function onmovestart(e: CustomEvent) {
+		if (!open) e.preventDefault() // it's closing!
 		const isHeader = isTouchingHeader(e.detail.target)
 		if (!canDragSheet && !isHeader) e.preventDefault()
 		if (refs.children?.scrollTop !== 0 && !isHeader) e.preventDefault()
@@ -275,55 +276,66 @@
 </script>
 
 {#if isOpen}
-	<dialog data-diaper bind:this={refs.ref} {onclick} class={props?.class} style:height={autoHeight} style:max-height={maxHeight} style={props?.style}>
-		<div style:flex="1" {onmovestart} {onmove} {onmoveend} use:draggable use:dyanamicDuration>
-			<!-- svelte-ignore a11y_click_events_have_key_events -->
-			<!-- svelte-ignore a11y_no_static_element_interactions -->
-			<header bind:this={refs.header} class:headerOverlaysContent onclick={handleHeaderClick}>
-				{#if header}
-					{@render header?.()}
-				{:else}
-					<div style:padding-block="8px">
-						<div class="handle"></div>
-					</div>
-				{/if}
-			</header>
-			<main bind:this={refs.main} style:max-height="{mainHeight}px">
-				{#if initialized}
-					{@const paddingTop = headerOverlaysContent ? headerHeight : 0}
-					<!-- style:max-height="{mainHeight}px" is needed to make iOS scrollable -->
-					<section
-						bind:this={refs.children}
-						data-visible={snapPointIndex === 0 || (snapPointIndex === 1 && !snapPoint1Content) || (snapPointIndex === 2 && !snapPoint2Content) || null}
-						style:overflow="auto"
-						style:height={height === 'auto' || snapPoints === 'auto' ? 'fit-content' : '100%'}
-						style:max-height="{mainHeight}px"
-						style:padding-top="{paddingTop}px"
-						style:padding-bottom={children ? saib + 'px' : 0}
-					>
-						{@render children?.()}
-					</section>
-					<section
-						bind:this={refs.snapPoint1}
-						data-visible={snapPointIndex === 1 || null}
-						style:overflow="auto"
-						style:padding-top="{paddingTop}px"
-						style:padding-bottom={snapPoint1Content ? saib + 'px' : 0}
-					>
-						{@render snapPoint1Content?.()}
-					</section>
-					<section
-						bind:this={refs.snapPoint2}
-						data-visible={snapPointIndex === 2 || null}
-						style:overflow="auto"
-						style:padding-top="{paddingTop}px"
-						style:padding-bottom={snapPoint2Content ? saib + 'px' : 0}
-					>
-						{@render snapPoint2Content?.()}
-					</section>
-				{/if}
-			</main>
-		</div>
+	<dialog
+		data-diaper
+		bind:this={refs.ref}
+		{onclick}
+		class={props?.class}
+		style:height={autoHeight}
+		style:max-height={maxHeight}
+		style={props?.style}
+		{onmovestart}
+		{onmove}
+		{onmoveend}
+		use:draggable
+		use:dyanamicDuration
+	>
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<header bind:this={refs.header} class:headerOverlaysContent onclick={handleHeaderClick}>
+			{#if header}
+				{@render header?.()}
+			{:else}
+				<div style:padding-block="8px">
+					<div class="handle"></div>
+				</div>
+			{/if}
+		</header>
+		<main bind:this={refs.main} style:max-height="{mainHeight}px">
+			{#if initialized}
+				{@const paddingTop = headerOverlaysContent ? headerHeight : 0}
+				<!-- style:max-height="{mainHeight}px" is needed to make iOS scrollable -->
+				<section
+					bind:this={refs.children}
+					data-visible={snapPointIndex === 0 || (snapPointIndex === 1 && !snapPoint1Content) || (snapPointIndex === 2 && !snapPoint2Content) || null}
+					style:overflow="auto"
+					style:height={height === 'auto' || snapPoints === 'auto' ? 'fit-content' : '100%'}
+					style:max-height="{mainHeight}px"
+					style:padding-top="{paddingTop}px"
+					style:padding-bottom={children ? saib + 'px' : 0}
+				>
+					{@render children?.()}
+				</section>
+				<section
+					bind:this={refs.snapPoint1}
+					data-visible={snapPointIndex === 1 || null}
+					style:overflow="auto"
+					style:padding-top="{paddingTop}px"
+					style:padding-bottom={snapPoint1Content ? saib + 'px' : 0}
+				>
+					{@render snapPoint1Content?.()}
+				</section>
+				<section
+					bind:this={refs.snapPoint2}
+					data-visible={snapPointIndex === 2 || null}
+					style:overflow="auto"
+					style:padding-top="{paddingTop}px"
+					style:padding-bottom={snapPoint2Content ? saib + 'px' : 0}
+				>
+					{@render snapPoint2Content?.()}
+				</section>
+			{/if}
+		</main>
 	</dialog>
 {/if}
 
