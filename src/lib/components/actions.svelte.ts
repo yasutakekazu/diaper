@@ -14,7 +14,6 @@ export function dyanamicDuration(node: HTMLElement) {
 	const HISTORY_MS = 100
 	let diaperDuration = '0.4s'
 	let touchHistory: { y: number; time: number }[] = []
-	let dialog = node.parentElement!
 
 	const touchstart = () => {
 		clearAll()
@@ -32,13 +31,13 @@ export function dyanamicDuration(node: HTMLElement) {
 		diaperDuration = getRootProperty('--diaper-default-duration')
 		setDuration(diaperDuration)
 
-		dialog.addEventListener('touchstart', touchstart)
-		dialog.addEventListener('touchmove', touchmove)
-		dialog.addEventListener('touchend', touchend)
+		node.addEventListener('touchstart', touchstart)
+		node.addEventListener('touchmove', touchmove)
+		node.addEventListener('touchend', touchend)
 		return () => {
-			dialog.removeEventListener('touchstart', touchstart)
-			dialog.removeEventListener('touchmove', touchmove)
-			dialog.removeEventListener('touchend', touchend)
+			node.removeEventListener('touchstart', touchstart)
+			node.removeEventListener('touchmove', touchmove)
+			node.removeEventListener('touchend', touchend)
 		}
 	})
 
@@ -91,9 +90,9 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 	let translateY = 0
 	let deltaY = 0
 	let isTouching = false
-	let dialog = node.parentElement!
 
 	function ontouchstart(e: TouchEvent) {
+		if (e.target === e.currentTarget) return // touch is on backdrop
 		startY = 0
 		currentY = 0
 		translateY = 0
@@ -103,7 +102,7 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 		const event = new CustomEvent('movestart', { detail: { target: e.target as HTMLElement }, cancelable: true })
 		if (!node.dispatchEvent(event)) return
 
-		currentY = dialog.getBoundingClientRect().top - dialog.offsetTop
+		currentY = node.getBoundingClientRect().top - node.offsetTop
 
 		startY = e.touches[0].clientY
 		isTouching = true
@@ -127,7 +126,7 @@ export function draggable(node: HTMLElement): ActionReturn<Parameter, Attributes
 			translateY = Math.pow(Math.abs(translateY), 0.5) * Math.sign(translateY)
 		}
 
-		dialog.style.setProperty('translate', `0 ${translateY}px`)
+		node.style.setProperty('translate', `0 ${translateY}px`)
 
 		const event = new CustomEvent('move', { detail: { translateY, deltaY } })
 		node.dispatchEvent(event)
