@@ -36,14 +36,17 @@
 	}
 
 	export function close() {
+		if (isTouching) return
 		open = false
 	}
 
 	export function snapTo(index: number) {
+		if (isTouching) return
 		snapToIndex(index)
 	}
 
 	export function setIndex(index: number) {
+		if (isTouching) return
 		snapPointIndex = index
 	}
 
@@ -69,6 +72,7 @@
 
 	let dialog: HTMLDialogElement
 	let backgroundElement: HTMLElement
+	let isTouching = false
 	let headerSnappoint = 0
 
 	const saib = insets.bottom
@@ -116,6 +120,7 @@
 	}
 
 	function onmovestart(e: CustomEvent) {
+		isTouching = true
 		if (!open) e.preventDefault() // it's closing!
 		const isHeader = isTouchingHeader(e.detail.target)
 		if (!canDragSheet && !isHeader) e.preventDefault()
@@ -138,6 +143,7 @@
 			snapPointIndex = Math.max(--snapPointIndex, 0)
 		}
 		snapToIndex(snapPointIndex)
+		isTouching = false
 	}
 
 	function handleHeaderClick(e: MouseEvent) {
