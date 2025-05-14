@@ -28,7 +28,7 @@ export function dyanamicDuration(node: HTMLElement) {
 		setDuration(calcDyanamicDuration())
 	}
 
-	$effect(() => {
+	$effect.pre(() => {
 		diaperDuration = getRootProperty('--diaper-default-duration')
 		setDuration(diaperDuration)
 
