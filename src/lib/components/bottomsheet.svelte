@@ -40,12 +40,10 @@
 	}
 
 	export function snapTo(index: number) {
-		if (isTouching) return
 		snapToIndex(index)
 	}
 
 	export function setIndex(index: number) {
-		if (isTouching) return
 		snapPointIndex = index
 	}
 
@@ -71,7 +69,6 @@
 
 	let dialog: HTMLDialogElement
 	let backgroundElement: HTMLElement
-	let isTouching = false
 	let headerSnappoint = 0
 
 	const saib = insets.bottom
